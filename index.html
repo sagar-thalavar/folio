@@ -19,39 +19,68 @@ body {
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1100px;
     margin: auto;
     padding: 60px 20px;
 }
 
 h1 {
     font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    color: #555;
+    margin-bottom: 40px;
+    font-size: 1.05rem;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    margin: 50px 0 20px;
+}
+
+.links,
+.projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
     margin-bottom: 40px;
 }
 
-.links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 24px;
-    margin-bottom: 60px;
-}
-
-.link-box {
+.link-box,
+.project-box {
     background: white;
-    padding: 40px 20px;
+    padding: 28px 20px;
     text-align: center;
     border-radius: 20px;
-    font-size: 1.4rem;
-    font-weight: 600;
     text-decoration: none;
     color: #111;
     box-shadow: 0 20px 40px rgba(0,0,0,0.08);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.link-box {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.project-box:hover,
 .link-box:hover {
     transform: translateY(-4px);
     box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+}
+
+.project-box h3 {
+    margin: 0 0 8px;
+    font-size: 1.15rem;
+}
+
+.project-box p {
+    margin: 0;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
 .write-box {
@@ -59,6 +88,7 @@ h1 {
     padding: 32px;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    margin-top: 20px;
 }
 
 .write-box h2 {
@@ -111,18 +141,42 @@ footer {
 
 <div class="container">
     <h1>Sagar R. Thalavar</h1>
+    <div class="subtitle">Computer Science & Engineering | Data Science | Archival</div>
 
     <div class="links">
-        <a class="link-box" href="https://www.linkedin.com/in/sagar-r-thalavar-developer-gpti/" target="_blank">LinkedIn</a>
-        <a class="link-box" href="https://github.com/sagar50906" target="_blank">GitHub</a>
-        <a class="link-box" href="https://www.instagram.com/otziburl/" target="_blank">Instagram</a>
-        <a class="link-box" href="https://mail.google.com/mail/?view=cm&fs=1&to=sagarthalavar509@gmail.com">Email</a>
+        <a class="link-box" href="https://www.linkedin.com/in/sagar-r-thalavar-developer-gpti/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="link-box" href="https://github.com/sagar-thalavar" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="link-box" href="https://www.instagram.com/otziburl/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a class="link-box" href="https://mail.google.com/mail/?view=cm&fs=1&to=sagarthalavar509@gmail.com" target="_blank" rel="noopener noreferrer">Email</a>
+    </div>
+
+    <h2 class="section-title">Live Projects</h2>
+    <div class="projects">
+        <a class="project-box" href="https://pi-collision-simulator.vercel.app/" target="_blank" rel="noopener noreferrer">
+            <h3>PI Collision Simulator</h3>
+            <p>Interactive physics-based project demo.</p>
+        </a>
+
+        <a class="project-box" href="https://sagar-mouse-practice.netlify.app/" target="_blank" rel="noopener noreferrer">
+            <h3>Mouse Practice</h3>
+            <p>Practice and improve mouse control skills.</p>
+        </a>
+
+        <a class="project-box" href="https://dataops-zeta.vercel.app/" target="_blank" rel="noopener noreferrer">
+            <h3>DataOps Zeta</h3>
+            <p>A project focused on data operations workflow.</p>
+        </a>
+
+        <a class="project-box" href="https://one-last-two.vercel.app/" target="_blank" rel="noopener noreferrer">
+            <h3>One Last Two</h3>
+            <p>Another live project you can explore directly.</p>
+        </a>
     </div>
 
     <div class="write-box">
         <h2>Temporary Note</h2>
         <p>
-            Write something here for yourself.  
+            Write something here for yourself.
             This space does not save or remember.
         </p>
 
@@ -132,7 +186,7 @@ footer {
     </div>
 
     <footer>
-      Feel free to copy anything from this page. Copyright permission is granted publicly. - Sagar 
+        Feel free to copy anything from this page. Copyright permission is granted publicly. - Sagar
     </footer>
 </div>
 
@@ -144,8 +198,3 @@ function eraseText() {
 
 </body>
 </html>
-
-
-
-
-
