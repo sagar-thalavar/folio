@@ -95,11 +95,15 @@ a {
   gap: 28px;
 }
 
-/* Premium theme switcher */
+/* Premium theme switcher header */
+.top-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
 .theme-toggle {
-  position: fixed;
-  top: 24px;
-  right: 24px;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -112,7 +116,6 @@ a {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 100;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: var(--shadow-sm);
 }

@@ -23,27 +23,27 @@ const App: React.FC = () => {
   };
 
   return (
-    <>
-      <button 
-        className="theme-toggle" 
-        onClick={toggleTheme} 
-        aria-label="Toggle theme"
-        title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-      >
-        {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-      </button>
+    <main className="container">
+      <header className="top-header">
+        <button 
+          className="theme-toggle" 
+          onClick={toggleTheme} 
+          aria-label="Toggle theme"
+          title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+        >
+          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
+      </header>
 
-      <main className="container">
-        <Hero />
-        
-        <div className="grid-layout">
-          <Projects />
-          <Note />
-        </div>
-        
-        <Footer />
-      </main>
-    </>
+      <Hero />
+      
+      <div className="grid-layout">
+        <Projects />
+        <Note />
+      </div>
+      
+      <Footer />
+    </main>
   );
 };
 
