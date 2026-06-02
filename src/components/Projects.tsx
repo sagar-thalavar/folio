@@ -11,28 +11,28 @@ interface Project {
 
 const projectsData: Project[] = [
   {
-    title: "PI Collision Simulator",
+    title: "PiCollision: Mathematical Simulator",
     badge: "Physics + curiosity",
     href: "https://pi-collision-simulator.vercel.app/",
-    summary: "An interactive simulator that turns a mathematical idea into something visible and easy to explore."
+    summary: "An interactive physics simulator that visualizes elastic collisions and demonstrates how they compute the digits of Pi."
   },
   {
-    title: "Mouse Practice",
+    title: "ClickCraft: Mouse Precision Trainer",
     badge: "Skill training",
     href: "https://sagar-mouse-practice.netlify.app/",
-    summary: "A browser-based practice space for improving cursor precision, control, and movement confidence."
+    summary: "A browser-based skill training workspace designed for improving cursor control, precision, and hand-eye coordination."
   },
   {
-    title: "DataOps Zeta",
+    title: "DataOps Zeta: PostgreSQL Playground",
     badge: "Data workflow",
     href: "https://dataops-zeta.vercel.app/",
-    summary: "A clear view into understanding data operations and how they connect to database workflows."
+    summary: "An interactive operations portal built with Next.js and Neon Serverless Postgres for executing and visualizing CRUD database operations in real-time."
   },
   {
-    title: "One Last Two",
+    title: "Equilibrium: Life Balance Tracker",
     badge: "College mini project",
     href: "https://one-last-two.vercel.app/",
-    summary: "A college mini project that lives on the web and shows a simple, finished interface."
+    summary: "A college project designed as a life-balancing planner application to track, prioritize, and manage tasks across life, college, and work."
   }
 ];
 
