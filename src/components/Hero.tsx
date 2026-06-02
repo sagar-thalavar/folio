@@ -10,6 +10,12 @@ const Hero: React.FC = () => {
         <span className="badge-text">Live portfolio</span>
       </div>
       
+      <img 
+        src="/profile.jpg" 
+        alt="Sagar R. Thalavar" 
+        className="hero-avatar"
+      />
+      
       <h1>Sagar R. Thalavar</h1>
       
       <p className="hero-subtitle">
