@@ -1164,7 +1164,11 @@ a:focus-visible {
   gap: 12px;
 }
 
-.btn-primary, .btn-secondary, .btn-logout {
+.admin-dashboard-container .btn-primary,
+.admin-dashboard-container .btn-secondary,
+.admin-dashboard-container .btn-logout,
+.admin-container .btn-primary,
+.admin-container .btn-secondary {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1177,25 +1181,30 @@ a:focus-visible {
   transition: all 0.2s ease;
 }
 
-.btn-primary {
+.admin-dashboard-container .btn-primary,
+.admin-container .btn-primary {
   background: var(--accent);
   color: var(--bg);
   border: none;
 }
 
-.btn-primary:hover {
+.admin-dashboard-container .btn-primary:hover,
+.admin-container .btn-primary:hover {
   background: var(--accent-hover);
   transform: translateY(-1px);
 }
 
-.btn-secondary {
+.admin-dashboard-container .btn-secondary,
+.admin-container .btn-secondary {
   background: var(--card-bg);
   color: var(--text-primary);
   border: 1px solid var(--card-border);
 }
 
-.btn-secondary:hover {
+.admin-dashboard-container .btn-secondary:hover,
+.admin-container .btn-secondary:hover {
   background: var(--accent-light);
+  color: var(--text-primary);
 }
 
 .btn-logout {
