@@ -320,12 +320,24 @@ p {
   border: 1px solid var(--card-border);
 }
 
-.btn-secondary:hover {
+.btn-secondary:visited {
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
   transform: translateY(-2px);
   background: var(--text-primary);
   color: var(--bg);
   border-color: var(--text-primary);
   box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+  background: var(--accent-light);
+  color: var(--text-primary);
+  border-color: var(--accent-border);
 }
 
 /* Main layouts */
