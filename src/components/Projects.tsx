@@ -25,7 +25,7 @@ const projectsData: Project[] = [
   {
     title: "DataOps Zeta: PostgreSQL Playground",
     badge: "Data workflow",
-    href: "https://dataops-zeta.vercel.app/",
+    href: "https://data.sagarthalavar.in/",
     summary: "An interactive operations portal built with Next.js and Neon Serverless Postgres for executing and visualizing CRUD database operations in real-time."
   },
   {
