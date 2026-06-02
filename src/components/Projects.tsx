@@ -13,13 +13,13 @@ const projectsData: Project[] = [
   {
     title: "PiCollision: Mathematical Simulator",
     badge: "Physics + curiosity",
-    href: "https://pi-collision-simulator.vercel.app/",
+    href: "https://collision.sagarthalavar.in",
     summary: "An interactive physics simulator that visualizes elastic collisions and demonstrates how they compute the digits of Pi."
   },
   {
     title: "ClickCraft: Mouse Precision Trainer",
     badge: "Skill training",
-    href: "https://sagar-mouse-practice.netlify.app/",
+    href: "https://click.sagarthalavar.in",
     summary: "A browser-based skill training workspace designed for improving cursor control, precision, and hand-eye coordination."
   },
   {
@@ -31,7 +31,7 @@ const projectsData: Project[] = [
   {
     title: "Equilibrium: Life Balance Tracker",
     badge: "College mini project",
-    href: "https://one-last-two.vercel.app/",
+    href: "https://equilibrium.sagarthalavar.in",
     summary: "A college project designed as a life-balancing planner application to track, prioritize, and manage tasks across life, college, and work."
   }
 ];
