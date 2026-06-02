@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mail, BookOpen } from 'lucide-react';
 import { LinkedinIcon, GithubIcon, InstagramIcon } from './BrandIcons';
+import { navigate } from '../lib/navigation';
 
 const Hero: React.FC = () => {
   return (
@@ -36,7 +37,11 @@ const Hero: React.FC = () => {
       <div className="hero-actions">
         <a 
           className="btn-primary" 
-          href="#articles"
+          href="/article"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/article');
+          }}
         >
           <BookOpen size={18} />
           <span>Read My Writings</span>

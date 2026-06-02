@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import type { Session } from '@supabase/supabase-js';
 import type { Post } from '../types/blog';
 import { renderMarkdown } from '../lib/markdown';
+import { navigate } from '../lib/navigation';
 import { 
   Key, LogOut, ArrowLeft, Plus, Edit3, Trash2, 
   Eye, FileText, CheckCircle, AlertCircle, Save 
@@ -249,7 +250,7 @@ const Admin: React.FC = () => {
   };
 
   const handleBackToPortfolio = () => {
-    window.location.hash = '';
+    navigate('/');
   };
 
   // RENDER LOGIN SCREEN (UNAUTHENTICATED)

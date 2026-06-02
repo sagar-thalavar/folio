@@ -6,6 +6,7 @@ import Writings from './components/Writings';
 import Admin from './components/Admin';
 import Footer from './components/Footer';
 import { Sun, Moon, ArrowLeft } from 'lucide-react';
+import { navigate } from './lib/navigation';
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -14,9 +15,8 @@ const App: React.FC = () => {
     return 'light';
   });
 
-  // Track hash-based views
-  const [isAdminView, setIsAdminView] = useState(window.location.hash === '#admin');
-  const [isArticlesView, setIsArticlesView] = useState(window.location.hash === '#articles');
+  // Track pathname-based views
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -24,25 +24,31 @@ const App: React.FC = () => {
   }, [theme]);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      setIsAdminView(window.location.hash === '#admin');
-      setIsArticlesView(window.location.hash === '#articles');
+    const handleLocationChange = () => {
+      setCurrentPath(window.location.pathname);
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  // Render Admin Console if URL matches #admin
+  const isAdminView = currentPath === '/admin';
+  const isArticlesView = currentPath === '/article';
+
+  // Render Admin Console if URL matches /admin
   if (isAdminView) {
     return (
       <main className="container">
         <header className="top-header">
-          <a href="#" className="writings-nav-link">
+          <a 
+            href="/" 
+            className="writings-nav-link"
+            onClick={(e) => { e.preventDefault(); navigate('/'); }}
+          >
             <ArrowLeft size={16} />
             <span>Back to Home</span>
           </a>
@@ -63,12 +69,16 @@ const App: React.FC = () => {
     );
   }
 
-  // Render Articles Feed if URL matches #articles
+  // Render Articles Feed if URL matches /article
   if (isArticlesView) {
     return (
       <main className="container">
         <header className="top-header">
-          <a href="#" className="writings-nav-link">
+          <a 
+            href="/" 
+            className="writings-nav-link"
+            onClick={(e) => { e.preventDefault(); navigate('/'); }}
+          >
             <ArrowLeft size={16} />
             <span>Back to Home</span>
           </a>
