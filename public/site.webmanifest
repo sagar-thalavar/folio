@@ -1,0 +1,20 @@
+{
+  "name": "Sagar R. Thalavar | Portfolio",
+  "short_name": "Sagar Folio",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#111111",
+  "background_color": "#111111",
+  "start_url": "/",
+  "display": "standalone"
+}
