@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail } from 'lucide-react';
+import { Mail, BookOpen } from 'lucide-react';
 import { LinkedinIcon, GithubIcon, InstagramIcon } from './BrandIcons';
 
 const Hero: React.FC = () => {
@@ -36,12 +36,19 @@ const Hero: React.FC = () => {
       <div className="hero-actions">
         <a 
           className="btn-primary" 
+          href="#articles"
+        >
+          <BookOpen size={18} />
+          <span>Read My Writings</span>
+        </a>
+        <a 
+          className="btn-secondary" 
           href="https://www.linkedin.com/in/sagar-r-thalavar-developer-gpti/" 
           target="_blank" 
           rel="noopener noreferrer"
         >
           <LinkedinIcon size={18} />
-          <span>Open LinkedIn</span>
+          <span>LinkedIn</span>
         </a>
         <a 
           className="btn-secondary" 
