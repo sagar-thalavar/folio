@@ -1273,6 +1273,7 @@ a:focus-visible {
   justify-content: space-between;
   align-items: center;
   gap: 30px;
+  min-width: 0;
 }
 
 .admin-post-row-info {
@@ -1280,6 +1281,7 @@ a:focus-visible {
   flex-direction: column;
   gap: 8px;
   flex-grow: 1;
+  min-width: 0;
 }
 
 .title-row {
@@ -1287,12 +1289,15 @@ a:focus-visible {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .title-row h3 {
   font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 700;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .status-badge {
@@ -1318,15 +1323,19 @@ a:focus-visible {
 .slug-text {
   font-size: 0.8rem;
   color: var(--text-muted);
+  word-break: break-all;
 }
 
 .excerpt-text {
   font-size: 0.9rem;
   color: var(--text-secondary);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .tags-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
