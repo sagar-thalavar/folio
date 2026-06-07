@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, BookOpen } from 'lucide-react';
+import { Mail, BookOpen, Camera } from 'lucide-react';
 import { LinkedinIcon, GithubIcon, InstagramIcon } from './BrandIcons';
 import { navigate } from '../lib/navigation';
 
@@ -36,7 +36,15 @@ const Hero: React.FC = () => {
 
       <div className="hero-actions">
         <a 
-          className="btn-primary" 
+          className="btn-primary btn-guestbook" 
+          href="/guestbook"
+          title="Leave a memory in my Guestbook"
+        >
+          <Camera size={18} />
+          <span>Visit Guestbook</span>
+        </a>
+        <a 
+          className="btn-secondary" 
           href="/article"
           onClick={(e) => {
             e.preventDefault();

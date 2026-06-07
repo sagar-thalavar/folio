@@ -1593,3 +1593,36 @@ a:focus-visible {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Unique eye-catching style for the guestbook redirect button */
+.btn-guestbook {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3) !important;
+  animation: guestbook-pulse 2s infinite alternate;
+}
+
+.btn-guestbook:hover,
+.btn-guestbook:focus {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5) !important;
+  opacity: 0.95 !important;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%) !important;
+}
+
+.btn-guestbook:active {
+  transform: translateY(0) scale(1) !important;
+}
+
+@keyframes guestbook-pulse {
+  0% {
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+  }
+  100% {
+    box-shadow: 0 4px 22px rgba(219, 39, 119, 0.5);
+  }
+}
+
