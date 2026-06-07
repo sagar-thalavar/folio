@@ -1,6 +1,8 @@
 {
   "cleanUrls": false,
   "rewrites": [
+    { "source": "/guestbook", "destination": "https://guestbook-beta-five.vercel.app/guestbook/" },
+    { "source": "/guestbook/:path*", "destination": "https://guestbook-beta-five.vercel.app/guestbook/:path*" },
     { "source": "/:path*", "destination": "/index.html" }
   ]
 }
