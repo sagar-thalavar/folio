@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Hero from './components/Hero';
 import Projects from './components/Projects';
 import Note from './components/Note';
-import Writings from './components/Writings';
-import Admin from './components/Admin';
 import Footer from './components/Footer';
 import { Sun, Moon, ArrowLeft } from 'lucide-react';
 import { navigate } from './lib/navigation';
+
+const Writings = React.lazy(() => import('./components/Writings'));
+const Admin = React.lazy(() => import('./components/Admin'));
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -62,7 +63,9 @@ const App: React.FC = () => {
           </button>
         </header>
 
-        <Admin />
+        <React.Suspense fallback={<div className="loading-spinner"></div>}>
+          <Admin />
+        </React.Suspense>
 
         <Footer />
       </main>
@@ -92,7 +95,9 @@ const App: React.FC = () => {
           </button>
         </header>
 
-        <Writings />
+        <React.Suspense fallback={<div className="loading-spinner"></div>}>
+          <Writings />
+        </React.Suspense>
 
         <Footer />
       </main>

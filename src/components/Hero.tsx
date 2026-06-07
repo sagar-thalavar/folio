@@ -12,7 +12,7 @@ const Hero: React.FC = () => {
       </div>
       
       <img 
-        src="/profile.jpg" 
+        src="/profile.webp" 
         alt="Sagar R. Thalavar" 
         className="hero-avatar"
       />
