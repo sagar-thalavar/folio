@@ -15,6 +15,10 @@ const Hero: React.FC = () => {
         src="/profile.webp" 
         alt="Sagar R. Thalavar" 
         className="hero-avatar"
+        width="120"
+        height="120"
+        fetchPriority="high"
+        decoding="async"
       />
       
       <h1>Sagar R. Thalavar</h1>
