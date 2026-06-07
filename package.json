@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@preact/compat": "^18.3.2",
     "@supabase/supabase-js": "^2.107.0",
     "lucide-react": "^1.17.0",
+    "preact": "^10.29.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },
