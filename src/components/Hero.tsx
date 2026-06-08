@@ -8,7 +8,7 @@ const Hero: React.FC = () => {
     <section className="hero glass">
       <div className="hero-badge">
         <Waves size={14} />
-        <span className="badge-text">ようこそ · ಸ್ವಾಗತ</span>
+        <span className="badge-text">ಸ್ವಾಗತ</span>
       </div>
       <div className="hero-social-icons">
         <a 
