@@ -239,8 +239,6 @@ p {
   font-size: 0.82rem;
   font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 .hero-avatar {
@@ -1639,34 +1637,35 @@ a:focus-visible {
 
 /* Unique eye-catching style for the guestbook redirect button */
 .btn-guestbook {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
+  background: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #e5e7eb !important;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3) !important;
-  animation: guestbook-pulse 2s infinite alternate;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
 }
 
 .btn-guestbook:hover,
 .btn-guestbook:focus {
-  transform: translateY(-3px) scale(1.02) !important;
-  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5) !important;
-  opacity: 0.95 !important;
-  color: #ffffff !important;
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+  background: #f9fafb !important;
+  color: #111827 !important;
 }
 
 .btn-guestbook:active {
-  transform: translateY(0) scale(1) !important;
+  transform: translateY(0) !important;
 }
 
-@keyframes guestbook-pulse {
-  0% {
-    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
-  }
-  100% {
-    box-shadow: 0 4px 22px rgba(219, 39, 119, 0.5);
-  }
+[data-theme=dark] .btn-guestbook {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #ffffff1a !important;
+}
+
+[data-theme=dark] .btn-guestbook:hover,
+[data-theme=dark] .btn-guestbook:focus {
+  background: #f0f0f0 !important;
+  color: #111827 !important;
 }
 
