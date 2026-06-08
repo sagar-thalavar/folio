@@ -1,11 +1,15 @@
 import React from 'react';
-import { Mail, BookOpen, Camera } from 'lucide-react';
+import { Mail, BookOpen, Camera, Waves } from 'lucide-react';
 import { LinkedinIcon, GithubIcon, InstagramIcon } from './BrandIcons';
 import { navigate } from '../lib/navigation';
 
 const Hero: React.FC = () => {
   return (
     <section className="hero glass">
+      <div className="hero-badge">
+        <Waves size={14} />
+        <span className="badge-text">Live portfolio</span>
+      </div>
       <div className="hero-social-icons">
         <a 
           className="social-icon-btn" 
