@@ -6,9 +6,41 @@ import { navigate } from '../lib/navigation';
 const Hero: React.FC = () => {
   return (
     <section className="hero glass">
-      <div className="hero-badge">
-        <span className="badge-pulse"></span>
-        <span className="badge-text">Live portfolio</span>
+      <div className="hero-social-icons">
+        <a 
+          className="social-icon-btn" 
+          href="https://www.linkedin.com/in/sagar-r-thalavar-developer-gpti/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+        >
+          <LinkedinIcon size={18} />
+        </a>
+        <a 
+          className="social-icon-btn" 
+          href="https://github.com/sagar-thalavar" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+          <GithubIcon size={18} />
+        </a>
+        <a 
+          className="social-icon-btn" 
+          href="https://www.instagram.com/otziburl/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+        >
+          <InstagramIcon size={18} />
+        </a>
+        <a 
+          className="social-icon-btn" 
+          href="mailto:sagarthalavar509@gmail.com"
+          aria-label="Email"
+        >
+          <Mail size={18} />
+        </a>
       </div>
       
       <img 
@@ -57,40 +89,6 @@ const Hero: React.FC = () => {
         >
           <BookOpen size={18} />
           <span>Read My Writings</span>
-        </a>
-        <a 
-          className="btn-secondary" 
-          href="https://www.linkedin.com/in/sagar-r-thalavar-developer-gpti/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-        >
-          <LinkedinIcon size={18} />
-          <span>LinkedIn</span>
-        </a>
-        <a 
-          className="btn-secondary" 
-          href="https://github.com/sagar-thalavar" 
-          target="_blank" 
-          rel="noopener noreferrer"
-        >
-          <GithubIcon size={18} />
-          <span>GitHub</span>
-        </a>
-        <a 
-          className="btn-secondary" 
-          href="https://www.instagram.com/otziburl/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-        >
-          <InstagramIcon size={18} />
-          <span>Instagram</span>
-        </a>
-        <a 
-          className="btn-secondary" 
-          href="mailto:sagarthalavar509@gmail.com"
-        >
-          <Mail size={18} />
-          <span>Email</span>
         </a>
       </div>
     </section>
