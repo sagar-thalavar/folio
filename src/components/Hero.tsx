@@ -48,7 +48,7 @@ const Hero: React.FC = () => {
       </div>
       
       <img 
-        src="/profile.jpeg" 
+        src="/profile.webp" 
         alt="Sagar R. Thalavar" 
         className="hero-avatar"
         width="120"
