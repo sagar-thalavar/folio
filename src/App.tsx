@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Hero from './components/Hero';
-import Projects from './components/Projects';
-import Note from './components/Note';
 import Footer from './components/Footer';
 import { Sun, Moon, ArrowLeft } from 'lucide-react';
 import { navigate } from './lib/navigation';
 
 const Writings = React.lazy(() => import('./components/Writings'));
 const Admin = React.lazy(() => import('./components/Admin'));
+const Projects = React.lazy(() => import('./components/Projects'));
+const Note = React.lazy(() => import('./components/Note'));
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -120,10 +120,12 @@ const App: React.FC = () => {
 
       <Hero />
       
-      <div className="grid-layout">
-        <Projects />
-        <Note />
-      </div>
+      <React.Suspense fallback={<div className="loading-spinner"></div>}>
+        <div className="grid-layout">
+          <Projects />
+          <Note />
+        </div>
+      </React.Suspense>
       
       <Footer />
     </main>
