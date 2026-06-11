@@ -541,9 +541,9 @@ p {
 .note-erase-btn {
   align-self: flex-start;
   margin-top: 18px;
-  border: 1px solid var(--card-border);
-  background: var(--card-bg);
-  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+  background: var(--text-primary);
+  color: var(--bg);
   padding: 12px 24px;
   border-radius: 99px;
   font-family: inherit;
@@ -551,17 +551,15 @@ p {
   font-size: 0.92rem;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .note-erase-btn:hover {
-  background: var(--text-primary);
-  color: var(--bg);
-  border-color: var(--text-primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.3);
+  opacity: 0.93;
 }
 
 /* Footer wrapper */

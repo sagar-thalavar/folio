@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trash2, FileEdit } from 'lucide-react';
+import { FileEdit } from 'lucide-react';
 
 const Note: React.FC = () => {
   const [text, setText] = useState('');
@@ -28,8 +28,7 @@ const Note: React.FC = () => {
         />
       </div>
       <button className="note-erase-btn" type="button" onClick={handleErase}>
-        <Trash2 size={16} />
-        <span>Erase</span>
+        Erase
       </button>
     </section>
   );
