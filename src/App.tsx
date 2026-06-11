@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
 import { Sun, Moon, ArrowLeft } from 'lucide-react';
-import { navigate } from './lib/navigation';
+
 
 const Writings = React.lazy(() => import('./components/Writings'));
 const Admin = React.lazy(() => import('./components/Admin'));
@@ -46,12 +46,12 @@ const App: React.FC = () => {
       <main className="container">
         <header className="top-header">
           <a 
-            href="/" 
+            href="#" 
             className="writings-nav-link"
-            onClick={(e) => { e.preventDefault(); navigate('/'); }}
+            onClick={(e) => { e.preventDefault(); window.history.back(); }}
           >
             <ArrowLeft size={16} />
-            <span>Back to Home</span>
+            <span>Back</span>
           </a>
           <button 
             className="theme-toggle" 
@@ -76,12 +76,12 @@ const App: React.FC = () => {
       <main className="container">
         <header className="top-header">
           <a 
-            href="/" 
+            href="#" 
             className="writings-nav-link"
-            onClick={(e) => { e.preventDefault(); navigate('/'); }}
+            onClick={(e) => { e.preventDefault(); window.history.back(); }}
           >
             <ArrowLeft size={16} />
-            <span>Back to Home</span>
+            <span>Back</span>
           </a>
           <button 
             className="theme-toggle" 
