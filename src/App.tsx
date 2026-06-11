@@ -51,7 +51,7 @@ const App: React.FC = () => {
             onClick={(e) => { e.preventDefault(); window.history.back(); }}
           >
             <ArrowLeft size={16} />
-            <span>Back</span>
+            <span>Back to Home</span>
           </a>
           <button 
             className="theme-toggle" 
@@ -81,7 +81,7 @@ const App: React.FC = () => {
             onClick={(e) => { e.preventDefault(); window.history.back(); }}
           >
             <ArrowLeft size={16} />
-            <span>Back</span>
+            <span>Back to Home</span>
           </a>
           <button 
             className="theme-toggle" 
