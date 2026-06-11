@@ -66,8 +66,6 @@ const App: React.FC = () => {
         <React.Suspense fallback={<div className="loading-spinner"></div>}>
           <Admin />
         </React.Suspense>
-
-        <Footer />
       </main>
     );
   }
@@ -98,8 +96,6 @@ const App: React.FC = () => {
         <React.Suspense fallback={<div className="loading-spinner"></div>}>
           <Writings />
         </React.Suspense>
-
-        <Footer />
       </main>
     );
   }
