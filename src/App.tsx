@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
-import { Sun, Moon, ArrowLeft, Sparkles } from 'lucide-react';
+import { Sun, Moon, ArrowLeft } from 'lucide-react';
 
 
 const Writings = React.lazy(() => import('./components/Writings'));
@@ -10,9 +10,9 @@ const Projects = React.lazy(() => import('./components/Projects'));
 const Note = React.lazy(() => import('./components/Note'));
 
 const App: React.FC = () => {
-  const [theme, setTheme] = useState<'light' | 'dark' | 'colorful'>(() => {
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem('theme');
-    if (saved === 'dark' || saved === 'light' || saved === 'colorful') return saved;
+    if (saved === 'dark' || saved === 'light') return saved;
     return 'light';
   });
 
@@ -34,27 +34,7 @@ const App: React.FC = () => {
   }, []);
 
   const toggleTheme = () => {
-    setTheme((prev) => {
-      if (prev === 'light') return 'dark';
-      if (prev === 'dark') return 'colorful';
-      return 'light';
-    });
-  };
-
-  const renderThemeToggle = () => {
-    const nextThemeLabel = theme === 'light' ? 'Dark' : theme === 'dark' ? 'Colorful' : 'Light';
-    return (
-      <button 
-        className="theme-toggle" 
-        onClick={toggleTheme} 
-        aria-label="Toggle theme"
-        title={`Switch to ${nextThemeLabel} Mode`}
-      >
-        {theme === 'light' && <Moon size={20} />}
-        {theme === 'dark' && <Sparkles size={20} />}
-        {theme === 'colorful' && <Sun size={20} />}
-      </button>
-    );
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   const isAdminView = currentPath === '/admin';
@@ -73,7 +53,14 @@ const App: React.FC = () => {
             <ArrowLeft size={16} />
             <span>Back to Home</span>
           </a>
-          {renderThemeToggle()}
+          <button 
+            className="theme-toggle" 
+            onClick={toggleTheme} 
+            aria-label="Toggle theme"
+            title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+          >
+            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          </button>
         </header>
 
         <React.Suspense fallback={<div className="loading-spinner"></div>}>
@@ -96,7 +83,14 @@ const App: React.FC = () => {
             <ArrowLeft size={16} />
             <span>Back to Home</span>
           </a>
-          {renderThemeToggle()}
+          <button 
+            className="theme-toggle" 
+            onClick={toggleTheme} 
+            aria-label="Toggle theme"
+            title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+          >
+            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          </button>
         </header>
 
         <React.Suspense fallback={<div className="loading-spinner"></div>}>
@@ -110,7 +104,14 @@ const App: React.FC = () => {
   return (
     <main className="container">
       <header className="top-header homepage-header">
-        {renderThemeToggle()}
+        <button 
+          className="theme-toggle" 
+          onClick={toggleTheme} 
+          aria-label="Toggle theme"
+          title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+        >
+          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
       </header>
 
       <Hero />
