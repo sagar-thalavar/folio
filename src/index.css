@@ -48,91 +48,85 @@
 [data-theme='colorful'] {
   --font-heading: "Courier New", Courier, monospace;
   --font-body: "Courier New", Courier, monospace;
-  --bg-gradient: none;
-  --bg: #008080; /* Classic Windows 95 Desktop Teal */
-  --card-bg: #c0c0c0; /* Standard gray window background */
-  --card-border: #808080;
-  --text-primary: #000000;
-  --text-secondary: #000000;
-  --text-muted: #808080;
-  --accent: #000080; /* Windows 95 Title Bar Blue */
-  --accent-hover: #1084d0;
-  --accent-light: #d8d8d8;
-  --accent-border: #808080;
-  --shadow-sm: none;
-  --shadow-md: none;
-  --shadow-lg: none;
-  --shadow-hover: none;
+  /* Retro CRT Scanlines using gradients */
+  --bg-gradient: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                 linear-gradient(90deg, rgba(57, 255, 20, 0.02), rgba(0, 0, 0, 0), rgba(57, 255, 20, 0.02));
+  --bg-size: 100% 4px, 6px 100%;
+  --bg: #030802; /* Deep dark green-black base */
+  --card-bg: #000000;
+  --card-border: #39ff14; /* Glowing Phosphor Green */
+  --text-primary: #39ff14;
+  --text-secondary: #24b80e;
+  --text-muted: #18780a;
+  --accent: #39ff14;
+  --accent-hover: #00ff00;
+  --accent-light: rgba(57, 255, 20, 0.08);
+  --accent-border: #39ff14;
+  --shadow-sm: 0 0 4px rgba(57, 255, 20, 0.4);
+  --shadow-md: 0 0 8px rgba(57, 255, 20, 0.6);
+  --shadow-lg: 0 0 12px rgba(57, 255, 20, 0.8);
+  --shadow-hover: 0 0 16px rgba(57, 255, 20, 1);
+  background-size: var(--bg-size);
 }
 
 [data-theme='colorful'] .glass {
-  background: #c0c0c0 !important;
-  border: 2px solid !important;
-  border-color: #ffffff #808080 #808080 #ffffff !important; /* 3D Outward Bevel */
+  background: #000000 !important;
+  border: 2px solid #39ff14 !important;
   border-radius: 0 !important;
-  box-shadow: none !important;
-  padding: 40px 16px 20px 16px !important; /* Space for the title bar */
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3) !important;
+  padding: 36px 16px 20px 16px !important;
   position: relative !important;
   transform: none !important;
 }
 
-/* Windows 95 System Title Bar */
+/* 80s MS-DOS Prompt Header */
 [data-theme='colorful'] .glass::before {
-  content: '📂 System Window (sagar-thalavar)               [ _ ] [ ▢ ] [ X ]';
+  content: 'C:\\DOS\\PROMPT> RUN PORTFOLIO_V1.EXE';
   position: absolute;
-  top: 2px;
-  left: 2px;
-  right: 2px;
-  height: 22px;
-  background: linear-gradient(90deg, #000080, #1084d0) !important;
-  color: #ffffff !important;
+  top: 6px;
+  left: 12px;
+  color: #39ff14 !important;
   font-family: "Courier New", Courier, monospace !important;
   font-size: 11px !important;
   font-weight: bold !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 0 8px !important;
-  box-sizing: border-box !important;
+  letter-spacing: 0.05em !important;
   border: none !important;
   box-shadow: none !important;
+  background: transparent !important;
   z-index: 5;
+  text-shadow: 0 0 4px rgba(57, 255, 20, 0.8) !important;
 }
 
-/* Retro Blinking "Under Construction" GeoCities tag */
-@keyframes blink-geocities {
+/* Blinking Terminal Cursor */
+@keyframes blink-terminal-cursor {
   0%, 49% { opacity: 1; }
   50%, 100% { opacity: 0; }
 }
 
 [data-theme='colorful'] .glass::after {
-  content: '⚠️ UNDER CONSTRUCTION ⚠️';
+  content: '▉';
   position: absolute;
-  bottom: 4px;
-  right: 8px;
-  color: #ffff00 !important;
-  background: #000000 !important;
-  font-family: "Courier New", Courier, monospace !important;
-  font-size: 9px !important;
-  font-weight: bold !important;
-  padding: 2px 6px !important;
-  border: 1px solid #ffff00 !important;
-  animation: blink-geocities 1.2s infinite !important;
+  bottom: 8px;
+  right: 12px;
+  color: #39ff14 !important;
+  font-family: monospace !important;
+  font-size: 11px !important;
+  animation: blink-terminal-cursor 1s infinite !important;
   z-index: 5;
   pointer-events: none;
+  text-shadow: 0 0 4px rgba(57, 255, 20, 0.8) !important;
 }
 
 [data-theme='colorful'] .glass:hover {
   transform: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 0 14px rgba(57, 255, 20, 0.5) !important;
 }
 
 [data-theme='colorful'] h1 {
   font-family: "Courier New", Courier, monospace !important;
   font-weight: bold !important;
   font-size: 2.2rem !important;
-  color: #000000 !important;
-  text-shadow: none !important;
+  color: #39ff14 !important;
 }
 
 [data-theme='colorful'] h2,
@@ -140,31 +134,29 @@
 [data-theme='colorful'] h4 {
   font-family: "Courier New", Courier, monospace !important;
   font-weight: bold !important;
-  border-bottom: 2px solid #808080 !important;
+  border-bottom: 2px solid #39ff14 !important;
   padding-bottom: 4px;
 }
 
 [data-theme='colorful'] .hero-avatar {
   border-radius: 0 !important;
-  border: 2px solid !important;
-  border-color: #808080 #ffffff #ffffff #808080 !important; /* Inward Bevel */
-  filter: grayscale(0.5) contrast(1.1) !important; /* Retro dithered/gray feel */
-  box-shadow: none !important;
+  border: 2px solid #39ff14 !important;
+  filter: contrast(1.8) brightness(0.7) sepia(1) hue-rotate(75deg) saturate(4.5) !important; /* Dithered green phosphor look */
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.4) !important;
   transform: none !important;
 }
 
-/* 90s Mechanical/Hit Counter style badge */
+/* 80s mechanical system badge style */
 [data-theme='colorful'] .hero-badge {
   border-radius: 0 !important;
-  border: 2px solid !important;
-  border-color: #808080 #ffffff #ffffff #808080 !important; /* Inward Bevel */
+  border: 2px solid #39ff14 !important;
   background: #000000 !important;
-  color: #ff0000 !important; /* Phosphor Red LED */
+  color: #39ff14 !important;
   font-family: monospace !important;
   font-weight: bold !important;
   letter-spacing: 2px !important;
   padding: 2px 8px !important;
-  box-shadow: none !important;
+  box-shadow: 0 0 6px rgba(57, 255, 20, 0.3) !important;
   font-size: 0.8rem !important;
 }
 
@@ -175,16 +167,15 @@
 [data-theme='colorful'] .theme-toggle,
 [data-theme='colorful'] .writings-nav-link {
   border-radius: 0 !important;
-  border: 2px solid !important;
-  border-color: #ffffff #808080 #808080 #ffffff !important; /* 3D Outward Bevel */
+  border: 1px solid #39ff14 !important;
   box-shadow: none !important;
   font-family: "Courier New", Courier, monospace !important;
   font-weight: bold !important;
-  background: #c0c0c0 !important;
-  color: #000000 !important;
+  background: transparent !important;
+  color: #39ff14 !important;
   padding: 6px 14px !important;
   font-size: 0.85rem !important;
-  transition: none !important;
+  transition: all 0.15s ease-in-out !important;
 }
 
 [data-theme='colorful'] .btn-primary:hover,
@@ -194,9 +185,9 @@
 [data-theme='colorful'] .theme-toggle:hover,
 [data-theme='colorful'] .writings-nav-link:hover {
   transform: none !important;
-  box-shadow: none !important;
-  background: #d8d8d8 !important;
-  color: #000000 !important;
+  box-shadow: 0 0 10px #39ff14 !important;
+  background: #39ff14 !important;
+  color: #030802 !important;
 }
 
 [data-theme='colorful'] .btn-primary:active,
@@ -205,26 +196,23 @@
 [data-theme='colorful'] .social-icon-btn:active,
 [data-theme='colorful'] .theme-toggle:active,
 [data-theme='colorful'] .writings-nav-link:active {
-  border-color: #808080 #ffffff #ffffff #808080 !important; /* Inward Bevel (Pressed) */
-  padding: 7px 13px 5px 15px !important; /* Shifts text slightly to simulate mechanical press */
-  background: #c0c0c0 !important;
+  background: #18780a !important;
+  color: #000000 !important;
 }
 
 [data-theme='colorful'] .textarea-container textarea {
   border-radius: 0 !important;
-  border: 2px solid !important;
-  border-color: #808080 #ffffff #ffffff #808080 !important; /* Inward Bevel */
-  background: #ffffff !important;
-  color: #000000 !important;
+  border: 1px solid #39ff14 !important;
+  background: #000000 !important;
+  color: #39ff14 !important;
   font-family: "Courier New", Courier, monospace !important;
 }
 
 [data-theme='colorful'] .tab-control-capsule {
   border-radius: 0 !important;
-  border: 2px solid !important;
-  border-color: #808080 #ffffff #ffffff #808080 !important; /* Inward Bevel */
+  border: 1px solid #39ff14 !important;
   box-shadow: none !important;
-  background: #e0e0e0 !important;
+  background: #000000 !important;
 }
 
 [data-theme='colorful'] .tab-control-btn {
@@ -234,70 +222,82 @@
 }
 
 [data-theme='colorful'] .tab-control-btn.active {
-  background: #000080 !important;
-  color: #ffffff !important;
+  background: #39ff14 !important;
+  color: #000000 !important;
 }
 
 [data-theme='colorful'] .project-badge {
   border-radius: 0 !important;
-  border: 2px solid !important;
-  border-color: #808080 #ffffff #ffffff #808080 !important; /* Inward Bevel */
-  background: #d8d8d8 !important;
-  color: #000000 !important;
+  border: 1px solid #39ff14 !important;
+  background: transparent !important;
+  color: #39ff14 !important;
   font-family: "Courier New", Courier, monospace !important;
   font-weight: bold !important;
 }
 
 [data-theme='colorful'] .project-link {
   border-radius: 0 !important;
-  border: 2px solid !important;
-  border-color: #ffffff #808080 #808080 #ffffff !important; /* Outward Bevel */
+  border: 1px solid #39ff14 !important;
   box-shadow: none !important;
   font-family: "Courier New", Courier, monospace !important;
   font-weight: bold !important;
-  background: #c0c0c0 !important;
-  color: #0000ee !important; /* Classic blue link color */
+  background: transparent !important;
+  color: #39ff14 !important;
   text-decoration: underline !important;
-  transition: none !important;
+  transition: all 0.15s ease-in-out !important;
 }
 
 [data-theme='colorful'] .project-link:hover {
   transform: none !important;
-  box-shadow: none !important;
-  background: #d8d8d8 !important;
-  color: #0000ff !important;
+  box-shadow: 0 0 10px #39ff14 !important;
+  background: #39ff14 !important;
+  color: #030802 !important;
 }
 
 [data-theme='colorful'] .project-link:active {
-  border-color: #808080 #ffffff #ffffff #808080 !important; /* Inward Bevel (Pressed) */
+  background: #18780a !important;
 }
 
 [data-theme='colorful'] .writing-card {
   border-radius: 0 !important;
-  border-bottom: 2px solid #808080 !important;
+  border-bottom: 1px dashed #39ff14 !important;
   background: transparent !important;
 }
 
 [data-theme='colorful'] .tag-pill {
   border-radius: 0 !important;
-  border: 2px solid !important;
-  border-color: #808080 #ffffff #ffffff #808080 !important; /* Inward Bevel */
-  background: #d8d8d8 !important;
-  color: #000000 !important;
+  border: 1px solid #39ff14 !important;
+  background: transparent !important;
+  color: #39ff14 !important;
 }
 
-/* Classic blue underlined web links inside elements */
+/* Global Phosphor Glow on all text/buttons/headers in colorful mode */
+[data-theme='colorful'] h1,
+[data-theme='colorful'] h2,
+[data-theme='colorful'] h3,
+[data-theme='colorful'] h4,
+[data-theme='colorful'] p,
+[data-theme='colorful'] span,
+[data-theme='colorful'] a,
+[data-theme='colorful'] button,
+[data-theme='colorful'] label,
+[data-theme='colorful'] textarea {
+  text-shadow: 0 0 6px rgba(57, 255, 20, 0.6) !important;
+}
+
+/* Phosphor green links inside blocks */
 [data-theme='colorful'] a {
-  color: #0000ee !important;
+  color: #39ff14 !important;
   text-decoration: underline !important;
 }
 
 [data-theme='colorful'] a:hover {
-  color: #0000ff !important;
+  color: #00ff00 !important;
+  text-shadow: 0 0 10px rgba(57, 255, 20, 0.9) !important;
 }
 
 [data-theme='colorful'] a:visited {
-  color: #551a8b !important;
+  color: #24b80e !important;
 }
 
 * {
