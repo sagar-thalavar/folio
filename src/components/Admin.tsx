@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import type { Session } from '@supabase/supabase-js';
 import type { Post } from '../types/blog';
@@ -38,17 +38,29 @@ const Admin: React.FC = () => {
   // Tab state (write vs manage)
   const [activeTab, setActiveTab] = useState<'manage' | 'editor'>('manage');
 
+  // Lifecycle references to prevent memory leaks on unmount
+  const isMountedRef = useRef(true);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    };
+  }, []);
+
   // Fetch all posts (published and drafts) when authenticated
   const fetchAdminPosts = async () => {
     try {
-      setPostsLoading(true);
+      if (isMountedRef.current) setPostsLoading(true);
       const { data, error } = await supabase
         .from('posts')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setPosts(data || []);
+      if (isMountedRef.current) setPosts(data || []);
     } catch (err: unknown) {
       console.error('Error fetching admin posts:', err);
       let msg = 'Failed to load posts.';
@@ -57,20 +69,20 @@ const Admin: React.FC = () => {
       } else if (err instanceof Error) {
         msg = err.message;
       }
-      setPostsError(msg);
+      if (isMountedRef.current) setPostsError(msg);
     } finally {
-      setPostsLoading(false);
+      if (isMountedRef.current) setPostsLoading(false);
     }
   };
 
   // Monitor auth state on mount
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
-      setSession(currentSession);
+      if (isMountedRef.current) setSession(currentSession);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession);
+      if (isMountedRef.current) setSession(newSession);
     });
 
     return () => subscription.unsubscribe();
@@ -101,8 +113,10 @@ const Admin: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      setLoginLoading(true);
-      setAuthError(null);
+      if (isMountedRef.current) {
+        setLoginLoading(true);
+        setAuthError(null);
+      }
       
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -118,42 +132,48 @@ const Admin: React.FC = () => {
       } else if (err instanceof Error) {
         msg = err.message;
       }
-      setAuthError(msg);
+      if (isMountedRef.current) setAuthError(msg);
     } finally {
-      setLoginLoading(false);
+      if (isMountedRef.current) setLoginLoading(false);
     }
   };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    setSession(null);
-    setEmail('');
-    setPassword('');
+    if (isMountedRef.current) {
+      setSession(null);
+      setEmail('');
+      setPassword('');
+    }
   };
 
   const resetForm = () => {
-    setIsEditing(false);
-    setEditingId(null);
-    setTitle('');
-    setSlug('');
-    setExcerpt('');
-    setContent('');
-    setTagsInput('');
-    setPublished(true);
-    setEditorError(null);
+    if (isMountedRef.current) {
+      setIsEditing(false);
+      setEditingId(null);
+      setTitle('');
+      setSlug('');
+      setExcerpt('');
+      setContent('');
+      setTagsInput('');
+      setPublished(true);
+      setEditorError(null);
+    }
   };
 
   const handleSavePost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !content.trim() || !excerpt.trim()) {
-      setEditorError('Title, Excerpt, and Content are required fields.');
+      if (isMountedRef.current) setEditorError('Title, Excerpt, and Content are required fields.');
       return;
     }
 
     try {
-      setSaveLoading(true);
-      setEditorError(null);
-      setSaveSuccess(false);
+      if (isMountedRef.current) {
+        setSaveLoading(true);
+        setEditorError(null);
+        setSaveSuccess(false);
+      }
 
       // Parse tags
       const tags = tagsInput
@@ -193,13 +213,19 @@ const Admin: React.FC = () => {
         if (error) throw error;
       }
 
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      if (isMountedRef.current) setSaveSuccess(true);
+      
+      saveTimeoutRef.current = setTimeout(() => {
+        if (isMountedRef.current) setSaveSuccess(false);
+      }, 3000);
       
       // Refresh list and reset form
       await fetchAdminPosts();
-      resetForm();
-      setActiveTab('manage');
+      if (isMountedRef.current) {
+        resetForm();
+        setActiveTab('manage');
+      }
     } catch (err: unknown) {
       console.error('Error saving post:', err);
       let msg = 'Failed to save post. Verify slug uniqueness.';
@@ -208,9 +234,9 @@ const Admin: React.FC = () => {
       } else if (err instanceof Error) {
         msg = err.message;
       }
-      setEditorError(msg);
+      if (isMountedRef.current) setEditorError(msg);
     } finally {
-      setSaveLoading(false);
+      if (isMountedRef.current) setSaveLoading(false);
     }
   };
 
