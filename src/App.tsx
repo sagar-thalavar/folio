@@ -5,10 +5,11 @@ import { Sun, Moon, ArrowLeft } from 'lucide-react';
 import SplashOverlay from './components/SplashOverlay';
 
 
+import Projects from './components/Projects';
+import Note from './components/Note';
+
 const Writings = React.lazy(() => import('./components/Writings'));
 const Admin = React.lazy(() => import('./components/Admin'));
-const Projects = React.lazy(() => import('./components/Projects'));
-const Note = React.lazy(() => import('./components/Note'));
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -112,12 +113,10 @@ const App: React.FC = () => {
 
             <Hero />
             
-            <React.Suspense fallback={<div className="loading-spinner"></div>}>
-              <div className="grid-layout">
-                <Projects />
-                <Note />
-              </div>
-            </React.Suspense>
+            <div className="grid-layout">
+              <Projects />
+              <Note />
+            </div>
             
             <Footer />
           </main>
