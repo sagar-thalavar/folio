@@ -1702,81 +1702,37 @@ a:focus-visible {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  justify-content: center;
   text-align: center;
 }
 
-.splash-logo-container {
-  position: relative;
-  width: 100px;
-  height: 100px;
-}
-
-.splash-svg {
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
-}
-
-[data-theme='dark'] .splash-svg {
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.08));
-}
-
-/* SVG Circle drawing animation */
-.splash-circle {
-  stroke-dasharray: 280;
-  stroke-dashoffset: 280;
-  animation: drawCircle 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Inner wave path drawing animation */
-.splash-path {
-  stroke-dasharray: 80;
-  stroke-dashoffset: 80;
-  animation: drawPath 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
-}
-
-/* Initial letter S fade-in */
-.splash-text-initial {
-  opacity: 0;
-  transform: scale(0.8);
-  transform-origin: center;
-  animation: fadeInScale 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
-}
-
 .splash-title-container {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  position: relative;
 }
 
-.splash-title {
+.splash-name {
   font-family: var(--font-heading);
   color: var(--text-primary);
-  font-size: 0.95rem;
+  font-size: clamp(2.5rem, 6vw, 3.8rem);
   font-weight: 800;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.35em;
+  text-indent: 0.35em; /* Correct centering offset of letter-spacing */
+  margin: 0;
   opacity: 0;
-  transform: translateY(8px);
-  animation: slideUpFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+  transform: scale(0.95);
+  animation: splashNameFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Sleek minimalist progress bar */
-.splash-progressbar {
-  width: 140px;
-  height: 2px;
-  background: var(--card-border);
-  border-radius: 99px;
-  overflow: hidden;
-  opacity: 0;
-  animation: fadeIn 0.4s ease 0.6s forwards;
-}
-
-.splash-progressbar-fill {
+.splash-underline {
   width: 0%;
-  height: 100%;
+  height: 2.5px;
   background: var(--accent);
+  margin-top: 16px;
   border-radius: 99px;
-  animation: fillProgress 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+  animation: drawUnderline 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
 }
 
 /* Content wrapper entrance transitions */
@@ -1796,39 +1752,14 @@ a:focus-visible {
 }
 
 /* KEYFRAMES FOR PRELOADER ANIMATIONS */
-@keyframes drawCircle {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes drawPath {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes fadeInScale {
+@keyframes splashNameFadeIn {
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
 
-@keyframes slideUpFadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fillProgress {
+@keyframes drawUnderline {
   to {
     width: 100%;
   }

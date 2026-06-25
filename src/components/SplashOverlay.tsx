@@ -27,49 +27,9 @@ const SplashOverlay: React.FC<SplashOverlayProps> = ({ onComplete }) => {
   return (
     <div className={`splash-overlay ${isExiting ? 'splash-exit' : ''}`} aria-hidden="true">
       <div className="splash-content">
-        {/* Sleek SVG Tracing Logo */}
-        <div className="splash-logo-container">
-          <svg className="splash-svg" viewBox="0 0 100 100" width="100" height="100">
-            {/* Outer drawing circle */}
-            <circle
-              className="splash-circle"
-              cx="50"
-              cy="50"
-              r="44"
-              stroke="var(--accent)"
-              strokeWidth="2.5"
-              fill="none"
-            />
-            {/* Sleek Inner Initials SRT/Waves design */}
-            <path
-              className="splash-path"
-              d="M 32,48 C 38,35 44,65 50,50 C 56,35 62,65 68,52"
-              stroke="var(--accent)"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              fill="none"
-            />
-            <text
-              className="splash-text-initial"
-              x="50"
-              y="54"
-              dominantBaseline="middle"
-              textAnchor="middle"
-              fill="var(--text-primary)"
-              fontSize="15"
-              fontWeight="bold"
-            >
-              S
-            </text>
-          </svg>
-        </div>
-
-        {/* Animated letter-spacing Title */}
         <div className="splash-title-container">
-          <h2 className="splash-title">SAGAR R. THALAVAR</h2>
-          <div className="splash-progressbar">
-            <div className="splash-progressbar-fill"></div>
-          </div>
+          <h1 className="splash-name">SAGAR</h1>
+          <div className="splash-underline"></div>
         </div>
       </div>
     </div>
