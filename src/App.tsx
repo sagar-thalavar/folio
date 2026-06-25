@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
 import { Sun, Moon, ArrowLeft } from 'lucide-react';
+import SplashOverlay from './components/SplashOverlay';
 
 
 const Writings = React.lazy(() => import('./components/Writings'));
@@ -15,6 +16,8 @@ const App: React.FC = () => {
     if (saved === 'dark' || saved === 'light') return saved;
     return 'light';
   });
+
+  const [showSplash, setShowSplash] = useState(true);
 
   // Track pathname-based views
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -40,91 +43,87 @@ const App: React.FC = () => {
   const isAdminView = currentPath === '/admin';
   const isArticlesView = currentPath === '/article';
 
-  // Render Admin Console if URL matches /admin
-  if (isAdminView) {
-    return (
-      <main className="container">
-        <header className="top-header">
-          <a 
-            href="#" 
-            className="writings-nav-link"
-            onClick={(e) => { e.preventDefault(); window.history.back(); }}
-          >
-            <ArrowLeft size={16} />
-            <span>Back to Home</span>
-          </a>
-          <button 
-            className="theme-toggle" 
-            onClick={toggleTheme} 
-            aria-label="Toggle theme"
-            title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-          >
-            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-          </button>
-        </header>
-
-        <React.Suspense fallback={<div className="loading-spinner"></div>}>
-          <Admin />
-        </React.Suspense>
-      </main>
-    );
-  }
-
-  // Render Articles Feed if URL matches /article
-  if (isArticlesView) {
-    return (
-      <main className="container">
-        <header className="top-header">
-          <a 
-            href="#" 
-            className="writings-nav-link"
-            onClick={(e) => { e.preventDefault(); window.history.back(); }}
-          >
-            <ArrowLeft size={16} />
-            <span>Back to Home</span>
-          </a>
-          <button 
-            className="theme-toggle" 
-            onClick={toggleTheme} 
-            aria-label="Toggle theme"
-            title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-          >
-            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-          </button>
-        </header>
-
-        <React.Suspense fallback={<div className="loading-spinner"></div>}>
-          <Writings />
-        </React.Suspense>
-      </main>
-    );
-  }
-
-  // Render Default Public Portfolio Layout (Clean & Clutter-Free)
   return (
-    <main className="container">
-      <header className="top-header homepage-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme} 
-          aria-label="Toggle theme"
-          title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-        >
-          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-        </button>
-      </header>
+    <>
+      {showSplash && <SplashOverlay onComplete={() => setShowSplash(false)} />}
+      <div className={showSplash ? 'preload-hidden' : 'preload-visible'}>
+        {isAdminView ? (
+          <main className="container">
+            <header className="top-header">
+              <a 
+                href="#" 
+                className="writings-nav-link"
+                onClick={(e) => { e.preventDefault(); window.history.back(); }}
+              >
+                <ArrowLeft size={16} />
+                <span>Back to Home</span>
+              </a>
+              <button 
+                className="theme-toggle" 
+                onClick={toggleTheme} 
+                aria-label="Toggle theme"
+                title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+              >
+                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
+            </header>
 
-      <Hero />
-      
-      <React.Suspense fallback={<div className="loading-spinner"></div>}>
-        <div className="grid-layout">
-          <Projects />
-          <Note />
-        </div>
-      </React.Suspense>
-      
-      <Footer />
-    </main>
+            <React.Suspense fallback={<div className="loading-spinner"></div>}>
+              <Admin />
+            </React.Suspense>
+          </main>
+        ) : isArticlesView ? (
+          <main className="container">
+            <header className="top-header">
+              <a 
+                href="#" 
+                className="writings-nav-link"
+                onClick={(e) => { e.preventDefault(); window.history.back(); }}
+              >
+                <ArrowLeft size={16} />
+                <span>Back to Home</span>
+              </a>
+              <button 
+                className="theme-toggle" 
+                onClick={toggleTheme} 
+                aria-label="Toggle theme"
+                title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+              >
+                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
+            </header>
+
+            <React.Suspense fallback={<div className="loading-spinner"></div>}>
+              <Writings />
+            </React.Suspense>
+          </main>
+        ) : (
+          <main className="container">
+            <header className="top-header homepage-header">
+              <button 
+                className="theme-toggle" 
+                onClick={toggleTheme} 
+                aria-label="Toggle theme"
+                title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+              >
+                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
+            </header>
+
+            <Hero />
+            
+            <React.Suspense fallback={<div className="loading-spinner"></div>}>
+              <div className="grid-layout">
+                <Projects />
+                <Note />
+              </div>
+            </React.Suspense>
+            
+            <Footer />
+          </main>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -1667,3 +1667,171 @@ a:focus-visible {
   color: #111827 !important;
 }
 
+/* ==========================================================================
+   PREMIUM SPLASH OVERLAY PRELOADER STYLES
+   ========================================================================== */
+.splash-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: blur(0px);
+}
+
+/* Zoom out, blur, and fade out on exit */
+.splash-overlay.splash-exit {
+  opacity: 0;
+  transform: scale(1.08);
+  filter: blur(16px);
+  pointer-events: none;
+}
+
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.splash-logo-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.splash-svg {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
+}
+
+[data-theme='dark'] .splash-svg {
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.08));
+}
+
+/* SVG Circle drawing animation */
+.splash-circle {
+  stroke-dasharray: 280;
+  stroke-dashoffset: 280;
+  animation: drawCircle 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Inner wave path drawing animation */
+.splash-path {
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+  animation: drawPath 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+/* Initial letter S fade-in */
+.splash-text-initial {
+  opacity: 0;
+  transform: scale(0.8);
+  transform-origin: center;
+  animation: fadeInScale 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+}
+
+.splash-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.splash-title {
+  font-family: var(--font-heading);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: slideUpFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+
+/* Sleek minimalist progress bar */
+.splash-progressbar {
+  width: 140px;
+  height: 2px;
+  background: var(--card-border);
+  border-radius: 99px;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeIn 0.4s ease 0.6s forwards;
+}
+
+.splash-progressbar-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+  animation: fillProgress 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+
+/* Content wrapper entrance transitions */
+.preload-hidden {
+  opacity: 0;
+  transform: translateY(24px) scale(0.975);
+  filter: blur(8px);
+}
+
+.preload-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* KEYFRAMES FOR PRELOADER ANIMATIONS */
+@keyframes drawCircle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes drawPath {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fadeInScale {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUpFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fillProgress {
+  to {
+    width: 100%;
+  }
+}
+
+
