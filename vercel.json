@@ -3,6 +3,6 @@
   "rewrites": [
     { "source": "/guestbook", "destination": "https://guestbook-beta-five.vercel.app/guestbook/" },
     { "source": "/guestbook/:path*", "destination": "https://guestbook-beta-five.vercel.app/guestbook/:path*" },
-    { "source": "/:path*", "destination": "/index.html" }
+    { "source": "/((?!guestbook|llms.txt|robots.txt|sitemap.xml|.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }
   ]
 }

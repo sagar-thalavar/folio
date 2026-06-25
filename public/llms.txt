@@ -1,0 +1,16 @@
+# Sagar R. Thalavar | Portfolio
+
+A personal website and developer portfolio for Sagar R. Thalavar, Data Science Engineering student and web developer.
+
+## Core Pages
+
+- [Home](https://sagarthalavar.in/): Introduction, live projects list, and contact details.
+- [Writings](https://sagarthalavar.in/article): Tech articles and personal reflections on work, design, and attention.
+- [Admin](https://sagarthalavar.in/admin): Management dashboard for published posts and drafts.
+
+## Social & Professional Links
+
+- [GitHub](https://github.com/sagar-thalavar): Open-source repositories and code contributions.
+- [LinkedIn](https://www.linkedin.com/in/sagar-r-thalavar-developer-gpti/): Professional background and engineering experience.
+- [Instagram](https://www.instagram.com/otziburl/): Personal snapshots and life outside dev work.
+- [Email](mailto:sagarthalavar509@gmail.com): Direct contact for inquiries and collaboration.
