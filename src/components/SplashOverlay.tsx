@@ -39,18 +39,6 @@ const SplashOverlay: React.FC<SplashOverlayProps> = ({ onComplete }) => {
               strokeLinecap="round"
               fill="none"
             />
-            <text
-              className="splash-text-initial"
-              x="50"
-              y="54"
-              dominantBaseline="middle"
-              textAnchor="middle"
-              fill="var(--text-primary)"
-              fontSize="15"
-              fontWeight="bold"
-            >
-              S
-            </text>
           </svg>
         </div>
 
