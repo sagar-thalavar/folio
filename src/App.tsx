@@ -13,8 +13,12 @@ const Admin = React.lazy(() => import('./components/Admin'));
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark' || saved === 'light') return saved;
+    try {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || saved === 'light') return saved;
+    } catch (e) {
+      // ignore security exceptions in sandboxed test runs
+    }
     return 'light';
   });
 
@@ -25,7 +29,11 @@ const App: React.FC = () => {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+    try {
+      localStorage.setItem('theme', theme);
+    } catch (e) {
+      // ignore security exceptions in sandboxed test runs
+    }
   }, [theme]);
 
   useEffect(() => {
