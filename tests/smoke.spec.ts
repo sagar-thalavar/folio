@@ -14,13 +14,19 @@ test('homepage loads with no console errors or CSP violations', async ({ page })
   expect(errors, `Console errors found:\n${errors.join('\n')}`).toEqual([]);
 });
 
-test('theme toggle applies data-theme attribute', async ({ page }) => {
+test('theme toggle flips back and forth correctly', async ({ page }) => {
   await page.goto('/');
   const html = page.locator('html');
-  const before = await html.getAttribute('data-theme');
+  const initial = await html.getAttribute('data-theme');
+  const toggle = page.getByRole('button', { name: /toggle theme/i });
 
-  await page.getByRole('button', { name: /toggle theme/i }).click();
-  await expect(html).not.toHaveAttribute('data-theme', before ?? '');
+  await toggle.click();
+  const afterOneClick = await html.getAttribute('data-theme');
+  expect(afterOneClick).not.toBe(initial);
+
+  await toggle.click();
+  const afterTwoClicks = await html.getAttribute('data-theme');
+  expect(afterTwoClicks).toBe(initial);
 });
 
 test('Writings route loads without console errors', async ({ page }) => {
