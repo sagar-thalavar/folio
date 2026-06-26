@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Testing
+playwright-report
+test-results
+.lighthouseci
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

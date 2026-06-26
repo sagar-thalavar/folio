@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build && node postbuild.js",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "playwright test",
+    "test:lighthouse": "lhci autorun"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.107.0",
@@ -17,6 +19,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.61.1",
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
