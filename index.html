@@ -47,7 +47,7 @@
     
     <link rel="apple-touch-icon" href="/favicon-192.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <script src="/init.js"></script>
+    <script>(function(){try{var saved=localStorage.getItem('theme');var theme=saved==='dark'||saved==='light'?saved:'light';document.documentElement.setAttribute('data-theme',theme);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
     <style>
       :root {
         --bg: #f3f4f6;
