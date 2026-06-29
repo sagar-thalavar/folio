@@ -32,6 +32,15 @@ test('Permissions-Policy allows camera for same-origin use', () => {
   expect(value).toMatch(/camera=\(self\)|camera=\(\s*self\s*\)/);
 });
 
+test('CSP img-src allows blob: (needed by guestbook, served behind this CSP via rewrite)', () => {
+  // /guestbook is proxied through this domain, so it's actually governed by
+  // THIS vercel.json, not its own -- guestbook's selfie camera/upload preview
+  // assigns a blob: URL to an <img src>, which CSP silently blocks without
+  // this, producing a broken-image icon with no visible error to the user.
+  const csp = getHeader('Content-Security-Policy');
+  expect(csp).toMatch(/img-src[^;]*\bblob:/);
+});
+
 test('CSP script-src hash matches the actual inline script in the built HTML', () => {
   const distIndexPath = path.join(root, 'dist', 'index.html');
   if (!existsSync(distIndexPath)) {
