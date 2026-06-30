@@ -33,6 +33,12 @@ const projectsData: Project[] = [
     badge: "College mini project",
     href: "https://equilibrium.sagarthalavar.in",
     summary: "A college project designed as a life-balancing planner application to track, prioritize, and manage tasks across life, college, and work."
+  },
+  {
+    title: "Guestbook: A Visitor Journal",
+    badge: "Web app",
+    href: "https://sagarthalavar.in/guestbook",
+    summary: "A private visitor journal where guests sign in, leave a selfie and a memory, and browse a public wall of moments."
   }
 ];
 
