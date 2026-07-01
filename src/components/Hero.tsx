@@ -38,9 +38,11 @@ const Hero: React.FC = () => {
         >
           <InstagramIcon size={18} />
         </a>
-        <a 
-          className="social-icon-btn" 
-          href="mailto:sagarthalavar509@gmail.com"
+        <a
+          className="social-icon-btn"
+          href="https://mail.google.com/mail/?view=cm&to=sagarthalavar509@gmail.com"
+          target="_blank"
+          rel="noopener noreferrer"
           aria-label="Email"
         >
           <Mail size={18} />
