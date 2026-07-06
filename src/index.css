@@ -129,7 +129,31 @@ a {
 }
 
 .homepage-header {
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+
+.visit-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 99px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  user-select: none;
+}
+
+@media (max-width: 480px) {
+  .visit-counter {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
 }
 
 .theme-toggle {

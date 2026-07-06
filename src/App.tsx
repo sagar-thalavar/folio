@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
-import { Sun, Moon, ArrowLeft } from 'lucide-react';
+import { Sun, Moon, ArrowLeft, Eye } from 'lucide-react';
 import SplashOverlay from './components/SplashOverlay';
-
+import { supabase } from './lib/supabase';
 
 import Projects from './components/Projects';
 import Note from './components/Note';
@@ -23,6 +23,7 @@ const App: React.FC = () => {
   });
 
   const [showSplash, setShowSplash] = useState(true);
+  const [visitCount, setVisitCount] = useState<number | null>(null);
 
   // Track pathname-based views
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -43,6 +44,18 @@ const App: React.FC = () => {
 
     window.addEventListener('popstate', handleLocationChange);
     return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
+
+  useEffect(() => {
+    async function trackVisit() {
+      try {
+        const { data } = await supabase.rpc('increment_page_view', { page_name: 'folio' });
+        if (typeof data === 'number') setVisitCount(data);
+      } catch {
+        // silently fail — counter is non-critical
+      }
+    }
+    trackVisit();
   }, []);
 
   const toggleTheme = () => {
@@ -109,9 +122,15 @@ const App: React.FC = () => {
         ) : (
           <main className="container">
             <header className="top-header homepage-header">
-              <button 
-                className="theme-toggle" 
-                onClick={toggleTheme} 
+              {visitCount !== null && (
+                <div className="visit-counter" aria-label={`${visitCount.toLocaleString()} visits`}>
+                  <Eye size={14} />
+                  <span>{visitCount.toLocaleString()}</span>
+                </div>
+              )}
+              <button
+                className="theme-toggle"
+                onClick={toggleTheme}
                 aria-label="Toggle theme"
                 title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
               >
