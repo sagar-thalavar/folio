@@ -47,6 +47,9 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    if (!supabaseUrl) return; // skip in test/dev environments without credentials
+
     async function trackVisit() {
       try {
         const { data } = await supabase.rpc('increment_page_view', { page_name: 'folio' });
