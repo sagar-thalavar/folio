@@ -129,6 +129,10 @@ a {
 }
 
 .homepage-header {
+  justify-content: flex-end;
+}
+
+.homepage-header:has(.visit-counter) {
   justify-content: space-between;
 }
 
