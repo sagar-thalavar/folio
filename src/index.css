@@ -45,6 +45,24 @@
   --shadow-hover: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
 }
 
+[data-theme='colorful'] {
+  --bg-gradient: radial-gradient(circle at 15% 20%, #B388FF 0%, #E7C6FF 35%, #FFC78A 65%, #67D9FF 100%);
+  --bg: #FFF5E9;
+  --card-bg: rgba(255, 255, 255, 0.6);
+  --card-border: rgba(179, 136, 255, 0.25);
+  --text-primary: #3D1A6E;
+  --text-secondary: #5B2D8E;
+  --text-muted: #9B72CF;
+  --accent: #FF7B72;
+  --accent-hover: #FF5A50;
+  --accent-light: rgba(255, 123, 114, 0.12);
+  --accent-border: rgba(255, 123, 114, 0.35);
+  --shadow-sm: 0 1px 2px 0 rgba(179, 136, 255, 0.15);
+  --shadow-md: 0 10px 30px -10px rgba(179, 136, 255, 0.25), 0 1px 3px rgba(255, 123, 114, 0.1);
+  --shadow-lg: 0 20px 40px -15px rgba(179, 136, 255, 0.35);
+  --shadow-hover: 0 30px 60px -15px rgba(255, 123, 114, 0.4);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

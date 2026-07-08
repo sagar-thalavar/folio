@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
-import { Sun, Moon, ArrowLeft, Eye } from 'lucide-react';
+import { Sun, Moon, ArrowLeft, Eye, Palette } from 'lucide-react';
 import SplashOverlay from './components/SplashOverlay';
 import { supabase } from './lib/supabase';
 
@@ -12,10 +12,10 @@ const Writings = React.lazy(() => import('./components/Writings'));
 const Admin = React.lazy(() => import('./components/Admin'));
 
 const App: React.FC = () => {
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+  const [theme, setTheme] = useState<'light' | 'dark' | 'colorful'>(() => {
     try {
       const saved = localStorage.getItem('theme');
-      if (saved === 'dark' || saved === 'light') return saved;
+      if (saved === 'dark' || saved === 'light' || saved === 'colorful') return saved;
     } catch (e) {
       // ignore security exceptions in sandboxed test runs
     }
@@ -62,8 +62,11 @@ const App: React.FC = () => {
   }, []);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    setTheme((prev) => prev === 'light' ? 'dark' : prev === 'dark' ? 'colorful' : 'light');
   };
+
+  const themeIcon = theme === 'light' ? <Moon size={20} /> : theme === 'dark' ? <Sun size={20} /> : <Palette size={20} />;
+  const themeTitle = theme === 'light' ? 'Switch to Dark Mode' : theme === 'dark' ? 'Switch to Colorful Mode' : 'Switch to Light Mode';
 
   const isAdminView = currentPath === '/admin';
   const isArticlesView = currentPath === '/article';
@@ -87,9 +90,9 @@ const App: React.FC = () => {
                 className="theme-toggle" 
                 onClick={toggleTheme} 
                 aria-label="Toggle theme"
-                title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+                title={themeTitle}
               >
-                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                {themeIcon}
               </button>
             </header>
 
@@ -112,9 +115,9 @@ const App: React.FC = () => {
                 className="theme-toggle" 
                 onClick={toggleTheme} 
                 aria-label="Toggle theme"
-                title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+                title={themeTitle}
               >
-                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                {themeIcon}
               </button>
             </header>
 
@@ -135,9 +138,9 @@ const App: React.FC = () => {
                 className="theme-toggle"
                 onClick={toggleTheme}
                 aria-label="Toggle theme"
-                title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+                title={themeTitle}
               >
-                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                {themeIcon}
               </button>
             </header>
 
