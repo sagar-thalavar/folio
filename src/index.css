@@ -46,23 +46,27 @@
 }
 
 [data-theme='colorful'] {
-  --bg-gradient: radial-gradient(circle at 12% 15%, #FF8A00 0%, rgba(255, 138, 0, 0) 45%),
-                 radial-gradient(circle at 88% 85%, #FF5A00 0%, rgba(255, 90, 0, 0) 50%),
-                 linear-gradient(160deg, #1a1004 0%, #000000 70%);
-  --bg: #0a0603;
-  --card-bg: rgba(20, 13, 6, 0.55);
-  --card-border: rgba(255, 138, 0, 0.25);
-  --text-primary: #FFF3E0;
-  --text-secondary: #FFD3A0;
-  --text-muted: #F0C48C;
-  --accent: #FF7A00;
-  --accent-hover: #FF9500;
-  --accent-light: rgba(255, 122, 0, 0.15);
-  --accent-border: rgba(255, 122, 0, 0.4);
+  --bg-gradient: radial-gradient(circle at 12% 15%, #2F8AFF 0%, rgba(47, 138, 255, 0) 45%),
+                 radial-gradient(circle at 88% 85%, #00C2FF 0%, rgba(0, 194, 255, 0) 50%),
+                 linear-gradient(160deg, #050a1a 0%, #000000 70%);
+  --bg: #05070f;
+  --card-bg: rgba(10, 14, 26, 0.55);
+  --card-border: rgba(47, 138, 255, 0.25);
+  --text-primary: #F5F7FF;
+  --text-secondary: #BFD9FF;
+  --text-muted: #8FB8E8;
+  --accent: #2F8AFF;
+  --accent-hover: #5AA6FF;
+  --accent-light: rgba(47, 138, 255, 0.15);
+  --accent-border: rgba(47, 138, 255, 0.4);
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(255, 122, 0, 0.15);
+  --shadow-md: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(47, 138, 255, 0.15);
   --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
-  --shadow-hover: 0 30px 60px -15px rgba(255, 122, 0, 0.35);
+  --shadow-hover: 0 30px 60px -15px rgba(47, 138, 255, 0.35);
+}
+
+[data-theme='colorful'] .hero.glass {
+  background: rgba(139, 92, 246, 0.85);
 }
 
 * {
