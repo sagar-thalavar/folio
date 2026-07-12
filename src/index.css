@@ -84,7 +84,7 @@
   color: #1B1B1B !important;
 }
 
-[data-theme='colorful'] .project-card:nth-child(1) { background: #F2DE5C; }
+[data-theme='colorful'] .project-card:nth-child(1) { background: #FFE066; }
 [data-theme='colorful'] .project-card:nth-child(2) { background: #A29BF2; }
 [data-theme='colorful'] .project-card:nth-child(3) { background: #6FC3F0; }
 [data-theme='colorful'] .project-card:nth-child(4) { background: #A8D5A0; }
