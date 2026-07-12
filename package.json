@@ -12,9 +12,9 @@
     "test:lighthouse": "lhci autorun"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.110.0",
-    "lucide-react": "^1.23.0",
-    "posthog-js": "^1.396.9",
+    "@supabase/supabase-js": "^2.110.2",
+    "lucide-react": "^1.24.0",
+    "posthog-js": "^1.399.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
