@@ -1768,7 +1768,7 @@ a:focus-visible {
   height: 100vh;
   background-color: var(--bg);
   background-image: var(--bg-gradient);
-  background-attachment: fixed;
+  background-attachment: scroll;
   display: flex;
   align-items: center;
   justify-content: center;
