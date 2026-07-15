@@ -21,8 +21,7 @@ const projectsData: Project[] = [
     title: "Treasure Hunt: A SaaS Game",
     badge: "Quick SaaS project",
     href: "https://treasure.sagarthalavar.in/",
-    summary: "A SaaS-style treasure hunt game built for a colleague Tharun. Features auth, location-based treasures, and reward points — genuinely fun to play.",
-    color: "#07a5c1"
+    summary: "A SaaS-style treasure hunt game built for a colleague Tharun. Features auth, location-based treasures, and reward points — genuinely fun to play."
   },
   {
     title: "PiCollision: Mathematical Simulator",
