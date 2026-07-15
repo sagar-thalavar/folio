@@ -17,6 +17,12 @@ const projectsData: Project[] = [
     summary: "A private visitor journal where guests sign in, leave a selfie and a memory, and browse a public wall of moments."
   },
   {
+    title: "Treasure Hunt: A SaaS Game",
+    badge: "Quick SaaS project",
+    href: "https://treasure.sagarthalavar.in/",
+    summary: "A quick SaaS-style treasure hunt game built to show a college friend Tharun how a real product gets made — clues, levels, and a live leaderboard."
+  },
+  {
     title: "PiCollision: Mathematical Simulator",
     badge: "Physics + curiosity",
     href: "https://collision.sagarthalavar.in",
