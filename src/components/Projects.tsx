@@ -7,6 +7,7 @@ interface Project {
   badge: string;
   href: string;
   summary: string;
+  color?: string;
 }
 
 const projectsData: Project[] = [
@@ -20,7 +21,8 @@ const projectsData: Project[] = [
     title: "Treasure Hunt: A SaaS Game",
     badge: "Quick SaaS project",
     href: "https://treasure.sagarthalavar.in/",
-    summary: "A SaaS-style treasure hunt game built for a colleague Tharun. Features auth, location-based treasures, and reward points — genuinely fun to play."
+    summary: "A SaaS-style treasure hunt game built for a colleague Tharun. Features auth, location-based treasures, and reward points — genuinely fun to play.",
+    color: "#07a5c1"
   },
   {
     title: "PiCollision: Mathematical Simulator",
@@ -69,6 +71,7 @@ const Projects: React.FC = () => {
             badge={project.badge}
             href={project.href}
             summary={project.summary}
+            color={project.color}
           />
         ))}
       </div>
