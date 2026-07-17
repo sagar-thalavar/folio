@@ -8,15 +8,15 @@ const SplashOverlay: React.FC<SplashOverlayProps> = ({ onComplete }) => {
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    // 1. Hold splash screen for 1.6s of logo drawing and text fade
+    // 1. Hold splash screen for 800ms of logo drawing and text fade
     const timer = setTimeout(() => {
       setIsExiting(true);
-    }, 1600);
+    }, 800);
 
-    // 2. Complete splash and remove from DOM after exit transition (600ms)
+    // 2. Complete splash and remove from DOM after exit transition (400ms)
     const completeTimer = setTimeout(() => {
       onComplete();
-    }, 2200);
+    }, 1200);
 
     return () => {
       clearTimeout(timer);
