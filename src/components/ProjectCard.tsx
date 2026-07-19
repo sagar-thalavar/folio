@@ -10,17 +10,17 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ title, badge, href, summary }) => {
   return (
-    <article className="project-card glass">
+    <a className="project-card glass" href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
       <div className="project-top">
         <span className="project-badge">{badge}</span>
         <h3 className="project-title">{title}</h3>
         <p className="project-desc">{summary}</p>
       </div>
-      <a className="project-link" href={href} target="_blank" rel="noopener noreferrer">
+      <div className="project-link">
         <span>Open project</span>
         <ArrowUpRight size={16} className="project-link-icon" />
-      </a>
-    </article>
+      </div>
+    </a>
   );
 };
 
