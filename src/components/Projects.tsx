@@ -7,6 +7,7 @@ interface Project {
   badge: string;
   href: string;
   summary: string;
+  color?: string;
 }
 
 const projectsData: Project[] = [
@@ -15,6 +16,18 @@ const projectsData: Project[] = [
     badge: "Local PDF & File Utilities",
     href: "https://files.sagarthalavar.in",
     summary: "An all-in-one serverless local file studio to edit, merge, rotate, sign, convert, and compress PDFs, images, and office documents entirely in the browser."
+  },
+  {
+    title: "Guestbook: A Visitor Journal",
+    badge: "Web app",
+    href: "https://sagarthalavar.in/guestbook",
+    summary: "A private visitor journal where guests sign in, leave a selfie and a memory, and browse a public wall of moments."
+  },
+  {
+    title: "Treasure Hunt: A SaaS Game",
+    badge: "Quick SaaS project",
+    href: "https://treasure.sagarthalavar.in/",
+    summary: "A SaaS-style treasure hunt game built for a colleague Tharun. Features auth, location-based treasures, and reward points — genuinely fun to play."
   },
   {
     title: "PiCollision: Mathematical Simulator",
@@ -63,6 +76,7 @@ const Projects: React.FC = () => {
             badge={project.badge}
             href={project.href}
             summary={project.summary}
+            color={project.color}
           />
         ))}
       </div>
