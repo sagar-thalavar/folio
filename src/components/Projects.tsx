@@ -11,6 +11,12 @@ interface Project {
 
 const projectsData: Project[] = [
   {
+    title: "Files Sandbox: PDF & File Studio",
+    badge: "Local PDF & File Utilities",
+    href: "https://files.sagarthalavar.in",
+    summary: "An all-in-one serverless local file studio to edit, merge, rotate, sign, convert, and compress PDFs, images, and office documents entirely in the browser."
+  },
+  {
     title: "PiCollision: Mathematical Simulator",
     badge: "Physics + curiosity",
     href: "https://collision.sagarthalavar.in",
