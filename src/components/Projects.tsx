@@ -24,6 +24,12 @@ const projectsData: Project[] = [
     summary: "A SaaS-style treasure hunt game built for a colleague Tharun. Features auth, location-based treasures, and reward points — genuinely fun to play."
   },
   {
+    title: "Files Sandbox: PDF & File Studio",
+    badge: "Local File Utilities",
+    href: "https://files.sagarthalavar.in/",
+    summary: "A local workspace for files operations: organizer, converter, signature adder, file size reducer, and CSV file analyzer."
+  },
+  {
     title: "PiCollision: Mathematical Simulator",
     badge: "Physics + curiosity",
     href: "https://collision.sagarthalavar.in",
