@@ -79,9 +79,11 @@
 
 [data-theme='colorful'] .project-card:nth-child(1) { background: #FFE066; }
 [data-theme='colorful'] .project-card:nth-child(2) { background: #A29BF2; }
-[data-theme='colorful'] .project-card:nth-child(3) { background: #6FC3F0; }
-[data-theme='colorful'] .project-card:nth-child(4) { background: #A8D5A0; }
-[data-theme='colorful'] .project-card:nth-child(5) { background: #F2998A; }
+[data-theme='colorful'] .project-card:nth-child(3) { background: #8FD8CC; }
+[data-theme='colorful'] .project-card:nth-child(4) { background: #6FC3F0; }
+[data-theme='colorful'] .project-card:nth-child(5) { background: #A8D5A0; }
+[data-theme='colorful'] .project-card:nth-child(6) { background: #B5D9F6; }
+[data-theme='colorful'] .project-card:nth-child(7) { background: #E8B7C9; }
 
 [data-theme='colorful'] .project-card .project-badge {
   background: rgba(255, 255, 255, 0.55);
