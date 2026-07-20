@@ -19,7 +19,7 @@ const App: React.FC = () => {
     } catch (e) {
       // ignore security exceptions in sandboxed test runs
     }
-    return 'light';
+    return 'colorful';
   });
 
   const [showSplash, setShowSplash] = useState(true);

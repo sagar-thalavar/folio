@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, BookOpen, Camera, Waves } from 'lucide-react';
+import { Mail, BookOpen, Camera, Waves, Building } from 'lucide-react';
 import { LinkedinIcon, GithubIcon, InstagramIcon } from './BrandIcons';
 import { navigate } from '../lib/navigation';
 
@@ -17,6 +17,7 @@ const Hero: React.FC = () => {
           target="_blank" 
           rel="noopener noreferrer"
           aria-label="LinkedIn"
+          title="LinkedIn"
         >
           <LinkedinIcon size={18} />
         </a>
@@ -26,17 +27,9 @@ const Hero: React.FC = () => {
           target="_blank" 
           rel="noopener noreferrer"
           aria-label="GitHub"
+          title="GitHub"
         >
           <GithubIcon size={18} />
-        </a>
-        <a 
-          className="social-icon-btn" 
-          href="https://www.instagram.com/otziburl/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          aria-label="Instagram"
-        >
-          <InstagramIcon size={18} />
         </a>
         <a
           className="social-icon-btn"
@@ -44,8 +37,29 @@ const Hero: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Email"
+          title="Email"
         >
           <Mail size={18} />
+        </a>
+        <a
+          className="social-icon-btn"
+          href="https://share.google/UvPtn6OHxLGjI5K1y"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Bangalore International Centre (BIC) Exhibition"
+          title="Bangalore International Centre (BIC) Exhibition"
+        >
+          <Building size={18} />
+        </a>
+        <a 
+          className="social-icon-btn" 
+          href="https://www.instagram.com/otziburl/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+          title="Instagram"
+        >
+          <InstagramIcon size={18} />
         </a>
       </div>
       
