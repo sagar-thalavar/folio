@@ -12,12 +12,6 @@ interface Project {
 
 const projectsData: Project[] = [
   {
-    title: "Files Sandbox: PDF & File Studio",
-    badge: "Local PDF & File Utilities",
-    href: "https://files.sagarthalavar.in",
-    summary: "An all-in-one serverless local file studio to edit, merge, rotate, sign, convert, and compress PDFs, images, and office documents entirely in the browser."
-  },
-  {
     title: "Guestbook: A Visitor Journal",
     badge: "Web app",
     href: "https://sagarthalavar.in/guestbook",
@@ -28,6 +22,12 @@ const projectsData: Project[] = [
     badge: "Quick SaaS project",
     href: "https://treasure.sagarthalavar.in/",
     summary: "A SaaS-style treasure hunt game built for a colleague Tharun. Features auth, location-based treasures, and reward points — genuinely fun to play."
+  },
+  {
+    title: "Files Sandbox: PDF & File Studio",
+    badge: "Local File Utilities",
+    href: "https://files.sagarthalavar.in/",
+    summary: "A local workspace for files operations: organizer, converter, signature adder, file size reducer, and CSV file analyzer."
   },
   {
     title: "PiCollision: Mathematical Simulator",
