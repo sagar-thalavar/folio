@@ -52,6 +52,12 @@ const projectsData: Project[] = [
     badge: "College mini project",
     href: "https://equilibrium.sagarthalavar.in",
     summary: "A college project designed as a life-balancing planner application to track, prioritize, and manage tasks across life, college, and work."
+  },
+  {
+    title: "Sagar's Playground: Dev Sandbox",
+    badge: "Experimental Sandbox",
+    href: "/playground",
+    summary: "A personal sandbox and code dump to prototype experimental features, run spikes, and track feature completion percentages."
   }
 ];
 

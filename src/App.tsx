@@ -10,6 +10,7 @@ import Note from './components/Note';
 
 const Writings = React.lazy(() => import('./components/Writings'));
 const Admin = React.lazy(() => import('./components/Admin'));
+const Playground = React.lazy(() => import('./components/Playground'));
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark' | 'colorful'>(() => {
@@ -70,6 +71,7 @@ const App: React.FC = () => {
 
   const isAdminView = currentPath === '/admin';
   const isArticlesView = currentPath === '/article';
+  const isPlaygroundView = currentPath === '/playground';
 
   return (
     <>
@@ -123,6 +125,31 @@ const App: React.FC = () => {
 
             <React.Suspense fallback={<div className="loading-spinner"></div>}>
               <Writings />
+            </React.Suspense>
+          </main>
+        ) : isPlaygroundView ? (
+          <main className="container">
+            <header className="top-header">
+              <a 
+                href="#" 
+                className="writings-nav-link"
+                onClick={(e) => { e.preventDefault(); window.history.back(); }}
+              >
+                <ArrowLeft size={16} />
+                <span>Back to Home</span>
+              </a>
+              <button 
+                className="theme-toggle" 
+                onClick={toggleTheme} 
+                aria-label="Toggle theme"
+                title={themeTitle}
+              >
+                {themeIcon}
+              </button>
+            </header>
+
+            <React.Suspense fallback={<div className="loading-spinner"></div>}>
+              <Playground />
             </React.Suspense>
           </main>
         ) : (
