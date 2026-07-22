@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import { navigate } from '../lib/navigation';
 
 interface ProjectCardProps {
   title: string;
@@ -10,8 +11,24 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ title, badge, href, summary, color }) => {
+  const isInternal = href.startsWith('/');
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isInternal) {
+      e.preventDefault();
+      navigate(href);
+    }
+  };
+
   return (
-    <a className="project-card glass" href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+    <a 
+      className="project-card glass" 
+      href={href} 
+      target={isInternal ? undefined : "_blank"} 
+      rel={isInternal ? undefined : "noopener noreferrer"} 
+      onClick={handleClick}
+      style={{ textDecoration: 'none' }}
+    >
       <div className="project-top">
         <span
           className="project-badge"

@@ -84,6 +84,7 @@
 [data-theme='colorful'] .project-card:nth-child(5) { background: #A8D5A0; }
 [data-theme='colorful'] .project-card:nth-child(6) { background: #B5D9F6; }
 [data-theme='colorful'] .project-card:nth-child(7) { background: #E8B7C9; }
+[data-theme='colorful'] .project-card:nth-child(8) { background: #C8B9F5; }
 
 [data-theme='colorful'] .project-card .project-badge {
   background: rgba(255, 255, 255, 0.55);
@@ -1907,6 +1908,314 @@ a:focus-visible {
 @keyframes fillProgress {
   to {
     transform: scaleX(1);
+  }
+}
+
+/* ==========================================================================
+   SAGAR'S PLAYGROUND DASHBOARD STYLES
+   ========================================================================== */
+.playground-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.playground-layout {
+  display: flex;
+  gap: 24px;
+  min-height: 550px;
+}
+
+.playground-sidebar {
+  flex: 1;
+  min-width: 280px;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.playground-sidebar .sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.playground-sidebar .sidebar-header h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.playground-sidebar .spike-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--card-border);
+  color: var(--text-secondary);
+}
+
+.playground-sidebar .tab-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.playground-sidebar .tab-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.playground-sidebar .tab-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--text-muted);
+}
+
+.playground-sidebar .tab-btn.active {
+  border-left-width: 4px !important;
+  box-shadow: var(--shadow-md);
+}
+
+.playground-sidebar .tab-btn-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.playground-sidebar .indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.playground-sidebar .tab-btn-title h4 {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.playground-sidebar .tab-btn-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.playground-sidebar .tab-btn-meta .badge-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.playground-sidebar .tab-btn-meta .progress-value {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.playground-sidebar .add-spike-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--card-border);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Workspace */
+.playground-workspace {
+  flex: 2;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.playground-workspace .workspace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.playground-workspace .title-group h2 {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 8px 0 4px;
+}
+
+.playground-workspace .title-group .subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.playground-workspace .category-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid transparent;
+  display: inline-block;
+}
+
+.playground-workspace .progress-card {
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.playground-workspace .progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.playground-workspace .progress-num {
+  font-weight: 800;
+}
+
+.playground-workspace .progress-bar-track {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 99px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.playground-workspace .progress-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.playground-workspace .workspace-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.playground-workspace h3 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+
+.playground-workspace .desc-section p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.playground-workspace .checklist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.playground-workspace .checklist-header span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.playground-workspace .task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.playground-workspace .task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.playground-workspace .task-item .icon-done {
+  color: var(--accent);
+}
+
+.playground-workspace .task-item .icon-todo {
+  color: var(--text-muted);
+}
+
+.playground-workspace .sandbox-info-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(246, 208, 143, 0.1);
+  border: 1px solid rgba(246, 208, 143, 0.2);
+  color: #8A7256;
+  font-size: 0.8rem;
+  margin-top: 10px;
+}
+
+.playground-workspace .sandbox-info-banner p {
+  margin: 0;
+}
+
+[data-theme='dark'] .playground-workspace .progress-bar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .playground-workspace .sandbox-info-banner {
+  background: rgba(246, 208, 143, 0.05);
+  border-color: rgba(246, 208, 143, 0.1);
+  color: #F6D08F;
+}
+
+@media (max-width: 768px) {
+  .playground-layout {
+    flex-direction: column;
+  }
+  
+  .playground-sidebar {
+    max-width: 100%;
   }
 }
 
