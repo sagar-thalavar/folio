@@ -71,8 +71,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       currency: order.currency,
       key_id: process.env.RAZORPAY_KEY_ID
     });
-  } catch (error: any) {
+  } catch (error) {
+    const errMsg = error instanceof Error ? error.message : String(error);
     console.error('Error creating Razorpay order:', error);
-    return res.status(500).json({ error: error.message || 'Internal Server Error' });
+    return res.status(500).json({ error: errMsg });
   }
 }

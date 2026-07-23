@@ -62,8 +62,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       return res.status(400).json({ success: false, error: 'Signature verification failed.' });
     }
-  } catch (error: any) {
+  } catch (error) {
+    const errMsg = error instanceof Error ? error.message : String(error);
     console.error('Error verifying signature:', error);
-    return res.status(500).json({ error: error.message || 'Internal Server Error' });
+    return res.status(500).json({ error: errMsg });
   }
 }

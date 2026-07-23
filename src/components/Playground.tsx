@@ -48,7 +48,7 @@ const initialItems: PlaygroundItem[] = [
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
-    if ((window as any).Razorpay) {
+    if ('Razorpay' in window) {
       resolve(true);
       return;
     }
@@ -78,25 +78,22 @@ const Playground: React.FC = () => {
   const [transactionId, setTransactionId] = useState<string>('');
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
+interface FeedItem {
+  name: string;
+  amount: number;
+  service_type: string;
+  message: string | null;
+  created_at: string;
+}
+
   // Feed states
-  const [feed, setFeed] = useState<any[]>([]);
+  const [feed, setFeed] = useState<FeedItem[]>([]);
   const [feedLoading, setFeedLoading] = useState<boolean>(false);
 
   const currentItem = items.find(item => item.id === activeTab) || items[0];
 
   // Helper to determine if custom pricing is selected
   const isCustomService = subService.toLowerCase().includes('custom');
-
-  // Sync sub-services on tier change
-  useEffect(() => {
-    if (selectedTier === 'consulting') {
-      setSubService('30-Min Chat or Q&A');
-    } else if (selectedTier === 'review') {
-      setSubService('Portfolio Review & Feedback');
-    } else if (selectedTier === 'collaboration') {
-      setSubService('Join my Active Projects');
-    }
-  }, [selectedTier]);
 
   // Fetch feed items
   const fetchFeed = async () => {
@@ -122,6 +119,7 @@ const Playground: React.FC = () => {
 
   useEffect(() => {
     if (activeTab === 'support-work') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       fetchFeed();
     }
   }, [activeTab]);
@@ -180,29 +178,30 @@ const Playground: React.FC = () => {
         name: 'Sagar Thalavar',
         description: subService,
         order_id: orderData.order_id,
-        handler: async function (response: any) {
+        handler: async function (paymentRes: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) {
           try {
             setLoading(true);
             const verifyRes = await fetch('/api/verify-payment', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature
+                razorpay_order_id: paymentRes.razorpay_order_id,
+                razorpay_payment_id: paymentRes.razorpay_payment_id,
+                razorpay_signature: paymentRes.razorpay_signature
               })
             });
 
             const verifyData = await verifyRes.json();
             if (verifyData.success) {
-              setTransactionId(response.razorpay_payment_id);
+              setTransactionId(paymentRes.razorpay_payment_id);
               setPaymentSuccess(true);
               fetchFeed();
             } else {
               setPaymentError(verifyData.error || 'Signature verification failed.');
             }
-          } catch (err: any) {
-            setPaymentError(err.message || 'Error occurred during verification.');
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            setPaymentError(msg);
           } finally {
             setLoading(false);
           }
@@ -221,11 +220,12 @@ const Playground: React.FC = () => {
         }
       };
 
-      const rzp = new (window as any).Razorpay(options);
+      const RzpConstructor = (window as unknown as { Razorpay: new (opts: unknown) => { open: () => void } }).Razorpay;
+      const rzp = new RzpConstructor(options);
       rzp.open();
-    } catch (err: any) {
-      console.error(err);
-      setPaymentError(err.message || 'Failed to process payment.');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setPaymentError(msg);
       setLoading(false);
     }
   };
@@ -581,7 +581,7 @@ const Playground: React.FC = () => {
                   <button 
                     type="button"
                     className={`service-card tier-consulting ${selectedTier === 'consulting' ? 'active' : ''}`}
-                    onClick={() => setSelectedTier('consulting')}
+                    onClick={() => { setSelectedTier('consulting'); setSubService('30-Min Chat or Q&A'); }}
                   >
                     <h4>1-on-1 Consulting</h4>
                     <span className="price-tag">₹499</span>
@@ -591,7 +591,7 @@ const Playground: React.FC = () => {
                   <button 
                     type="button"
                     className={`service-card tier-review ${selectedTier === 'review' ? 'active' : ''}`}
-                    onClick={() => setSelectedTier('review')}
+                    onClick={() => { setSelectedTier('review'); setSubService('Portfolio Review & Feedback'); }}
                   >
                     <h4>Reviews & Edits</h4>
                     <span className="price-tag">₹299</span>
@@ -601,7 +601,7 @@ const Playground: React.FC = () => {
                   <button 
                     type="button"
                     className={`service-card tier-collaboration ${selectedTier === 'collaboration' ? 'active' : ''}`}
-                    onClick={() => setSelectedTier('collaboration')}
+                    onClick={() => { setSelectedTier('collaboration'); setSubService('Join my Active Projects'); }}
                   >
                     <h4>Project Collaboration</h4>
                     <span className="price-tag">₹999</span>
