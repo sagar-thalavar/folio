@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Gamepad2, CheckCircle2, Circle, Plus, AlertTriangle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Gamepad2, CheckCircle2, Circle, Plus, AlertTriangle, Check, Loader2 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 interface PlaygroundItem {
   id: string;
@@ -13,11 +14,27 @@ interface PlaygroundItem {
 
 const initialItems: PlaygroundItem[] = [
   {
+    id: "support-work",
+    title: "Support My Work",
+    subtitle: "Consulting & Services",
+    progress: 100,
+    color: "#7EE3B3",
+    description: "Book a 30-minute consultation session, request feedback on your portfolio/resume, request custom development support, or collaborate on projects.",
+    tasks: [
+      { text: "Razorpay Sandbox accounts setup", completed: true },
+      { text: "Vercel serverless order creation API", completed: true },
+      { text: "Dynamic checkout overlay loading", completed: true },
+      { text: "Secure cryptographic hash verification", completed: true },
+      { text: "Supabase transaction persistence", completed: true },
+      { text: "Failsafe webhook event capturing", completed: true }
+    ]
+  },
+  {
     id: "mobile-detox",
     title: "Mobile Detox application",
     subtitle: "Screen time tracker & app blocker",
     progress: 0,
-    color: "#F4C39D", // Peach
+    color: "#F4C39D",
     description: "An experimental web application designed to help users limit screen time, block distracting apps, and cultivate better focus through gamified digital wellness tools.",
     tasks: [
       { text: "UI wireframes & layout design", completed: false },
@@ -29,14 +46,434 @@ const initialItems: PlaygroundItem[] = [
   }
 ];
 
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if ((window as any).Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
+
 const Playground: React.FC = () => {
   const [items] = useState<PlaygroundItem[]>(initialItems);
-  const [activeTab, setActiveTab] = useState<string>("mobile-detox");
+  const [activeTab, setActiveTab] = useState<string>("support-work");
+
+  // Booking states
+  const [selectedTier, setSelectedTier] = useState<'consulting' | 'review' | 'collaboration'>('consulting');
+  const [subService, setSubService] = useState<string>('30-Min Chat or Q&A');
+  const [customPrice, setCustomPrice] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [contactInfo, setContactInfo] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+  const [anonymous, setAnonymous] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false);
+  const [transactionId, setTransactionId] = useState<string>('');
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  // Feed states
+  const [feed, setFeed] = useState<any[]>([]);
+  const [feedLoading, setFeedLoading] = useState<boolean>(false);
 
   const currentItem = items.find(item => item.id === activeTab) || items[0];
 
+  // Helper to determine if custom pricing is selected
+  const isCustomService = subService.toLowerCase().includes('custom');
+
+  // Sync sub-services on tier change
+  useEffect(() => {
+    if (selectedTier === 'consulting') {
+      setSubService('30-Min Chat or Q&A');
+    } else if (selectedTier === 'review') {
+      setSubService('Portfolio Review & Feedback');
+    } else if (selectedTier === 'collaboration') {
+      setSubService('Join my Active Projects');
+    }
+  }, [selectedTier]);
+
+  // Fetch feed items
+  const fetchFeed = async () => {
+    try {
+      setFeedLoading(true);
+      const { data, error } = await supabase
+        .from('donations')
+        .select('name, amount, service_type, message, created_at')
+        .eq('status', 'success')
+        .eq('anonymous', false)
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      if (!error && data) {
+        setFeed(data);
+      }
+    } catch (err) {
+      console.error('Error fetching bookings feed:', err);
+    } finally {
+      setFeedLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'support-work') {
+      fetchFeed();
+    }
+  }, [activeTab]);
+
+  const handlePayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPaymentError(null);
+
+    if (!email) {
+      setPaymentError('Email address is required.');
+      return;
+    }
+
+    const finalAmount = isCustomService 
+      ? Number(customPrice) 
+      : (selectedTier === 'consulting' ? 499 : selectedTier === 'review' ? 299 : 999);
+
+    if (isNaN(finalAmount) || finalAmount < 10 || finalAmount > 5000) {
+      setPaymentError('Please enter a valid amount between ₹10 and ₹5,000.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        throw new Error('Failed to load Razorpay checkout script. Check connection.');
+      }
+
+      const response = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: finalAmount,
+          name: name || 'Anonymous',
+          email,
+          message,
+          service_type: subService,
+          contact_info: contactInfo,
+          anonymous
+        })
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || 'Failed to initiate order.');
+      }
+
+      const orderData = await response.json();
+
+      const options = {
+        key: orderData.key_id,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'Sagar Thalavar',
+        description: subService,
+        order_id: orderData.order_id,
+        handler: async function (response: any) {
+          try {
+            setLoading(true);
+            const verifyRes = await fetch('/api/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+              })
+            });
+
+            const verifyData = await verifyRes.json();
+            if (verifyData.success) {
+              setTransactionId(response.razorpay_payment_id);
+              setPaymentSuccess(true);
+              fetchFeed();
+            } else {
+              setPaymentError(verifyData.error || 'Signature verification failed.');
+            }
+          } catch (err: any) {
+            setPaymentError(err.message || 'Error occurred during verification.');
+          } finally {
+            setLoading(false);
+          }
+        },
+        prefill: {
+          name: name,
+          email: email
+        },
+        theme: {
+          color: '#FFE066'
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+          }
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (err: any) {
+      console.error(err);
+      setPaymentError(err.message || 'Failed to process payment.');
+      setLoading(false);
+    }
+  };
+
+  const getSubServiceOptions = () => {
+    switch (selectedTier) {
+      case 'consulting':
+        return [
+          '30-Min Chat or Q&A',
+          '30-Min Chess Session',
+          '30-Min LLM & AI Help',
+          '30-Min Excel/Sheets Help',
+          'Custom Consulting Request'
+        ];
+      case 'review':
+        return [
+          'Portfolio Review & Feedback',
+          'Resume Review & Feedback',
+          'Basic Video Editing',
+          'Document Writing/Editing',
+          'Poster/Graphic Design Help',
+          'Event Schedule Creation',
+          'Custom Review Request'
+        ];
+      case 'collaboration':
+        return [
+          'Join my Active Projects',
+          'Professional Connection Request',
+          'Custom Collaboration Request'
+        ];
+      default:
+        return [];
+    }
+  };
+
   return (
     <section className="panel playground-panel glass">
+      {/* Dynamic Style Injection for isolated page layout */}
+      <style>{`
+        .services-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
+          margin: 20px 0 28px;
+        }
+        .service-card {
+          padding: 20px;
+          border-radius: 16px;
+          border: 1px solid var(--card-border);
+          background: var(--card-bg);
+          cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          text-align: left;
+        }
+        .service-card:hover {
+          transform: translateY(-4px);
+          box-shadow: var(--shadow-md);
+        }
+        .service-card.active {
+          border-width: 2px;
+        }
+        [data-theme='light'] .service-card.active { border-color: #111; box-shadow: 0 0 12px rgba(17, 17, 17, 0.1); }
+        [data-theme='dark'] .service-card.active { border-color: #f9fafb; box-shadow: 0 0 12px rgba(249, 250, 251, 0.2); }
+        [data-theme='colorful'] .service-card.active { border-color: #2B2420; box-shadow: 0 0 12px rgba(43, 36, 32, 0.2); }
+        
+        [data-theme='colorful'] .service-card.tier-consulting { background: #FFE066 !important; color: #2B2420 !important; }
+        [data-theme='colorful'] .service-card.tier-review { background: #A29BF2 !important; color: #2B2420 !important; }
+        [data-theme='colorful'] .service-card.tier-collaboration { background: #8FD8CC !important; color: #2B2420 !important; }
+
+        .price-tag {
+          font-weight: 700;
+          font-size: 1.2rem;
+          color: var(--text-primary);
+          margin-top: 4px;
+        }
+        [data-theme='colorful'] .price-tag { color: #2B2420 !important; }
+        
+        .card-desc {
+          font-size: 0.85rem;
+          color: var(--text-muted);
+          line-height: 1.4;
+        }
+        [data-theme='colorful'] .card-desc { color: #5A4A3A !important; }
+
+        .booking-form {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          margin-top: 24px;
+        }
+        .booking-form .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .booking-form label {
+          font-size: 0.88rem;
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+        .booking-form input,
+        .booking-form select,
+        .booking-form textarea {
+          padding: 12px 16px;
+          border-radius: 12px;
+          border: 1px solid var(--card-border);
+          background: var(--card-bg);
+          color: var(--text-primary);
+          font-family: var(--font-body);
+          outline: none;
+          transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .booking-form input:focus,
+        .booking-form select:focus,
+        .booking-form textarea:focus {
+          border-color: var(--text-primary);
+          box-shadow: 0 0 0 3px var(--card-border);
+        }
+
+        .checkbox-container {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          cursor: pointer;
+          user-select: none;
+          font-size: 0.88rem;
+          margin: 4px 0;
+        }
+        .checkbox-container input {
+          width: auto;
+          margin: 0;
+          cursor: pointer;
+        }
+
+        .booking-submit-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 14px 28px;
+          border-radius: 99px;
+          border: 1px solid var(--accent-border);
+          background: var(--accent);
+          color: var(--bg);
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          width: fit-content;
+        }
+        [data-theme='colorful'] .booking-submit-btn {
+          background: #FFE066;
+          color: #2B2420;
+          border-color: #FFE066;
+        }
+        .booking-submit-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          opacity: 0.9;
+        }
+        .booking-submit-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .booking-success-view {
+          text-align: center;
+          padding: 48px 24px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 16px;
+        }
+        .success-check-circle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          background: rgba(16, 185, 129, 0.1);
+          color: #10B981;
+          margin-bottom: 8px;
+          animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes scaleUp {
+          0% { transform: scale(0.5); opacity: 0; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+
+        .feed-container {
+          margin-top: 48px;
+          border-top: 1px solid var(--card-border);
+          padding-top: 32px;
+        }
+        .feed-title {
+          font-family: var(--font-heading);
+          font-size: 1.25rem;
+          margin-bottom: 20px;
+        }
+        .feed-list {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .feed-item {
+          padding: 16px;
+          border-radius: 16px;
+          border: 1px solid var(--card-border);
+          background: var(--card-bg);
+          text-align: left;
+        }
+        .feed-meta {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.8rem;
+          color: var(--text-muted);
+          margin-bottom: 6px;
+        }
+        .feed-service {
+          display: inline-block;
+          font-size: 0.75rem;
+          background: var(--accent-light);
+          border: 1px solid var(--accent-border);
+          padding: 2px 8px;
+          border-radius: 99px;
+          color: var(--text-primary);
+          margin-bottom: 8px;
+          font-weight: 550;
+        }
+        .feed-message {
+          font-size: 0.9rem;
+          line-height: 1.4;
+          color: var(--text-secondary);
+        }
+
+        .form-error {
+          padding: 12px 16px;
+          background: rgba(239, 68, 68, 0.1);
+          border: 1px solid rgba(239, 68, 68, 0.2);
+          border-radius: 12px;
+          color: #EF4444;
+          font-size: 0.88rem;
+          text-align: left;
+        }
+      `}</style>
+
       <div className="section-header">
         <div className="section-title-group">
           <Gamepad2 className="section-icon" size={24} />
@@ -106,7 +543,7 @@ const Playground: React.FC = () => {
                   borderColor: `${currentItem.color}33`
                 }}
               >
-                In Planning
+                {currentItem.id === 'support-work' ? 'Live System' : 'In Planning'}
               </span>
               <h2>{currentItem.title}</h2>
               <p className="subtitle">{currentItem.subtitle}</p>
@@ -132,35 +569,254 @@ const Playground: React.FC = () => {
           </header>
 
           <div className="workspace-body">
-            <div className="desc-section">
-              <h3>Description</h3>
-              <p>{currentItem.description}</p>
-            </div>
+            {currentItem.id === 'support-work' ? (
+              // Support / Consulting View
+              <div className="support-work-container">
+                <p style={{ textAlign: 'left', lineHeight: 1.5 }}>
+                  Book a consultation, request feedback on a project or resume, collaborate together, or coordinate a custom development support task.
+                </p>
 
-            <div className="checklist-section">
-              <div className="checklist-header">
-                <h3>Feature Checklist</h3>
-                <span>{currentItem.tasks.filter(t => t.completed).length} / {currentItem.tasks.length} done</span>
-              </div>
-              
-              <ul className="task-list">
-                {currentItem.tasks.map((task, idx) => (
-                  <li key={idx} className={`task-item ${task.completed ? 'completed' : ''}`}>
-                    {task.completed ? (
-                      <CheckCircle2 size={18} className="icon-done" />
-                    ) : (
-                      <Circle size={18} className="icon-todo" />
+                {/* Service Cards Selector */}
+                <div className="services-grid">
+                  <button 
+                    type="button"
+                    className={`service-card tier-consulting ${selectedTier === 'consulting' ? 'active' : ''}`}
+                    onClick={() => setSelectedTier('consulting')}
+                  >
+                    <h4>1-on-1 Consulting</h4>
+                    <span className="price-tag">₹499</span>
+                    <p className="card-desc">30-minute teaching, advice, prompt help, or sheet creation.</p>
+                  </button>
+
+                  <button 
+                    type="button"
+                    className={`service-card tier-review ${selectedTier === 'review' ? 'active' : ''}`}
+                    onClick={() => setSelectedTier('review')}
+                  >
+                    <h4>Reviews & Edits</h4>
+                    <span className="price-tag">₹299</span>
+                    <p className="card-desc">Audit of your portfolio/resume, video editing, or graphics help.</p>
+                  </button>
+
+                  <button 
+                    type="button"
+                    className={`service-card tier-collaboration ${selectedTier === 'collaboration' ? 'active' : ''}`}
+                    onClick={() => setSelectedTier('collaboration')}
+                  >
+                    <h4>Project Collaboration</h4>
+                    <span className="price-tag">₹999</span>
+                    <p className="card-desc">Join active development projects or request network introductions.</p>
+                  </button>
+                </div>
+
+                {/* Booking / Checkout Form */}
+                {!paymentSuccess ? (
+                  <form onSubmit={handlePayment} className="booking-form">
+                    {paymentError && (
+                      <div className="form-error">
+                        {paymentError}
+                      </div>
                     )}
-                    <span>{task.text}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
 
-            <div className="sandbox-info-banner">
-              <AlertTriangle size={18} />
-              <p>This is a sandboxed display. You can edit this workspace file to start building the actual application UI here in React!</p>
-            </div>
+                    <div className="form-group">
+                      <label htmlFor="sub-service-select">Select Service Desired</label>
+                      <select 
+                        id="sub-service-select"
+                        value={subService}
+                        onChange={(e) => setSubService(e.target.value)}
+                      >
+                        {getSubServiceOptions().map((opt) => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {isCustomService && (
+                      <div className="form-group">
+                        <label htmlFor="custom-price-input">Custom Amount (₹)</label>
+                        <input
+                          id="custom-price-input"
+                          type="number"
+                          min="10"
+                          max="5000"
+                          placeholder="Enter agreed amount (e.g. 500)"
+                          value={customPrice}
+                          onChange={(e) => setCustomPrice(e.target.value)}
+                          required
+                        />
+                        <small style={{ textAlign: 'left', color: 'var(--text-muted)' }}>Enter amount between ₹10 and ₹5,000.</small>
+                      </div>
+                    )}
+
+                    <div className="form-group">
+                      <label htmlFor="booking-name">Your Name</label>
+                      <input 
+                        id="booking-name"
+                        type="text" 
+                        placeholder={anonymous ? "Will be hidden in feed" : "Your Name"}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        disabled={anonymous}
+                        required={!anonymous}
+                      />
+                    </div>
+
+                    <label className="checkbox-container">
+                      <input 
+                        type="checkbox"
+                        checked={anonymous}
+                        onChange={(e) => setAnonymous(e.target.checked)}
+                      />
+                      <span>Make this booking anonymous on the public feed</span>
+                    </label>
+
+                    <div className="form-group">
+                      <label htmlFor="booking-email">Email Address</label>
+                      <input 
+                        id="booking-email"
+                        type="email" 
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                      <small style={{ textAlign: 'left', color: 'var(--text-muted)' }}>For transaction confirmation and scheduling details.</small>
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="booking-contact">Contact Info (WhatsApp link, Calendly, or handle)</label>
+                      <input 
+                        id="booking-contact"
+                        type="text" 
+                        placeholder="e.g. calendly.com/username or @handle"
+                        value={contactInfo}
+                        onChange={(e) => setContactInfo(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="booking-message">Details of your request</label>
+                      <textarea 
+                        id="booking-message"
+                        rows={4}
+                        placeholder={
+                          selectedTier === 'review'
+                            ? "Provide links to your resume, portfolio draft, or video clips..."
+                            : selectedTier === 'consulting'
+                            ? "Describe what you would like to discuss or learn (chess, AI prompts, Excel sheets)..."
+                            : "Share details about the project collaboration or networking connection request..."
+                        }
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <button 
+                      type="submit" 
+                      className="booking-submit-btn"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="animate-spin" size={18} />
+                          <span>Initiating Checkout...</span>
+                        </>
+                      ) : (
+                        <span>Book Service (₹{isCustomService ? (customPrice || '0') : (selectedTier === 'consulting' ? '499' : selectedTier === 'review' ? '299' : '999')})</span>
+                      )}
+                    </button>
+                  </form>
+                ) : (
+                  // Success View
+                  <div className="booking-success-view">
+                    <div className="success-check-circle">
+                      <Check size={36} />
+                    </div>
+                    <h3>Booking Confirmed!</h3>
+                    <p style={{ maxWidth: '400px', margin: '0 auto', lineHeight: 1.5 }}>
+                      Thank you for booking **{subService}**. 
+                      A scheduling query will be sent to your email (**{email}**) shortly.
+                    </p>
+                    <small style={{ color: 'var(--text-muted)' }}>Transaction Reference: {transactionId}</small>
+                    <button 
+                      type="button"
+                      className="booking-submit-btn" 
+                      onClick={() => {
+                        setPaymentSuccess(false);
+                        setName('');
+                        setEmail('');
+                        setContactInfo('');
+                        setMessage('');
+                        setCustomPrice('');
+                      }}
+                      style={{ marginTop: '16px' }}
+                    >
+                      Book Another Service
+                    </button>
+                  </div>
+                )}
+
+                {/* Public Supporters Feed */}
+                <div className="feed-container">
+                  <h3 className="feed-title">Recent Public Bookings</h3>
+                  {feedLoading ? (
+                    <p style={{ color: 'var(--text-muted)' }}>Fetching booking updates...</p>
+                  ) : feed.length === 0 ? (
+                    <p style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>No public bookings completed yet.</p>
+                  ) : (
+                    <div className="feed-list">
+                      {feed.map((item, idx) => (
+                        <div key={idx} className="feed-item">
+                          <div className="feed-meta">
+                            <span className="feed-author">👤 {item.name}</span>
+                            <span className="feed-date">{new Date(item.created_at).toLocaleDateString()}</span>
+                          </div>
+                          <span className="feed-service">{item.service_type} (₹{item.amount})</span>
+                          {item.message && (
+                            <p className="feed-message">{item.message}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              // Original Spike Workspace Views
+              <>
+                <div className="desc-section">
+                  <h3>Description</h3>
+                  <p>{currentItem.description}</p>
+                </div>
+
+                <div className="checklist-section">
+                  <div className="checklist-header">
+                    <h3>Feature Checklist</h3>
+                    <span>{currentItem.tasks.filter(t => t.completed).length} / {currentItem.tasks.length} done</span>
+                  </div>
+                  
+                  <ul className="task-list">
+                    {currentItem.tasks.map((task, idx) => (
+                      <li key={idx} className={`task-item ${task.completed ? 'completed' : ''}`}>
+                        {task.completed ? (
+                          <CheckCircle2 size={18} className="icon-done" />
+                        ) : (
+                          <Circle size={18} className="icon-todo" />
+                        )}
+                        <span>{task.text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="sandbox-info-banner">
+                  <AlertTriangle size={18} />
+                  <p>This is a sandboxed display. You can edit this workspace file to start building the actual application UI here in React!</p>
+                </div>
+              </>
+            )}
           </div>
         </main>
       </div>

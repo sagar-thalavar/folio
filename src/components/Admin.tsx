@@ -6,7 +6,8 @@ import { renderMarkdown } from '../lib/markdown';
 import { navigate } from '../lib/navigation';
 import { 
   Key, LogOut, ArrowLeft, Plus, Edit3, Trash2, 
-  Eye, FileText, CheckCircle, AlertCircle, Save 
+  Eye, FileText, CheckCircle, AlertCircle, Save,
+  CreditCard
 } from 'lucide-react';
 
 const Admin: React.FC = () => {
@@ -35,8 +36,31 @@ const Admin: React.FC = () => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   
-  // Tab state (write vs manage)
-  const [activeTab, setActiveTab] = useState<'manage' | 'editor'>('manage');
+  // Tab state (write vs manage vs donations)
+  const [activeTab, setActiveTab] = useState<'manage' | 'editor' | 'donations'>('manage');
+
+  // Donations state
+  const [donations, setDonations] = useState<any[]>([]);
+  const [donationsLoading, setDonationsLoading] = useState(false);
+  const [donationsError, setDonationsError] = useState<string | null>(null);
+
+  const fetchDonations = async () => {
+    try {
+      if (isMountedRef.current) setDonationsLoading(true);
+      const { data, error } = await supabase
+        .from('donations')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      if (isMountedRef.current) setDonations(data || []);
+    } catch (err: any) {
+      console.error('Error fetching donations:', err);
+      if (isMountedRef.current) setDonationsError(err.message || 'Failed to fetch bookings.');
+    } finally {
+      if (isMountedRef.current) setDonationsLoading(false);
+    }
+  };
 
   // Lifecycle references to prevent memory leaks on unmount
   const isMountedRef = useRef(true);
@@ -94,6 +118,14 @@ const Admin: React.FC = () => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchAdminPosts();
   }, [session]);
+
+  // Fetch donations when tab is active
+  useEffect(() => {
+    if (!session) return;
+    if (activeTab === 'donations') {
+      fetchDonations();
+    }
+  }, [session, activeTab]);
 
   // Handler for title change that auto-generates slug
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -374,6 +406,13 @@ const Admin: React.FC = () => {
           <Plus size={18} />
           <span>Write New Post</span>
         </button>
+        <button 
+          className={`tab-btn ${activeTab === 'donations' ? 'active' : ''}`}
+          onClick={() => { resetForm(); setActiveTab('donations'); }}
+        >
+          <CreditCard size={18} />
+          <span>Manage Donations</span>
+        </button>
       </nav>
 
       <hr className="dashboard-divider" />
@@ -437,7 +476,7 @@ const Admin: React.FC = () => {
             </div>
           )}
         </div>
-      ) : (
+      ) : activeTab === 'editor' ? (
         <div className="tab-panel editor-panel">
           <form onSubmit={handleSavePost} className="editor-form">
             
@@ -581,7 +620,155 @@ const Admin: React.FC = () => {
             </div>
           </form>
         </div>
+      ) : (
+        <div className="tab-panel donations-panel">
+          <style>{`
+            .donations-metrics-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 16px;
+              margin-bottom: 28px;
+            }
+            .donation-metric-card {
+              padding: 24px;
+              border-radius: 16px;
+              text-align: center;
+            }
+            .metric-val {
+              font-size: 1.8rem;
+              font-weight: 700;
+              color: var(--text-primary);
+              margin-top: 8px;
+            }
+            .donation-table-row {
+              padding: 16px;
+              border-radius: 16px;
+              border: 1px solid var(--card-border);
+              background: var(--card-bg);
+              margin-bottom: 12px;
+              text-align: left;
+            }
+            .badge-donation-status {
+              padding: 2px 8px;
+              border-radius: 99px;
+              font-size: 0.75rem;
+              font-weight: 600;
+            }
+            .badge-donation-status.success {
+              background: rgba(16, 185, 129, 0.1);
+              color: #10B981;
+            }
+            .badge-donation-status.created {
+              background: rgba(59, 130, 246, 0.1);
+              color: #3B82F6;
+            }
+            .badge-donation-status.failed {
+              background: rgba(239, 68, 68, 0.1);
+              color: #EF4444;
+            }
+            .badge-anon {
+              background: var(--accent-light);
+              color: var(--text-muted);
+              padding: 2px 8px;
+              border-radius: 99px;
+              font-size: 0.75rem;
+              margin-left: 8px;
+            }
+          `}</style>
+
+          {donationsLoading ? (
+            <div className="dashboard-state">
+              <div className="loading-spinner"></div>
+              <p>Fetching bookings from server...</p>
+            </div>
+          ) : donationsError ? (
+            <div className="dashboard-state error">
+              <AlertCircle size={24} />
+              <p>{donationsError}</p>
+            </div>
+          ) : (
+            <>
+              {/* Render Metrics */}
+              {(() => {
+                const successful = donations.filter(d => d.status === 'success');
+                const totalEarnings = successful.reduce((sum, d) => sum + Number(d.amount), 0);
+                const totalBookings = successful.length;
+                const todayStr = new Date().toDateString();
+                const todayEarnings = successful
+                  .filter(d => new Date(d.created_at).toDateString() === todayStr)
+                  .reduce((sum, d) => sum + Number(d.amount), 0);
+
+                return (
+                  <div className="donations-metrics-grid">
+                    <div className="donation-metric-card glass">
+                      <h4>Total Earnings</h4>
+                      <p className="metric-val">₹{totalEarnings.toLocaleString()}</p>
+                    </div>
+                    <div className="donation-metric-card glass">
+                      <h4>Total Bookings</h4>
+                      <p className="metric-val">{totalBookings}</p>
+                    </div>
+                    <div className="donation-metric-card glass">
+                      <h4>Today's Earnings</h4>
+                      <p className="metric-val">₹{todayEarnings.toLocaleString()}</p>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Booking History list */}
+              {donations.length === 0 ? (
+                <div className="dashboard-state empty">
+                  <p>No bookings or donations recorded yet.</p>
+                </div>
+              ) : (
+                <div className="admin-posts-list">
+                  {donations.map((d) => (
+                    <div key={d.id} className="donation-table-row glass">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px' }}>
+                        <div>
+                          <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>
+                            {d.name || 'Anonymous'} 
+                            {d.anonymous && <span className="badge-anon">Anonymous request</span>}
+                          </h3>
+                          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                            Email: <code>{d.email || 'N/A'}</code> | Contact: <code>{d.contact_info || 'N/A'}</code>
+                          </p>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <span className={`badge-donation-status ${d.status}`}>
+                            {d.status.toUpperCase()}
+                          </span>
+                          <p style={{ fontWeight: 700, fontSize: '1.15rem', marginTop: '4px' }}>
+                            ₹{Number(d.amount).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div style={{ marginTop: '12px', borderTop: '1px solid var(--card-border)', paddingTop: '12px' }}>
+                        <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                          <strong>Service:</strong> {d.service_type}
+                        </p>
+                        {d.message && (
+                          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '6px', whiteSpace: 'pre-wrap' }}>
+                            <strong>Details:</strong> {d.message}
+                          </p>
+                        )}
+                      </div>
+
+                      <div style={{ marginTop: '12px', fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
+                        <span>Order ID: <code>{d.order_id}</code> {d.payment_id && <>| Payment ID: <code>{d.payment_id}</code></>}</span>
+                        <span>{new Date(d.created_at).toLocaleString()}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </div>
       )}
+
     </section>
   );
 };
