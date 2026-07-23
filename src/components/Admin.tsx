@@ -39,8 +39,23 @@ const Admin: React.FC = () => {
   // Tab state (write vs manage vs donations)
   const [activeTab, setActiveTab] = useState<'manage' | 'editor' | 'donations'>('manage');
 
+interface DonationItem {
+  id: string;
+  order_id: string;
+  payment_id: string | null;
+  amount: number;
+  status: string;
+  name: string | null;
+  email: string | null;
+  message: string | null;
+  service_type: string;
+  contact_info: string | null;
+  anonymous: boolean;
+  created_at: string;
+}
+
   // Donations state
-  const [donations, setDonations] = useState<any[]>([]);
+  const [donations, setDonations] = useState<DonationItem[]>([]);
   const [donationsLoading, setDonationsLoading] = useState(false);
   const [donationsError, setDonationsError] = useState<string | null>(null);
 
@@ -54,9 +69,10 @@ const Admin: React.FC = () => {
 
       if (error) throw error;
       if (isMountedRef.current) setDonations(data || []);
-    } catch (err: any) {
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err);
       console.error('Error fetching donations:', err);
-      if (isMountedRef.current) setDonationsError(err.message || 'Failed to fetch bookings.');
+      if (isMountedRef.current) setDonationsError(errMsg);
     } finally {
       if (isMountedRef.current) setDonationsLoading(false);
     }
@@ -123,6 +139,7 @@ const Admin: React.FC = () => {
   useEffect(() => {
     if (!session) return;
     if (activeTab === 'donations') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       fetchDonations();
     }
   }, [session, activeTab]);

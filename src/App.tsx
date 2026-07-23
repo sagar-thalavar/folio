@@ -17,7 +17,7 @@ const App: React.FC = () => {
     try {
       const saved = localStorage.getItem('theme');
       if (saved === 'dark' || saved === 'light' || saved === 'colorful') return saved;
-    } catch (e) {
+    } catch {
       // ignore security exceptions in sandboxed test runs
     }
     return 'colorful';
@@ -33,7 +33,7 @@ const App: React.FC = () => {
     document.documentElement.setAttribute('data-theme', theme);
     try {
       localStorage.setItem('theme', theme);
-    } catch (e) {
+    } catch {
       // ignore security exceptions in sandboxed test runs
     }
   }, [theme]);

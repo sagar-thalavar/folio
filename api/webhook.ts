@@ -10,7 +10,7 @@ export const config = {
 };
 
 async function getRawBody(readable: Readable): Promise<Buffer> {
-  const chunks: any[] = [];
+  const chunks: Uint8Array[] = [];
   for await (const chunk of readable) {
     chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
   }
@@ -78,8 +78,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     return res.status(200).json({ status: 'ok' });
-  } catch (error: any) {
+  } catch (error) {
+    const errMsg = error instanceof Error ? error.message : String(error);
     console.error('Error processing webhook:', error);
-    return res.status(500).json({ error: error.message || 'Internal Server Error' });
+    return res.status(500).json({ error: errMsg });
   }
 }
