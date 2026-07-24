@@ -81,9 +81,13 @@ const App: React.FC = () => {
           <main className="container">
             <header className="top-header">
               <a 
-                href="#" 
+                href="/" 
                 className="writings-nav-link"
-                onClick={(e) => { e.preventDefault(); window.history.back(); }}
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  window.history.pushState({}, '', '/'); 
+                  setCurrentPath('/'); 
+                }}
               >
                 <ArrowLeft size={16} />
                 <span>Back to Home</span>
@@ -106,9 +110,13 @@ const App: React.FC = () => {
           <main className="container">
             <header className="top-header">
               <a 
-                href="#" 
+                href="/" 
                 className="writings-nav-link"
-                onClick={(e) => { e.preventDefault(); window.history.back(); }}
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  window.history.pushState({}, '', '/'); 
+                  setCurrentPath('/'); 
+                }}
               >
                 <ArrowLeft size={16} />
                 <span>Back to Home</span>
@@ -131,9 +139,13 @@ const App: React.FC = () => {
           <main className="container">
             <header className="top-header">
               <a 
-                href="#" 
+                href="/" 
                 className="writings-nav-link"
-                onClick={(e) => { e.preventDefault(); window.history.back(); }}
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  window.history.pushState({}, '', '/'); 
+                  setCurrentPath('/'); 
+                }}
               >
                 <ArrowLeft size={16} />
                 <span>Back to Home</span>
