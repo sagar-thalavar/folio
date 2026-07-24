@@ -184,6 +184,7 @@ interface FeedItem {
         name: 'Sagar Thalavar',
         description: subService,
         order_id: orderData.order_id,
+        config_id: 'config_THR7mSrobh6Guh',
         config: {
           display: {
             blocks: {
