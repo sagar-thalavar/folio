@@ -280,12 +280,27 @@ const Playground: React.FC = () => {
         [data-theme='colorful'] .service-card.tier-review { background: #A29BF2 !important; color: #2B2420 !important; }
         [data-theme='colorful'] .service-card.tier-collaboration { background: #8FD8CC !important; color: #2B2420 !important; }
 
+        .service-card h4 {
+          font-family: var(--font-heading);
+          font-size: 1rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0;
+        }
+        [data-theme='dark'] .service-card h4 {
+          color: #f9fafb !important;
+        }
+        [data-theme='colorful'] .service-card h4 { 
+          color: #2B2420 !important; 
+        }
+
         .price-tag {
           font-weight: 700;
           font-size: 1.2rem;
           color: var(--text-primary);
           margin-top: 4px;
         }
+        [data-theme='dark'] .price-tag { color: #f9fafb !important; }
         [data-theme='colorful'] .price-tag { color: #2B2420 !important; }
         
         .card-desc {
@@ -293,6 +308,7 @@ const Playground: React.FC = () => {
           color: var(--text-muted);
           line-height: 1.4;
         }
+        [data-theme='dark'] .card-desc { color: #9ca3af !important; }
         [data-theme='colorful'] .card-desc { color: #5A4A3A !important; }
 
         .booking-form {
