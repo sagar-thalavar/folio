@@ -12,12 +12,12 @@
     "test:lighthouse": "lhci autorun"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.110.7",
-    "lucide-react": "^1.25.0",
-    "posthog-js": "^1.404.0",
+    "@supabase/supabase-js": "^2.110.8",
+    "lucide-react": "^1.26.0",
+    "posthog-js": "^1.407.2",
     "razorpay": "^2.9.8",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
