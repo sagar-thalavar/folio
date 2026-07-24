@@ -165,8 +165,14 @@ interface FeedItem {
       });
 
       if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || 'Failed to initiate order.');
+        let errText = 'Failed to initiate order.';
+        try {
+          const errData = await response.json();
+          errText = errData.error || errText;
+        } catch {
+          errText = `Server error (${response.status}). Please verify environment variables are configured on Vercel.`;
+        }
+        throw new Error(errText);
       }
 
       const orderData = await response.json();
