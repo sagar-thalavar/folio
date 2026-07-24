@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Gamepad2, CheckCircle2, Circle, Plus, AlertTriangle, Check, Loader2 } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 
 interface PlaygroundItem {
   id: string;
@@ -78,51 +77,10 @@ const Playground: React.FC = () => {
   const [transactionId, setTransactionId] = useState<string>('');
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
-interface FeedItem {
-  name: string;
-  amount: number;
-  service_type: string;
-  message: string | null;
-  created_at: string;
-}
-
-  // Feed states
-  const [feed, setFeed] = useState<FeedItem[]>([]);
-  const [feedLoading, setFeedLoading] = useState<boolean>(false);
-
   const currentItem = items.find(item => item.id === activeTab) || items[0];
 
   // Helper to determine if custom pricing is selected
   const isCustomService = subService.toLowerCase().includes('custom');
-
-  // Fetch feed items
-  const fetchFeed = async () => {
-    try {
-      setFeedLoading(true);
-      const { data, error } = await supabase
-        .from('donations')
-        .select('name, amount, service_type, message, created_at')
-        .eq('status', 'success')
-        .eq('anonymous', false)
-        .order('created_at', { ascending: false })
-        .limit(5);
-
-      if (!error && data) {
-        setFeed(data);
-      }
-    } catch (err) {
-      console.error('Error fetching bookings feed:', err);
-    } finally {
-      setFeedLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (activeTab === 'support-work') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      fetchFeed();
-    }
-  }, [activeTab]);
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -220,7 +178,6 @@ interface FeedItem {
             if (verifyData.success) {
               setTransactionId(paymentRes.razorpay_payment_id);
               setPaymentSuccess(true);
-              fetchFeed();
             } else {
               setPaymentError(verifyData.error || 'Signature verification failed.');
             }
@@ -783,30 +740,6 @@ interface FeedItem {
                   </div>
                 )}
 
-                {/* Public Supporters Feed */}
-                <div className="feed-container">
-                  <h3 className="feed-title">Recent Public Bookings</h3>
-                  {feedLoading ? (
-                    <p style={{ color: 'var(--text-muted)' }}>Fetching booking updates...</p>
-                  ) : feed.length === 0 ? (
-                    <p style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>No public bookings completed yet.</p>
-                  ) : (
-                    <div className="feed-list">
-                      {feed.map((item, idx) => (
-                        <div key={idx} className="feed-item">
-                          <div className="feed-meta">
-                            <span className="feed-author">👤 {item.name}</span>
-                            <span className="feed-date">{new Date(item.created_at).toLocaleDateString()}</span>
-                          </div>
-                          <span className="feed-service">{item.service_type} (₹{item.amount})</span>
-                          {item.message && (
-                            <p className="feed-message">{item.message}</p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
               </div>
             ) : (
               // Original Spike Workspace Views
