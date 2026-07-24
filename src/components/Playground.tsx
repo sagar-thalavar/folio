@@ -184,6 +184,24 @@ interface FeedItem {
         name: 'Sagar Thalavar',
         description: subService,
         order_id: orderData.order_id,
+        config: {
+          display: {
+            blocks: {
+              methods: {
+                name: 'Payment Options',
+                instruments: [
+                  { method: 'upi' },
+                  { method: 'card' },
+                  { method: 'netbanking' }
+                ]
+              }
+            },
+            sequence: ['block.methods'],
+            preferences: {
+              show_default_blocks: false
+            }
+          }
+        },
         handler: async function (paymentRes: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) {
           try {
             setLoading(true);
