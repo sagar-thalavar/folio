@@ -13,8 +13,12 @@ const Upcoming: React.FC = () => {
 
   return (
     <div className="news-ticker glass">
-      <div className="ticker-badge">
-        <span>Upcoming Features</span>
+      <div className="ticker-badge-container">
+        <div className="ticker-live-tag">LIVE</div>
+        <div className="ticker-badge">
+          <span>Upcoming Features</span>
+        </div>
+        <div className="ticker-accent-bar"></div>
       </div>
       <div className="ticker-content">
         <div className="ticker-track">
