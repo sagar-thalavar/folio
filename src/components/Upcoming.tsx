@@ -3,7 +3,8 @@ import React from 'react';
 const headlines = [
   "CSV Analyzer & Interactive Python Dashboard",
   "Stripe Payment Gateway Integration",
-  "BIC Venue: Constructing Personal Archives Exhibition",
+  "Chat based PDF maker",
+  "10k Monthly active users site",
   "Mobile Detox Screen Time Blocker Spike"
 ];
 
@@ -13,7 +14,7 @@ const Upcoming: React.FC = () => {
   return (
     <div className="news-ticker glass">
       <div className="ticker-badge">
-        <span>ROADMAP</span>
+        <span>Upcoming Features</span>
       </div>
       <div className="ticker-content">
         <div className="ticker-track">
