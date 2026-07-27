@@ -2219,4 +2219,105 @@ a:focus-visible {
   }
 }
 
+/* ==========================================================================
+   UPCOMING FEATURES NEWS TICKER STYLES
+   ========================================================================== */
+.news-ticker {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 99px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-top: 12px;
+  font-family: var(--font-body);
+  position: relative;
+  z-index: 10;
+}
+
+.ticker-badge {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  padding: 0 18px 0 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 99px 0 0 99px;
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+  box-shadow: 6px 0 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Red flashing live news dot */
+.ticker-badge::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #ff4d4d;
+  border-radius: 50%;
+  margin-left: 8px;
+  animation: ticker-blink 1.2s infinite;
+}
+
+@keyframes ticker-blink {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.ticker-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.ticker-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker-scroll 32s linear infinite;
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.ticker-divider {
+  margin: 0 24px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.news-ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+[data-theme='colorful'] .ticker-badge {
+  background: #2B2420;
+  color: #F6C88A;
+}
+
+
 

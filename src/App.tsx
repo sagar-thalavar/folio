@@ -7,6 +7,7 @@ import { supabase } from './lib/supabase';
 
 import Projects from './components/Projects';
 import Note from './components/Note';
+import Upcoming from './components/Upcoming';
 
 const Writings = React.lazy(() => import('./components/Writings'));
 const Admin = React.lazy(() => import('./components/Admin'));
@@ -189,6 +190,8 @@ const App: React.FC = () => {
               <Projects />
               <Note />
             </div>
+            
+            <Upcoming />
             
             <Footer />
           </main>
