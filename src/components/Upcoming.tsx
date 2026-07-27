@@ -14,7 +14,6 @@ const Upcoming: React.FC = () => {
   return (
     <div className="news-ticker glass">
       <div className="ticker-badge-container">
-        <div className="ticker-live-tag">LIVE</div>
         <div className="ticker-badge">
           <span>Upcoming Features</span>
         </div>
