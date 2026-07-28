@@ -13,6 +13,8 @@ const Writings = React.lazy(() => import('./components/Writings'));
 const Admin = React.lazy(() => import('./components/Admin'));
 const Playground = React.lazy(() => import('./components/Playground'));
 
+import LegalPolicies from './components/LegalPolicies';
+
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark' | 'colorful'>(() => {
     try {
@@ -73,6 +75,10 @@ const App: React.FC = () => {
   const isAdminView = currentPath === '/admin';
   const isArticlesView = currentPath === '/article';
   const isPlaygroundView = currentPath === '/playground';
+  const isTermsView = currentPath === '/terms';
+  const isPrivacyView = currentPath === '/privacy';
+  const isRefundView = currentPath === '/refund-policy';
+  const isContactView = currentPath === '/contact';
 
   return (
     <>
@@ -136,6 +142,17 @@ const App: React.FC = () => {
               <Writings />
             </React.Suspense>
           </main>
+        ) : isTermsView || isPrivacyView || isRefundView || isContactView ? (
+          <main className="container">
+            <LegalPolicies 
+              policy={isTermsView ? 'terms' : isPrivacyView ? 'privacy' : isRefundView ? 'refund' : 'contact'} 
+              onNavigateHome={() => {
+                window.history.pushState({}, '', '/');
+                setCurrentPath('/');
+              }}
+            />
+            <Footer />
+          </main>
         ) : isPlaygroundView ? (
           <main className="container">
             <header className="top-header">
@@ -164,6 +181,7 @@ const App: React.FC = () => {
             <React.Suspense fallback={<div className="loading-spinner"></div>}>
               <Playground />
             </React.Suspense>
+            <Footer />
           </main>
         ) : (
           <main className="container">
