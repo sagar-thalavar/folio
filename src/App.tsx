@@ -14,6 +14,7 @@ const Admin = React.lazy(() => import('./components/Admin'));
 const Playground = React.lazy(() => import('./components/Playground'));
 
 import LegalPolicies from './components/LegalPolicies';
+import TinyTools from './components/TinyTools';
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark' | 'colorful'>(() => {
@@ -210,6 +211,8 @@ const App: React.FC = () => {
             </div>
             
             <Upcoming />
+            
+            <TinyTools />
             
             <Footer />
           </main>

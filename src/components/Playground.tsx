@@ -14,33 +14,18 @@ interface PlaygroundItem {
 const initialItems: PlaygroundItem[] = [
   {
     id: "support-work",
-    title: "Mentorship & Services",
-    subtitle: "Teaching & Consulting",
+    title: "Mentorship & Professional Services",
+    subtitle: "1-on-1 Sessions & Advisory",
     progress: 100,
     color: "#7EE3B3",
     description: "Book 1-on-1 mentorship (Chess teaching & LLM coaching), request a portfolio/resume audit, or coordinate custom software advisory.",
     tasks: [
-      { text: "Razorpay Sandbox accounts setup", completed: true },
+      { text: "Razorpay Production live account active", completed: true },
       { text: "Vercel serverless order creation API", completed: true },
       { text: "Dynamic checkout overlay loading", completed: true },
-      { text: "Secure cryptographic hash verification", completed: true },
+      { text: "Secure cryptographic signature verification", completed: true },
       { text: "Supabase transaction persistence", completed: true },
-      { text: "Failsafe webhook event capturing", completed: true }
-    ]
-  },
-  {
-    id: "mobile-detox",
-    title: "Mobile Detox application",
-    subtitle: "Screen time tracker & app blocker",
-    progress: 0,
-    color: "#F4C39D",
-    description: "An experimental web application designed to help users limit screen time, block distracting apps, and cultivate better focus through gamified digital wellness tools.",
-    tasks: [
-      { text: "UI wireframes & layout design", completed: false },
-      { text: "Core screen-time tracking API integration", completed: false },
-      { text: "App locking and session scheduler logic", completed: false },
-      { text: "Gamification & rewards system implementation", completed: false },
-      { text: "Local storage state sync & dashboard metrics", completed: false }
+      { text: "Full legal compliance policies (Terms, Privacy, Refund, Contact)", completed: true }
     ]
   }
 ];
