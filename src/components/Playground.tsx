@@ -1,34 +1,5 @@
 import React, { useState } from 'react';
-import { Gamepad2, CheckCircle2, Circle, Plus, AlertTriangle, Check, Loader2 } from 'lucide-react';
-
-interface PlaygroundItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  progress: number;
-  color: string;
-  description: string;
-  tasks: { text: string; completed: boolean }[];
-}
-
-const initialItems: PlaygroundItem[] = [
-  {
-    id: "support-work",
-    title: "Mentorship & Professional Services",
-    subtitle: "1-on-1 Sessions & Advisory",
-    progress: 100,
-    color: "#7EE3B3",
-    description: "Book 1-on-1 mentorship (Chess teaching & LLM coaching), request a portfolio/resume audit, or coordinate custom software advisory.",
-    tasks: [
-      { text: "Razorpay Production live account active", completed: true },
-      { text: "Vercel serverless order creation API", completed: true },
-      { text: "Dynamic checkout overlay loading", completed: true },
-      { text: "Secure cryptographic signature verification", completed: true },
-      { text: "Supabase transaction persistence", completed: true },
-      { text: "Full legal compliance policies (Terms, Privacy, Refund, Contact)", completed: true }
-    ]
-  }
-];
+import { Gamepad2, Check, Loader2 } from 'lucide-react';
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -45,24 +16,17 @@ const loadRazorpayScript = () => {
 };
 
 const Playground: React.FC = () => {
-  const [items] = useState<PlaygroundItem[]>(initialItems);
-  const [activeTab, setActiveTab] = useState<string>("support-work");
-
   // Booking states
   const [selectedTier, setSelectedTier] = useState<'consulting' | 'review' | 'collaboration'>('consulting');
-  const [subService, setSubService] = useState<string>('30-Min Chat or Q&A');
+  const [subService, setSubService] = useState<string>('30-Min Chess Game Mentorship');
   const [customPrice, setCustomPrice] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [contactInfo, setContactInfo] = useState<string>('');
   const [message, setMessage] = useState<string>('');
-  const [anonymous, setAnonymous] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false);
   const [transactionId, setTransactionId] = useState<string>('');
   const [paymentError, setPaymentError] = useState<string | null>(null);
-
-  const currentItem = items.find(item => item.id === activeTab) || items[0];
 
   // Helper to determine if custom pricing is selected
   const isCustomService = subService.toLowerCase().includes('custom');
@@ -87,7 +51,6 @@ const Playground: React.FC = () => {
 
     try {
       setLoading(true);
-
       const scriptLoaded = await loadRazorpayScript();
       if (!scriptLoaded) {
         throw new Error('Failed to load Razorpay checkout script. Check connection.');
@@ -98,12 +61,12 @@ const Playground: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           amount: finalAmount,
-          name: name || 'Anonymous',
+          name: name || 'Client',
           email,
           message,
           service_type: subService,
-          contact_info: contactInfo,
-          anonymous
+          contact_info: email,
+          anonymous: false
         })
       });
 
@@ -226,14 +189,13 @@ const Playground: React.FC = () => {
   };
 
   return (
-    <section className="panel playground-panel glass">
-      {/* Dynamic Style Injection for isolated page layout */}
+    <section className="panel playground-panel glass" style={{ maxWidth: '840px', margin: '40px auto', padding: '32px' }}>
       <style>{`
         .services-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 16px;
-          margin: 20px 0 28px;
+          margin: 24px 0;
         }
         .service-card {
           padding: 20px;
@@ -269,12 +231,8 @@ const Playground: React.FC = () => {
           color: var(--text-primary);
           margin: 0;
         }
-        [data-theme='dark'] .service-card h4 {
-          color: #f9fafb !important;
-        }
-        [data-theme='colorful'] .service-card h4 { 
-          color: #2B2420 !important; 
-        }
+        [data-theme='dark'] .service-card h4 { color: #f9fafb !important; }
+        [data-theme='colorful'] .service-card h4 { color: #2B2420 !important; }
 
         .price-tag {
           font-weight: 700;
@@ -328,21 +286,6 @@ const Playground: React.FC = () => {
           box-shadow: 0 0 0 3px var(--card-border);
         }
 
-        .checkbox-container {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          cursor: pointer;
-          user-select: none;
-          font-size: 0.88rem;
-          margin: 4px 0;
-        }
-        .checkbox-container input {
-          width: auto;
-          margin: 0;
-          cursor: pointer;
-        }
-
         .booking-submit-btn {
           display: inline-flex;
           align-items: center;
@@ -390,57 +333,6 @@ const Playground: React.FC = () => {
           background: rgba(16, 185, 129, 0.1);
           color: #10B981;
           margin-bottom: 8px;
-          animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes scaleUp {
-          0% { transform: scale(0.5); opacity: 0; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-
-        .feed-container {
-          margin-top: 48px;
-          border-top: 1px solid var(--card-border);
-          padding-top: 32px;
-        }
-        .feed-title {
-          font-family: var(--font-heading);
-          font-size: 1.25rem;
-          margin-bottom: 20px;
-        }
-        .feed-list {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-        .feed-item {
-          padding: 16px;
-          border-radius: 16px;
-          border: 1px solid var(--card-border);
-          background: var(--card-bg);
-          text-align: left;
-        }
-        .feed-meta {
-          display: flex;
-          justify-content: space-between;
-          font-size: 0.8rem;
-          color: var(--text-muted);
-          margin-bottom: 6px;
-        }
-        .feed-service {
-          display: inline-block;
-          font-size: 0.75rem;
-          background: var(--accent-light);
-          border: 1px solid var(--accent-border);
-          padding: 2px 8px;
-          border-radius: 99px;
-          color: var(--text-primary);
-          margin-bottom: 8px;
-          font-weight: 550;
-        }
-        .feed-message {
-          font-size: 0.9rem;
-          line-height: 1.4;
-          color: var(--text-secondary);
         }
 
         .form-error {
@@ -448,7 +340,7 @@ const Playground: React.FC = () => {
           background: rgba(239, 68, 68, 0.1);
           border: 1px solid rgba(239, 68, 68, 0.2);
           border-radius: 12px;
-          color: #EF4444;
+          color: #ef4444;
           font-size: 0.88rem;
           text-align: left;
         }
@@ -457,324 +349,172 @@ const Playground: React.FC = () => {
       <div className="section-header">
         <div className="section-title-group">
           <Gamepad2 className="section-icon" size={24} />
-          <h2>Sagar's Playground</h2>
+          <h2>Mentorship & Professional Services</h2>
         </div>
         <p className="section-subtitle">
-          A development sandbox for exploring random features, experimental tech, and workflow spikes.
+          Book 1-on-1 mentorship (Chess teaching & LLM coaching), request a resume or portfolio audit, or coordinate custom software advisory.
         </p>
       </div>
 
-      <div className="playground-layout">
-        {/* Left Sidebar Pane */}
-        <aside className="playground-sidebar">
-          <div className="sidebar-header">
-            <h3>Active Spikes</h3>
-            <span className="spike-count">{items.length}</span>
-          </div>
-          
-          <div className="tab-list">
-            {items.map((item) => {
-              const isActive = item.id === activeTab;
-              return (
-                <button
-                  key={item.id}
-                  className={`tab-btn ${isActive ? 'active' : ''}`}
-                  onClick={() => setActiveTab(item.id)}
-                  style={
-                    isActive 
-                      ? { 
-                          borderLeftColor: item.color,
-                          backgroundColor: `${item.color}0c`
-                        } 
-                      : undefined
-                  }
-                >
-                  <div className="tab-btn-title">
-                    <span 
-                      className="indicator-dot" 
-                      style={{ backgroundColor: item.color }}
-                    ></span>
-                    <h4>{item.title}</h4>
-                  </div>
-                  <div className="tab-btn-meta">
-                    <span className="badge-text">{item.subtitle}</span>
-                    <span className="progress-value">{item.progress}%</span>
-                  </div>
-                </button>
-              );
-            })}
+      <div className="support-work-container" style={{ marginTop: '24px' }}>
+        {/* Service Cards Selector */}
+        <div className="services-grid">
+          <button 
+            type="button"
+            className={`service-card tier-consulting ${selectedTier === 'consulting' ? 'active' : ''}`}
+            onClick={() => { setSelectedTier('consulting'); setSubService('30-Min Chess Game Mentorship'); }}
+          >
+            <h4>1-on-1 Mentorship</h4>
+            <span className="price-tag">₹499</span>
+            <p className="card-desc">30-minute Chess teaching, LLM/AI coaching, or tech Q&A session.</p>
+          </button>
 
-            <button className="add-spike-btn" disabled>
-              <Plus size={16} />
-              <span>Create New Spike</span>
+          <button 
+            type="button"
+            className={`service-card tier-review ${selectedTier === 'review' ? 'active' : ''}`}
+            onClick={() => { setSelectedTier('review'); setSubService('Resume Review & Feedback'); }}
+          >
+            <h4>Resume & Reviews</h4>
+            <span className="price-tag">₹299</span>
+            <p className="card-desc">Audit of your resume, portfolio, video editing, or content writing.</p>
+          </button>
+
+          <button 
+            type="button"
+            className={`service-card tier-collaboration ${selectedTier === 'collaboration' ? 'active' : ''}`}
+            onClick={() => { setSelectedTier('collaboration'); setSubService('Software Project Advisory'); }}
+          >
+            <h4>Software Advisory</h4>
+            <span className="price-tag">₹999</span>
+            <p className="card-desc">Join active development projects, software advisory, or tech guidance.</p>
+          </button>
+        </div>
+
+        {/* Booking / Checkout Form */}
+        {!paymentSuccess ? (
+          <form onSubmit={handlePayment} className="booking-form">
+            {paymentError && (
+              <div className="form-error">
+                {paymentError}
+              </div>
+            )}
+
+            <div className="form-group">
+              <label htmlFor="sub-service-select">Select Service Desired</label>
+              <select 
+                id="sub-service-select"
+                value={subService}
+                onChange={(e) => setSubService(e.target.value)}
+              >
+                {getSubServiceOptions().map((opt) => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+            </div>
+
+            {isCustomService && (
+              <div className="form-group">
+                <label htmlFor="custom-price-input">Custom Amount (₹)</label>
+                <input
+                  id="custom-price-input"
+                  type="number"
+                  min="10"
+                  max="5000"
+                  placeholder="Enter agreed amount (e.g. 500)"
+                  value={customPrice}
+                  onChange={(e) => setCustomPrice(e.target.value)}
+                  required
+                />
+                <small style={{ textAlign: 'left', color: 'var(--text-muted)' }}>Enter amount between ₹10 and ₹5,000.</small>
+              </div>
+            )}
+
+            <div className="form-group">
+              <label htmlFor="booking-name">Your Name</label>
+              <input 
+                id="booking-name"
+                type="text" 
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="booking-email">Email Address</label>
+              <input 
+                id="booking-email"
+                type="email" 
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <small style={{ textAlign: 'left', color: 'var(--text-muted)' }}>For transaction confirmation and scheduling details.</small>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="booking-message">Details of your request</label>
+              <textarea 
+                id="booking-message"
+                rows={4}
+                placeholder={
+                  selectedTier === 'review'
+                    ? "Provide details or links for your resume, portfolio draft, or content review..."
+                    : selectedTier === 'consulting'
+                    ? "Describe what you would like to discuss or learn (Chess game analysis, LLM coaching, AI prompts)..."
+                    : "Share details about your software advisory or technical guidance request..."
+                }
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+              />
+            </div>
+
+            <button 
+              type="submit" 
+              className="booking-submit-btn"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin" size={18} />
+                  <span>Initiating Checkout...</span>
+                </>
+              ) : (
+                <span>Book Service (₹{isCustomService ? (customPrice || '0') : (selectedTier === 'consulting' ? '499' : selectedTier === 'review' ? '299' : '999')})</span>
+              )}
+            </button>
+          </form>
+        ) : (
+          // Success View
+          <div className="booking-success-view">
+            <div className="success-check-circle">
+              <Check size={36} />
+            </div>
+            <h3>Booking Confirmed!</h3>
+            <p style={{ maxWidth: '400px', margin: '0 auto', lineHeight: 1.5 }}>
+              Thank you for booking **{subService}**. 
+              A confirmation and scheduling query has been sent to your email (**{email}**).
+            </p>
+            <small style={{ color: 'var(--text-muted)' }}>Transaction Reference: {transactionId}</small>
+            <button 
+              type="button"
+              className="booking-submit-btn" 
+              onClick={() => {
+                setPaymentSuccess(false);
+                setName('');
+                setEmail('');
+                setMessage('');
+                setCustomPrice('');
+              }}
+              style={{ marginTop: '16px' }}
+            >
+              Book Another Service
             </button>
           </div>
-        </aside>
-
-        {/* Right Workspace Pane */}
-        <main className="playground-workspace glass-hover">
-          <header className="workspace-header">
-            <div className="title-group">
-              <span 
-                className="category-pill"
-                style={{ 
-                  backgroundColor: `${currentItem.color}1a`, 
-                  color: currentItem.color,
-                  borderColor: `${currentItem.color}33`
-                }}
-              >
-                {currentItem.id === 'support-work' ? 'Live System' : 'In Planning'}
-              </span>
-              <h2>{currentItem.title}</h2>
-              <p className="subtitle">{currentItem.subtitle}</p>
-            </div>
-            
-            <div className="progress-card">
-              <div className="progress-info">
-                <span>Overall Progress</span>
-                <span className="progress-num" style={{ color: currentItem.color }}>
-                  {currentItem.progress}%
-                </span>
-              </div>
-              <div className="progress-bar-track">
-                <div 
-                  className="progress-bar-fill" 
-                  style={{ 
-                    width: `${currentItem.progress}%`,
-                    backgroundColor: currentItem.color
-                  }}
-                ></div>
-              </div>
-            </div>
-          </header>
-
-          <div className="workspace-body">
-            {currentItem.id === 'support-work' ? (
-              // Mentorship & Advisory View
-              <div className="support-work-container">
-                <p style={{ textAlign: 'left', lineHeight: 1.5 }}>
-                  Book 1-on-1 mentorship (Chess teaching & LLM coaching), request a resume or portfolio audit, or request custom software advisory.
-                </p>
-
-                {/* Service Cards Selector */}
-                <div className="services-grid">
-                  <button 
-                    type="button"
-                    className={`service-card tier-consulting ${selectedTier === 'consulting' ? 'active' : ''}`}
-                    onClick={() => { setSelectedTier('consulting'); setSubService('30-Min Chess Game Mentorship'); }}
-                  >
-                    <h4>1-on-1 Mentorship</h4>
-                    <span className="price-tag">₹499</span>
-                    <p className="card-desc">30-minute Chess teaching, LLM/AI coaching, or tech Q&A session.</p>
-                  </button>
-
-                  <button 
-                    type="button"
-                    className={`service-card tier-review ${selectedTier === 'review' ? 'active' : ''}`}
-                    onClick={() => { setSelectedTier('review'); setSubService('Resume Review & Feedback'); }}
-                  >
-                    <h4>Resume & Reviews</h4>
-                    <span className="price-tag">₹299</span>
-                    <p className="card-desc">Audit of your resume, portfolio, video editing, or content writing.</p>
-                  </button>
-
-                  <button 
-                    type="button"
-                    className={`service-card tier-collaboration ${selectedTier === 'collaboration' ? 'active' : ''}`}
-                    onClick={() => { setSelectedTier('collaboration'); setSubService('Software Project Advisory'); }}
-                  >
-                    <h4>Software Advisory</h4>
-                    <span className="price-tag">₹999</span>
-                    <p className="card-desc">Join active development projects, software advisory, or tech guidance.</p>
-                  </button>
-                </div>
-
-                {/* Booking / Checkout Form */}
-                {!paymentSuccess ? (
-                  <form onSubmit={handlePayment} className="booking-form">
-                    {paymentError && (
-                      <div className="form-error">
-                        {paymentError}
-                      </div>
-                    )}
-
-                    <div className="form-group">
-                      <label htmlFor="sub-service-select">Select Service Desired</label>
-                      <select 
-                        id="sub-service-select"
-                        value={subService}
-                        onChange={(e) => setSubService(e.target.value)}
-                      >
-                        {getSubServiceOptions().map((opt) => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {isCustomService && (
-                      <div className="form-group">
-                        <label htmlFor="custom-price-input">Custom Amount (₹)</label>
-                        <input
-                          id="custom-price-input"
-                          type="number"
-                          min="10"
-                          max="5000"
-                          placeholder="Enter agreed amount (e.g. 500)"
-                          value={customPrice}
-                          onChange={(e) => setCustomPrice(e.target.value)}
-                          required
-                        />
-                        <small style={{ textAlign: 'left', color: 'var(--text-muted)' }}>Enter amount between ₹10 and ₹5,000.</small>
-                      </div>
-                    )}
-
-                    <div className="form-group">
-                      <label htmlFor="booking-name">Your Name</label>
-                      <input 
-                        id="booking-name"
-                        type="text" 
-                        placeholder={anonymous ? "Will be hidden in feed" : "Your Name"}
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        disabled={anonymous}
-                        required={!anonymous}
-                      />
-                    </div>
-
-                    <label className="checkbox-container">
-                      <input 
-                        type="checkbox"
-                        checked={anonymous}
-                        onChange={(e) => setAnonymous(e.target.checked)}
-                      />
-                      <span>Make this booking anonymous on the public feed</span>
-                    </label>
-
-                    <div className="form-group">
-                      <label htmlFor="booking-email">Email Address</label>
-                      <input 
-                        id="booking-email"
-                        type="email" 
-                        placeholder="you@example.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                      <small style={{ textAlign: 'left', color: 'var(--text-muted)' }}>For transaction confirmation and scheduling details.</small>
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="booking-contact">Contact Info (WhatsApp link, Calendly, or handle)</label>
-                      <input 
-                        id="booking-contact"
-                        type="text" 
-                        placeholder="e.g. calendly.com/username or @handle"
-                        value={contactInfo}
-                        onChange={(e) => setContactInfo(e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="booking-message">Details of your request</label>
-                      <textarea 
-                        id="booking-message"
-                        rows={4}
-                        placeholder={
-                          selectedTier === 'review'
-                            ? "Provide links to your resume, portfolio draft, or video clips..."
-                            : selectedTier === 'consulting'
-                            ? "Describe what you would like to discuss or learn (chess, AI prompts, Excel sheets)..."
-                            : "Share details about the project collaboration or networking connection request..."
-                        }
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <button 
-                      type="submit" 
-                      className="booking-submit-btn"
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <>
-                          <Loader2 className="animate-spin" size={18} />
-                          <span>Initiating Checkout...</span>
-                        </>
-                      ) : (
-                        <span>Book Service (₹{isCustomService ? (customPrice || '0') : (selectedTier === 'consulting' ? '499' : selectedTier === 'review' ? '299' : '999')})</span>
-                      )}
-                    </button>
-                  </form>
-                ) : (
-                  // Success View
-                  <div className="booking-success-view">
-                    <div className="success-check-circle">
-                      <Check size={36} />
-                    </div>
-                    <h3>Booking Confirmed!</h3>
-                    <p style={{ maxWidth: '400px', margin: '0 auto', lineHeight: 1.5 }}>
-                      Thank you for booking **{subService}**. 
-                      A scheduling query will be sent to your email (**{email}**) shortly.
-                    </p>
-                    <small style={{ color: 'var(--text-muted)' }}>Transaction Reference: {transactionId}</small>
-                    <button 
-                      type="button"
-                      className="booking-submit-btn" 
-                      onClick={() => {
-                        setPaymentSuccess(false);
-                        setName('');
-                        setEmail('');
-                        setContactInfo('');
-                        setMessage('');
-                        setCustomPrice('');
-                      }}
-                      style={{ marginTop: '16px' }}
-                    >
-                      Book Another Service
-                    </button>
-                  </div>
-                )}
-
-              </div>
-            ) : (
-              // Original Spike Workspace Views
-              <>
-                <div className="desc-section">
-                  <h3>Description</h3>
-                  <p>{currentItem.description}</p>
-                </div>
-
-                <div className="checklist-section">
-                  <div className="checklist-header">
-                    <h3>Feature Checklist</h3>
-                    <span>{currentItem.tasks.filter(t => t.completed).length} / {currentItem.tasks.length} done</span>
-                  </div>
-                  
-                  <ul className="task-list">
-                    {currentItem.tasks.map((task, idx) => (
-                      <li key={idx} className={`task-item ${task.completed ? 'completed' : ''}`}>
-                        {task.completed ? (
-                          <CheckCircle2 size={18} className="icon-done" />
-                        ) : (
-                          <Circle size={18} className="icon-todo" />
-                        )}
-                        <span>{task.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="sandbox-info-banner">
-                  <AlertTriangle size={18} />
-                  <p>This is a sandboxed display. You can edit this workspace file to start building the actual application UI here in React!</p>
-                </div>
-              </>
-            )}
-          </div>
-        </main>
+        )}
       </div>
     </section>
   );

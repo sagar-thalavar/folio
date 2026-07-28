@@ -76,6 +76,7 @@ const App: React.FC = () => {
   const isAdminView = currentPath === '/admin';
   const isArticlesView = currentPath === '/article';
   const isPlaygroundView = currentPath === '/playground';
+  const isTinyToolsView = currentPath === '/tools' || currentPath === '/tiny-tools';
   const isTermsView = currentPath === '/terms';
   const isPrivacyView = currentPath === '/privacy';
   const isRefundView = currentPath === '/refund-policy';
@@ -154,6 +155,34 @@ const App: React.FC = () => {
             />
             <Footer />
           </main>
+        ) : isTinyToolsView ? (
+          <main className="container">
+            <header className="top-header">
+              <a 
+                href="/" 
+                className="writings-nav-link"
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  window.history.pushState({}, '', '/'); 
+                  setCurrentPath('/'); 
+                }}
+              >
+                <ArrowLeft size={16} />
+                <span>Back to Home</span>
+              </a>
+              <button 
+                className="theme-toggle" 
+                onClick={toggleTheme} 
+                aria-label="Toggle theme"
+                title={themeTitle}
+              >
+                {themeIcon}
+              </button>
+            </header>
+
+            <TinyTools />
+            <Footer />
+          </main>
         ) : isPlaygroundView ? (
           <main className="container">
             <header className="top-header">
@@ -211,8 +240,6 @@ const App: React.FC = () => {
             </div>
             
             <Upcoming />
-            
-            <TinyTools />
             
             <Footer />
           </main>
