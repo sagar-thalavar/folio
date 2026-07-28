@@ -142,7 +142,7 @@ const Playground: React.FC = () => {
         name: 'Sagar Thalavar',
         description: subService,
         order_id: orderData.order_id,
-        config_id: 'config_THR7mSrobh6Guh',
+        config_id: 'config_TIwloXPRqknnLZ',
         config: {
           display: {
             blocks: {
