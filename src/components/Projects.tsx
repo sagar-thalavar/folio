@@ -54,6 +54,12 @@ const projectsData: Project[] = [
     summary: "A college project designed as a life-balancing planner application to track, prioritize, and manage tasks across life, college, and work."
   },
   {
+    title: "Tiny Tools: Micro-Apps & Spikes",
+    badge: "Experimental Utilities",
+    href: "/tools",
+    summary: "A collection of in-browser utilities, micro-apps, and workflow spikes (Mobile Detox screen time tracker & CSV Data Inspector)."
+  },
+  {
     title: "Mentorship & Professional Services",
     badge: "Book 1-on-1 Sessions",
     href: "/playground",
