@@ -14,11 +14,11 @@ interface PlaygroundItem {
 const initialItems: PlaygroundItem[] = [
   {
     id: "support-work",
-    title: "Support My Work",
-    subtitle: "Consulting & Services",
+    title: "Mentorship & Services",
+    subtitle: "Teaching & Consulting",
     progress: 100,
     color: "#7EE3B3",
-    description: "Book a 30-minute consultation session, request feedback on your portfolio/resume, request custom development support, or collaborate on projects.",
+    description: "Book 1-on-1 mentorship (Chess teaching & LLM coaching), request a portfolio/resume audit, or coordinate custom software advisory.",
     tasks: [
       { text: "Razorpay Sandbox accounts setup", completed: true },
       { text: "Vercel serverless order creation API", completed: true },
@@ -216,27 +216,24 @@ const Playground: React.FC = () => {
     switch (selectedTier) {
       case 'consulting':
         return [
-          '30-Min Chat or Q&A',
-          '30-Min Chess Session',
-          '30-Min LLM & AI Help',
-          '30-Min Excel/Sheets Help',
-          'Custom Consulting Request'
+          '30-Min Chess Game Mentorship',
+          '30-Min LLM & AI Coaching',
+          '30-Min Tech Consulting & Q&A',
+          'Custom Mentorship Session'
         ];
       case 'review':
         return [
-          'Portfolio Review & Feedback',
           'Resume Review & Feedback',
-          'Basic Video Editing',
-          'Document Writing/Editing',
-          'Poster/Graphic Design Help',
-          'Event Schedule Creation',
+          'Portfolio & Website Audit',
+          'Video & Media Editing Audit',
+          'Document & Content Review',
           'Custom Review Request'
         ];
       case 'collaboration':
         return [
-          'Join my Active Projects',
-          'Professional Connection Request',
-          'Custom Collaboration Request'
+          'Software Project Advisory',
+          'Active Project Collaboration',
+          'Custom Tech Advisory'
         ];
       default:
         return [];
@@ -568,10 +565,10 @@ const Playground: React.FC = () => {
 
           <div className="workspace-body">
             {currentItem.id === 'support-work' ? (
-              // Support / Consulting View
+              // Mentorship & Advisory View
               <div className="support-work-container">
                 <p style={{ textAlign: 'left', lineHeight: 1.5 }}>
-                  Book a consultation, request feedback on a project or resume, collaborate together, or coordinate a custom development support task.
+                  Book 1-on-1 mentorship (Chess teaching & LLM coaching), request a resume or portfolio audit, or request custom software advisory.
                 </p>
 
                 {/* Service Cards Selector */}
@@ -579,31 +576,31 @@ const Playground: React.FC = () => {
                   <button 
                     type="button"
                     className={`service-card tier-consulting ${selectedTier === 'consulting' ? 'active' : ''}`}
-                    onClick={() => { setSelectedTier('consulting'); setSubService('30-Min Chat or Q&A'); }}
+                    onClick={() => { setSelectedTier('consulting'); setSubService('30-Min Chess Game Mentorship'); }}
                   >
-                    <h4>1-on-1 Consulting</h4>
+                    <h4>1-on-1 Mentorship</h4>
                     <span className="price-tag">₹499</span>
-                    <p className="card-desc">30-minute teaching, advice, prompt help, or sheet creation.</p>
+                    <p className="card-desc">30-minute Chess teaching, LLM/AI coaching, or tech Q&A session.</p>
                   </button>
 
                   <button 
                     type="button"
                     className={`service-card tier-review ${selectedTier === 'review' ? 'active' : ''}`}
-                    onClick={() => { setSelectedTier('review'); setSubService('Portfolio Review & Feedback'); }}
+                    onClick={() => { setSelectedTier('review'); setSubService('Resume Review & Feedback'); }}
                   >
-                    <h4>Reviews & Edits</h4>
+                    <h4>Resume & Reviews</h4>
                     <span className="price-tag">₹299</span>
-                    <p className="card-desc">Audit of your portfolio/resume, video editing, or graphics help.</p>
+                    <p className="card-desc">Audit of your resume, portfolio, video editing, or content writing.</p>
                   </button>
 
                   <button 
                     type="button"
                     className={`service-card tier-collaboration ${selectedTier === 'collaboration' ? 'active' : ''}`}
-                    onClick={() => { setSelectedTier('collaboration'); setSubService('Join my Active Projects'); }}
+                    onClick={() => { setSelectedTier('collaboration'); setSubService('Software Project Advisory'); }}
                   >
-                    <h4>Project Collaboration</h4>
+                    <h4>Software Advisory</h4>
                     <span className="price-tag">₹999</span>
-                    <p className="card-desc">Join active development projects or request network introductions.</p>
+                    <p className="card-desc">Join active development projects, software advisory, or tech guidance.</p>
                   </button>
                 </div>
 
