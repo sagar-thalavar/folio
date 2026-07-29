@@ -18,6 +18,12 @@ const projectsData: Project[] = [
     summary: "A private visitor journal where guests sign in, leave a selfie and a memory, and browse a public wall of moments."
   },
   {
+    title: "Mentorship & Professional Services",
+    badge: "Book 1-on-1 Sessions",
+    href: "/playground",
+    summary: "Book 1-on-1 mentorship (Chess teaching & LLM coaching), request a portfolio or resume audit, or request custom software advisory."
+  },
+  {
     title: "Treasure Hunt: A SaaS Game",
     badge: "Quick SaaS project",
     href: "https://treasure.sagarthalavar.in/",
@@ -58,12 +64,6 @@ const projectsData: Project[] = [
     badge: "Experimental Utilities",
     href: "/tools",
     summary: "A collection of in-browser utilities, micro-apps, and workflow spikes (Mobile Detox screen time tracker & CSV Data Inspector)."
-  },
-  {
-    title: "Mentorship & Professional Services",
-    badge: "Book 1-on-1 Sessions",
-    href: "/playground",
-    summary: "Book 1-on-1 mentorship (Chess teaching & LLM coaching), request a portfolio or resume audit, or request custom software advisory."
   }
 ];
 

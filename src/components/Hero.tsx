@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, BookOpen, Camera, Waves, Building } from 'lucide-react';
+import { Mail, BookOpen, Camera, Waves, Building, Gamepad2 } from 'lucide-react';
 import { LinkedinIcon, GithubIcon, InstagramIcon } from './BrandIcons';
 import { navigate } from '../lib/navigation';
 
@@ -92,7 +92,19 @@ const Hero: React.FC = () => {
 
       <div className="hero-actions">
         <a 
-          className="btn-primary btn-guestbook" 
+          className="btn-primary" 
+          href="/playground"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/playground');
+          }}
+          title="Book 1-on-1 Mentorship & Professional Services"
+        >
+          <Gamepad2 size={18} />
+          <span>Services Provided</span>
+        </a>
+        <a 
+          className="btn-secondary" 
           href="/guestbook"
           title="Leave a memory in my Guestbook"
         >
