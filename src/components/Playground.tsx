@@ -195,7 +195,7 @@ const Playground: React.FC = () => {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 16px;
-          margin: 24px 0;
+          margin: 12px 0 24px 0;
         }
         .service-card {
           padding: 20px;
@@ -356,7 +356,7 @@ const Playground: React.FC = () => {
         </p>
       </div>
 
-      <div className="support-work-container" style={{ marginTop: '24px' }}>
+      <div className="support-work-container" style={{ marginTop: '8px' }}>
         {/* Service Cards Selector */}
         <div className="services-grid">
           <button 
