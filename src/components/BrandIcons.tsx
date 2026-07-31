@@ -56,3 +56,20 @@ export const InstagramIcon: React.FC<IconProps> = ({ size = 24, ...props }) => (
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
   </svg>
 );
+
+export const LeetcodeIcon: React.FC<IconProps> = ({ size = 24, ...props }) => (
+  <svg
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    stroke="currentColor"
+    strokeWidth="2"
+    fill="none"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M12 3a9 9 0 0 0-9 9c0 1.8.53 3.5 1.45 4.95l1.05 1.05a9 9 0 0 0 13 0l1.05-1.05C20.47 15.5 21 13.8 21 12a9 9 0 0 0-9-9z" />
+    <path d="M8.5 12l2.5 2.5 5-5" />
+  </svg>
+);
