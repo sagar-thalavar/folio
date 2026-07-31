@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Gamepad2, Check, Loader2 } from 'lucide-react';
+import { Check, Loader2 } from 'lucide-react';
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -348,7 +348,6 @@ const Playground: React.FC = () => {
 
       <div className="section-header">
         <div className="section-title-group">
-          <Gamepad2 className="section-icon" size={24} />
           <h2>Mentorship & Professional Services</h2>
         </div>
         <p className="section-subtitle">
