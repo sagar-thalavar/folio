@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mail, BookOpen, Camera, Waves, Building } from 'lucide-react';
-import { LinkedinIcon, GithubIcon, InstagramIcon } from './BrandIcons';
+import { LinkedinIcon, GithubIcon, InstagramIcon, LeetcodeIcon } from './BrandIcons';
 import { navigate } from '../lib/navigation';
 
 const Hero: React.FC = () => {
@@ -50,6 +50,16 @@ const Hero: React.FC = () => {
           title="Bangalore International Centre (BIC) Exhibition"
         >
           <Building size={18} />
+        </a>
+        <a 
+          className="social-icon-btn" 
+          href="https://leetcode.com/u/sagar50906/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="LeetCode"
+          title="LeetCode"
+        >
+          <LeetcodeIcon size={18} />
         </a>
         <a 
           className="social-icon-btn" 
