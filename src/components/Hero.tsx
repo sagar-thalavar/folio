@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, BookOpen, Camera, Waves, Building, Gamepad2 } from 'lucide-react';
+import { Mail, BookOpen, Camera, Waves, Building } from 'lucide-react';
 import { LinkedinIcon, GithubIcon, InstagramIcon } from './BrandIcons';
 import { navigate } from '../lib/navigation';
 
@@ -100,7 +100,6 @@ const Hero: React.FC = () => {
           }}
           title="Book 1-on-1 Mentorship & Professional Services"
         >
-          <Gamepad2 size={18} />
           <span>Services Provided</span>
         </a>
         <a 
