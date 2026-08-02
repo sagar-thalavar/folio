@@ -288,6 +288,14 @@ p {
   pointer-events: none;
 }
 
+.hero-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -296,7 +304,6 @@ p {
   border-radius: 99px;
   background: var(--accent-light);
   border: 1px solid var(--accent-border);
-  margin-bottom: 20px;
   transition: all 0.3s ease;
 }
 
@@ -373,9 +380,6 @@ p {
 }
 
 .hero-social-icons {
-  position: absolute;
-  top: 24px;
-  right: 24px;
   display: flex;
   gap: 8px;
   z-index: 1;
@@ -691,19 +695,30 @@ a:focus-visible {
   }
 
   .hero {
-    padding: 32px 24px;
-    padding-top: 56px;
+    padding: 32px 20px;
   }
 
-  .hero-social-icons {
-    top: 16px;
-    right: 16px;
+  .hero-top-row {
+    margin-bottom: 24px;
     gap: 6px;
   }
 
+  .hero-badge {
+    padding: 5px 10px;
+    gap: 5px;
+  }
+  
+  .hero-badge .badge-text {
+    font-size: 0.8rem;
+  }
+
+  .hero-social-icons {
+    gap: 4px;
+  }
+
   .social-icon-btn {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
   }
 
   .hero-avatar {
