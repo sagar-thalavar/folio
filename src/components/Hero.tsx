@@ -4,12 +4,22 @@ import { LinkedinIcon, GithubIcon, InstagramIcon, LeetcodeIcon } from './BrandIc
 import { navigate } from '../lib/navigation';
 
 const Hero: React.FC = () => {
+  const [isEnglish, setIsEnglish] = React.useState(false);
+
   return (
     <section className="hero glass">
       <div className="hero-top-row">
-        <div className="hero-badge" title="Welcome">
+        <div 
+          className="hero-badge" 
+          onClick={() => setIsEnglish(prev => !prev)}
+          style={{ 
+            cursor: 'pointer', 
+            userSelect: 'none', 
+            WebkitUserSelect: 'none' 
+          }}
+        >
           <Waves size={14} />
-          <span className="badge-text">ಸ್ವಾಗತ</span>
+          <span className="badge-text">{isEnglish ? 'Welcome' : 'ಸ್ವಾಗತ'}</span>
         </div>
         <div className="hero-social-icons">
           <a 
