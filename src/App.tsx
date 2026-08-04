@@ -15,6 +15,7 @@ const Playground = React.lazy(() => import('./components/Playground'));
 
 import LegalPolicies from './components/LegalPolicies';
 import TinyTools from './components/TinyTools';
+import WhatIDo from './components/WhatIDo';
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark' | 'colorful'>(() => {
@@ -233,6 +234,8 @@ const App: React.FC = () => {
             </header>
 
             <Hero />
+            
+            <WhatIDo />
             
             <div className="grid-layout">
               <Projects />

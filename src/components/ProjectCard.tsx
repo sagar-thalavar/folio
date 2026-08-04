@@ -8,10 +8,12 @@ interface ProjectCardProps {
   href: string;
   summary: string;
   color?: string;
+  isHighlight?: boolean;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ title, badge, href, summary, color }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ title, badge, href, summary, color, isHighlight }) => {
   const isInternal = href.startsWith('/');
+  const isMentorship = href === '/playground' || isHighlight;
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (isInternal) {
@@ -22,13 +24,39 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, badge, href, summary, 
 
   return (
     <a 
-      className="project-card glass" 
+      className={`project-card glass ${isMentorship ? 'mentorship-highlight-card' : ''}`}
       href={href} 
       target={isInternal ? undefined : "_blank"} 
       rel={isInternal ? undefined : "noopener noreferrer"} 
       onClick={handleClick}
-      style={{ textDecoration: 'none' }}
+      style={{ 
+        textDecoration: 'none',
+        position: 'relative',
+        ...(isMentorship ? {
+          border: '2px solid var(--accent)',
+          boxShadow: 'var(--shadow-lg)'
+        } : {})
+      }}
     >
+      {isMentorship && (
+        <span 
+          style={{
+            position: 'absolute',
+            top: '-12px',
+            right: '20px',
+            padding: '3px 10px',
+            borderRadius: '99px',
+            background: 'var(--accent)',
+            color: 'var(--bg)',
+            fontSize: '0.7rem',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.04em'
+          }}
+        >
+          Most Popular
+        </span>
+      )}
       <div className="project-top">
         <span
           className="project-badge"
@@ -39,8 +67,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, badge, href, summary, 
         <h3 className="project-title">{title}</h3>
         <p className="project-desc">{summary}</p>
       </div>
-      <div className="project-link">
-        <span>Open project</span>
+      <div className="project-link" style={isMentorship ? { background: 'var(--accent)', color: 'var(--bg)', borderColor: 'var(--accent)' } : undefined}>
+        <span>{isMentorship ? 'Book Session →' : 'Explore →'}</span>
         <ArrowUpRight size={16} className="project-link-icon" />
       </div>
     </a>

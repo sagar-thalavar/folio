@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Gamepad2, Check, Loader2, HelpCircle, UserCheck, ShieldAlert, Sparkles } from 'lucide-react';
+import { Gamepad2, Check, Loader2, HelpCircle, UserCheck, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -22,7 +22,6 @@ interface ServiceTier {
   price: number;
   description: string;
   deliverables: string[];
-  recommended?: boolean;
 }
 
 const services: ServiceTier[] = [
@@ -63,25 +62,11 @@ const services: ServiceTier[] = [
       'API & DB planning review',
       'Practical recommendations'
     ]
-  },
-  {
-    id: 'ai-project',
-    title: 'Build an AI Project Together',
-    duration: '90 Minutes',
-    price: 999,
-    recommended: true,
-    description: 'Build a complete AI project together instead of just learning theory (Chatbots, OpenAI/Gemini APIs, RAG, AI automation).',
-    deliverables: [
-      'Working project & live demo',
-      'Complete source code access',
-      'Detailed architecture explanation',
-      'Next learning roadmap'
-    ]
   }
 ];
 
 const Playground: React.FC = () => {
-  const [selectedServiceId, setSelectedServiceId] = useState<string>('ai-project');
+  const [selectedServiceId, setSelectedServiceId] = useState<string>('debugging');
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -90,7 +75,20 @@ const Playground: React.FC = () => {
   const [transactionId, setTransactionId] = useState<string>('');
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
-  const selectedService = services.find(s => s.id === selectedServiceId) || services[3];
+  // Accordion toggle states
+  const [openWhy, setOpenWhy] = useState<boolean>(false);
+  const [openFit, setOpenFit] = useState<boolean>(false);
+  const [openFaq, setOpenFaq] = useState<boolean>(false);
+
+  const selectedService = services.find(s => s.id === selectedServiceId) || services[0];
+
+  const handleCardClick = (id: string) => {
+    setSelectedServiceId(id);
+    const formEl = document.getElementById('booking-form-section');
+    if (formEl) {
+      formEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -217,13 +215,13 @@ const Playground: React.FC = () => {
   return (
     <section className="panel playground-panel glass" style={{ maxWidth: '920px', margin: '32px auto', padding: '32px' }}>
       <style>{`
-        .services-grid-v2 {
+        .services-grid-v3 {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 20px;
           margin: 20px 0 32px 0;
         }
-        .service-card-v2 {
+        .service-card-v3 {
           padding: 24px;
           border-radius: 20px;
           border: 1px solid var(--card-border);
@@ -232,47 +230,34 @@ const Playground: React.FC = () => {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
+          height: 100%;
+          min-height: 320px;
           position: relative;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           text-align: left;
         }
-        .service-card-v2:hover {
+        .service-card-v3:hover {
           transform: translateY(-4px);
           box-shadow: var(--shadow-md);
         }
-        .service-card-v2.selected {
-          border-width: 2px;
-          border-color: var(--accent);
+        .service-card-v3.selected {
+          border: 2px solid var(--accent);
           background: var(--accent-light);
         }
-        [data-theme='light'] .service-card-v2.selected { border-color: #111; box-shadow: 0 0 16px rgba(17, 17, 17, 0.1); }
-        [data-theme='dark'] .service-card-v2.selected { border-color: #f9fafb; box-shadow: 0 0 16px rgba(249, 250, 251, 0.15); }
-        [data-theme='colorful'] .service-card-v2.selected { border-color: #2B2420; box-shadow: 0 0 16px rgba(43, 36, 32, 0.15); }
-
-        .recommended-badge {
-          position: absolute;
-          top: -12px;
-          right: 20px;
-          padding: 4px 12px;
-          border-radius: 99px;
-          background: var(--accent);
-          color: var(--bg);
-          font-size: 0.72rem;
-          font-weight: 700;
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
-        }
+        [data-theme='light'] .service-card-v3.selected { border-color: #111; box-shadow: 0 0 16px rgba(17, 17, 17, 0.1); }
+        [data-theme='dark'] .service-card-v3.selected { border-color: #f9fafb; box-shadow: 0 0 16px rgba(249, 250, 251, 0.15); }
+        [data-theme='colorful'] .service-card-v3.selected { border-color: #2B2420; box-shadow: 0 0 16px rgba(43, 36, 32, 0.15); }
 
         .service-card-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          margin-bottom: 8px;
+          margin-bottom: 4px;
         }
 
-        .service-card-v2 h3 {
+        .service-card-v3 h3 {
           font-family: var(--font-heading);
-          font-size: 1.15rem;
+          font-size: 1.2rem;
           font-weight: 700;
           color: var(--text-primary);
           margin: 0;
@@ -282,16 +267,18 @@ const Playground: React.FC = () => {
           font-size: 0.75rem;
           font-weight: 600;
           color: var(--text-muted);
-          padding: 2px 8px;
+          padding: 3px 8px;
           border-radius: 6px;
           background: var(--card-border);
+          white-space: nowrap;
         }
 
-        .price-text {
+        .price-text-large {
           font-weight: 800;
-          font-size: 1.4rem;
+          font-size: 1.8rem;
           color: var(--text-primary);
-          margin: 6px 0 12px 0;
+          margin: 8px 0 12px 0;
+          line-height: 1;
         }
 
         .deliverables-list {
@@ -316,23 +303,37 @@ const Playground: React.FC = () => {
           flex-shrink: 0;
         }
 
-        .info-section {
-          padding: 24px;
+        .accordion-section {
           border-radius: 16px;
           border: 1px solid var(--card-border);
           background: var(--card-bg);
-          margin-bottom: 24px;
+          margin-top: 16px;
+          overflow: hidden;
+          transition: all 0.3s ease;
         }
 
-        .info-section h3 {
-          font-family: var(--font-heading);
-          font-size: 1.1rem;
-          font-weight: 700;
-          color: var(--text-primary);
-          margin-bottom: 16px;
+        .accordion-header {
+          padding: 20px 24px;
           display: flex;
           align-items: center;
-          gap: 8px;
+          justify-content: space-between;
+          cursor: pointer;
+          user-select: none;
+        }
+
+        .accordion-header h3 {
+          font-family: var(--font-heading);
+          font-size: 1.05rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .accordion-body {
+          padding: 0 24px 24px 24px;
         }
 
         .info-grid {
@@ -352,9 +353,8 @@ const Playground: React.FC = () => {
 
         .fit-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 20px;
-          margin-bottom: 24px;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 16px;
         }
 
         .faq-grid {
@@ -364,7 +364,7 @@ const Playground: React.FC = () => {
         }
 
         .faq-item {
-          padding: 16px 20px;
+          padding: 14px 18px;
           border-radius: 12px;
           border: 1px solid var(--card-border);
           background: var(--card-bg);
@@ -372,7 +372,7 @@ const Playground: React.FC = () => {
 
         .faq-question {
           font-weight: 700;
-          font-size: 0.95rem;
+          font-size: 0.92rem;
           color: var(--text-primary);
           margin-bottom: 4px;
         }
@@ -384,11 +384,42 @@ const Playground: React.FC = () => {
           margin: 0;
         }
 
+        .booking-section-card {
+          padding: 28px;
+          border-radius: 20px;
+          border: 1px solid var(--card-border);
+          background: var(--card-bg);
+          margin-bottom: 24px;
+        }
+
+        .scannable-selected-box {
+          padding: 14px 20px;
+          border-radius: 12px;
+          background: var(--accent-light);
+          border: 1.5px solid var(--accent-border);
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          width: fit-content;
+        }
+
+        .scannable-title {
+          font-size: 1.05rem;
+          font-weight: 700;
+          color: var(--text-primary);
+        }
+
+        .scannable-meta {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: var(--text-secondary);
+        }
+
         .booking-form {
           display: flex;
           flex-direction: column;
           gap: 16px;
-          margin-top: 24px;
+          margin-top: 20px;
         }
 
         .booking-form .form-group {
@@ -419,19 +450,6 @@ const Playground: React.FC = () => {
         .booking-form textarea:focus {
           border-color: var(--text-primary);
           box-shadow: 0 0 0 3px var(--card-border);
-        }
-
-        .selected-badge-box {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 16px;
-          border-radius: 12px;
-          background: var(--accent-light);
-          border: 1px solid var(--accent-border);
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: var(--text-primary);
         }
 
         .booking-submit-btn {
@@ -513,25 +531,22 @@ const Playground: React.FC = () => {
         </p>
       </div>
 
-      {/* Service Cards Selector */}
-      <div className="services-grid-v2">
+      {/* 1. Service Cards Selector */}
+      <div className="services-grid-v3">
         {services.map((service) => {
           const isSelected = service.id === selectedServiceId;
           return (
             <div
               key={service.id}
-              className={`service-card-v2 ${isSelected ? 'selected' : ''}`}
-              onClick={() => setSelectedServiceId(service.id)}
+              className={`service-card-v3 ${isSelected ? 'selected' : ''}`}
+              onClick={() => handleCardClick(service.id)}
             >
-              {service.recommended && (
-                <div className="recommended-badge">Recommended</div>
-              )}
               <div>
                 <div className="service-card-header">
                   <h3>{service.title}</h3>
                   <span className="duration-pill">{service.duration}</span>
                 </div>
-                <div className="price-text">₹{service.price}</div>
+                <div className="price-text-large">₹{service.price}</div>
                 <p className="card-desc" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.45 }}>
                   {service.description}
                 </p>
@@ -550,85 +565,12 @@ const Playground: React.FC = () => {
         })}
       </div>
 
-      {/* Why Work With Me Section */}
-      <div className="info-section">
-        <h3>
-          <Sparkles size={18} />
-          <span>Why Work With Me</span>
+      {/* 2. Book Your Session Form */}
+      <div id="booking-form-section" className="booking-section-card">
+        <h3 style={{ fontSize: '1.2rem', fontFamily: 'var(--font-heading)', fontWeight: 700, margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
+          Book Your Session
         </h3>
-        <div className="info-grid">
-          <div className="info-item">• Practical hands-on guidance</div>
-          <div className="info-item">• Personalized one-on-one sessions</div>
-          <div className="info-item">• Learn by solving real problems</div>
-          <div className="info-item">• Student-friendly pricing</div>
-          <div className="info-item">• Experience building multiple software and AI projects</div>
-        </div>
-      </div>
-
-      {/* Audience Fit Section */}
-      <div className="fit-grid">
-        <div className="info-section" style={{ marginBottom: 0 }}>
-          <h3>
-            <UserCheck size={18} />
-            <span>Suitable For</span>
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div className="info-item">✓ College students</div>
-            <div className="info-item">✓ Beginner developers</div>
-            <div className="info-item">✓ Developers learning AI</div>
-            <div className="info-item">✓ Hackathon participants</div>
-            <div className="info-item">✓ Developers stuck on projects</div>
-          </div>
-        </div>
-
-        <div className="info-section" style={{ marginBottom: 0 }}>
-          <h3>
-            <ShieldAlert size={18} />
-            <span>Not Suitable If</span>
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div className="info-item">✕ You want someone to complete your assignment</div>
-            <div className="info-item">✕ You expect guaranteed job placement</div>
-            <div className="info-item">✕ You want complete projects built for you</div>
-            <div className="info-item">✕ You are looking for free consulting</div>
-          </div>
-        </div>
-      </div>
-
-      {/* FAQ Section */}
-      <div className="info-section">
-        <h3>
-          <HelpCircle size={18} />
-          <span>Frequently Asked Questions</span>
-        </h3>
-        <div className="faq-grid">
-          <div className="faq-item">
-            <div className="faq-question">Do I need coding experience?</div>
-            <p className="faq-answer">No. Beginners are welcome.</p>
-          </div>
-          <div className="faq-item">
-            <div className="faq-question">How are sessions conducted?</div>
-            <p className="faq-answer">Sessions are conducted live via Google Meet.</p>
-          </div>
-          <div className="faq-item">
-            <div className="faq-question">Can I record the session?</div>
-            <p className="faq-answer">Yes, you are welcome to record for your personal reference.</p>
-          </div>
-          <div className="faq-item">
-            <div className="faq-question">Will I receive notes?</div>
-            <p className="faq-answer">Yes, session notes and relevant code references will be shared afterwards.</p>
-          </div>
-          <div className="faq-item">
-            <div className="faq-question">What if my issue is not fully solved?</div>
-            <p className="faq-answer">I will provide clear guidance, diagnostic steps, and next steps even if the entire problem requires further steps beyond the session duration.</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Booking / Checkout Form */}
-      <div className="info-section" style={{ marginBottom: 0 }}>
-        <h3 style={{ marginBottom: '8px' }}>Confirm Your Session</h3>
-        <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: 0 }}>
+        <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: '0 0 20px 0' }}>
           Fill in your details below to schedule your live one-on-one session.
         </p>
 
@@ -642,12 +584,9 @@ const Playground: React.FC = () => {
 
             <div className="form-group">
               <label>Selected Service</label>
-              <div className="selected-badge-box">
-                <span>{selectedService.title}</span>
-                <span>•</span>
-                <span>{selectedService.duration}</span>
-                <span>•</span>
-                <span>₹{selectedService.price}</span>
+              <div className="scannable-selected-box">
+                <div className="scannable-title">{selectedService.title}</div>
+                <div className="scannable-meta">{selectedService.duration} • ₹{selectedService.price}</div>
               </div>
             </div>
 
@@ -699,7 +638,7 @@ const Playground: React.FC = () => {
                   <span>Initiating Checkout...</span>
                 </>
               ) : (
-                <span>Book My Session (₹{selectedService.price})</span>
+                <span>Book Session →</span>
               )}
             </button>
           </form>
@@ -728,6 +667,101 @@ const Playground: React.FC = () => {
             >
               Book Another Session
             </button>
+          </div>
+        )}
+      </div>
+
+      {/* 3. Why Work With Me (Collapsible Accordion) */}
+      <div className="accordion-section">
+        <div className="accordion-header" onClick={() => setOpenWhy(!openWhy)}>
+          <h3>
+            <Sparkles size={18} />
+            <span>Why Work With Me</span>
+          </h3>
+          {openWhy ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+        </div>
+        {openWhy && (
+          <div className="accordion-body">
+            <div className="info-grid">
+              <div className="info-item">• Practical hands-on guidance</div>
+              <div className="info-item">• Personalized one-on-one sessions</div>
+              <div className="info-item">• Learn by solving real problems</div>
+              <div className="info-item">• Student-friendly pricing</div>
+              <div className="info-item">• Experience building multiple software & AI projects</div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 4. Audience Fit (Collapsible Accordion) */}
+      <div className="accordion-section">
+        <div className="accordion-header" onClick={() => setOpenFit(!openFit)}>
+          <h3>
+            <UserCheck size={18} />
+            <span>Audience Fit (Who Is This For / Not For)</span>
+          </h3>
+          {openFit ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+        </div>
+        {openFit && (
+          <div className="accordion-body">
+            <div className="fit-grid">
+              <div>
+                <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', marginBottom: '10px' }}>Suitable For</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div className="info-item">✓ College students</div>
+                  <div className="info-item">✓ Beginner developers</div>
+                  <div className="info-item">✓ Developers learning AI</div>
+                  <div className="info-item">✓ Hackathon participants</div>
+                  <div className="info-item">✓ Developers stuck on projects</div>
+                </div>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', marginBottom: '10px' }}>Not Suitable If</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div className="info-item">✕ You want someone to complete your assignment</div>
+                  <div className="info-item">✕ You expect guaranteed job placement</div>
+                  <div className="info-item">✕ You want complete projects built for you</div>
+                  <div className="info-item">✕ You are looking for free consulting</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 5. FAQ Accordion */}
+      <div className="accordion-section">
+        <div className="accordion-header" onClick={() => setOpenFaq(!openFaq)}>
+          <h3>
+            <HelpCircle size={18} />
+            <span>Frequently Asked Questions</span>
+          </h3>
+          {openFaq ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+        </div>
+        {openFaq && (
+          <div className="accordion-body">
+            <div className="faq-grid">
+              <div className="faq-item">
+                <div className="faq-question">Do I need coding experience?</div>
+                <p className="faq-answer">No. Beginners are welcome.</p>
+              </div>
+              <div className="faq-item">
+                <div className="faq-question">How are sessions conducted?</div>
+                <p className="faq-answer">Sessions are conducted live via Google Meet.</p>
+              </div>
+              <div className="faq-item">
+                <div className="faq-question">Can I record the session?</div>
+                <p className="faq-answer">Yes, you are welcome to record for your personal reference.</p>
+              </div>
+              <div className="faq-item">
+                <div className="faq-question">Will I receive notes?</div>
+                <p className="faq-answer">Yes, session notes and relevant code references will be shared afterwards.</p>
+              </div>
+              <div className="faq-item">
+                <div className="faq-question">What if my issue is not fully solved?</div>
+                <p className="faq-answer">I will provide clear guidance, diagnostic steps, and next steps even if the entire problem requires further steps beyond the session duration.</p>
+              </div>
+            </div>
           </div>
         )}
       </div>
