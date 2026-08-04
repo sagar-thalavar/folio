@@ -15,7 +15,6 @@ const Playground = React.lazy(() => import('./components/Playground'));
 
 import LegalPolicies from './components/LegalPolicies';
 import TinyTools from './components/TinyTools';
-import WhatIDo from './components/WhatIDo';
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark' | 'colorful'>(() => {
@@ -46,11 +45,16 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleLocationChange = () => {
       setCurrentPath(window.location.pathname);
+      window.scrollTo(0, 0);
     };
 
     window.addEventListener('popstate', handleLocationChange);
     return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPath]);
 
   useEffect(() => {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -234,8 +238,6 @@ const App: React.FC = () => {
             </header>
 
             <Hero />
-            
-            <WhatIDo />
             
             <div className="grid-layout">
               <Projects />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Gamepad2, Check, Loader2, HelpCircle, UserCheck, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { Check, Loader2, HelpCircle, UserCheck, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -60,13 +60,28 @@ const services: ServiceTier[] = [
     deliverables: [
       'Technical architecture guidance',
       'API & DB planning review',
+      'Startup MVP & tech stack advice',
       'Practical recommendations'
+    ]
+  },
+  {
+    id: 'custom',
+    title: 'Custom Session',
+    duration: 'Custom',
+    price: 100,
+    description: 'Custom consulting session or agreed custom payment amount for testing or special requests.',
+    deliverables: [
+      'Custom session scope',
+      'Flexible duration',
+      'Custom pricing entry',
+      'Live testing & support'
     ]
   }
 ];
 
 const Playground: React.FC = () => {
   const [selectedServiceId, setSelectedServiceId] = useState<string>('debugging');
+  const [customAmount, setCustomAmount] = useState<string>('100');
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -81,6 +96,7 @@ const Playground: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<boolean>(false);
 
   const selectedService = services.find(s => s.id === selectedServiceId) || services[0];
+  const isCustom = selectedService.id === 'custom';
 
   const handleCardClick = (id: string) => {
     setSelectedServiceId(id);
@@ -99,7 +115,12 @@ const Playground: React.FC = () => {
       return;
     }
 
-    const finalAmount = selectedService.price;
+    const finalAmount = isCustom ? Number(customAmount) : selectedService.price;
+
+    if (isNaN(finalAmount) || finalAmount < 10 || finalAmount > 5000) {
+      setPaymentError('Please enter a valid amount between ₹10 and ₹5,000.');
+      return;
+    }
 
     try {
       setLoading(true);
@@ -116,7 +137,7 @@ const Playground: React.FC = () => {
           name: name || 'Client',
           email,
           message,
-          service_type: selectedService.title,
+          service_type: isCustom ? `Custom Session (₹${finalAmount})` : selectedService.title,
           contact_info: email,
           anonymous: false
         })
@@ -140,7 +161,7 @@ const Playground: React.FC = () => {
         amount: orderData.amount,
         currency: orderData.currency,
         name: 'Sagar Thalavar',
-        description: selectedService.title,
+        description: isCustom ? `Custom Session (₹${finalAmount})` : selectedService.title,
         order_id: orderData.order_id,
         config_id: 'config_TIwloXPRqknnLZ',
         config: {
@@ -217,27 +238,27 @@ const Playground: React.FC = () => {
       <style>{`
         .services-grid-v3 {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 20px;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
           margin: 20px 0 32px 0;
         }
         .service-card-v3 {
-          padding: 24px;
-          border-radius: 20px;
+          padding: 20px;
+          border-radius: 18px;
           border: 1px solid var(--card-border);
           background: var(--card-bg);
           cursor: pointer;
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
+          justify-content: flex-start;
+          gap: 14px;
           height: 100%;
-          min-height: 320px;
           position: relative;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           text-align: left;
         }
         .service-card-v3:hover {
-          transform: translateY(-4px);
+          transform: translateY(-3px);
           box-shadow: var(--shadow-md);
         }
         .service-card-v3.selected {
@@ -257,17 +278,17 @@ const Playground: React.FC = () => {
 
         .service-card-v3 h3 {
           font-family: var(--font-heading);
-          font-size: 1.2rem;
+          font-size: 1.1rem;
           font-weight: 700;
           color: var(--text-primary);
           margin: 0;
         }
 
         .duration-pill {
-          font-size: 0.75rem;
+          font-size: 0.72rem;
           font-weight: 600;
           color: var(--text-muted);
-          padding: 3px 8px;
+          padding: 2px 7px;
           border-radius: 6px;
           background: var(--card-border);
           white-space: nowrap;
@@ -275,27 +296,27 @@ const Playground: React.FC = () => {
 
         .price-text-large {
           font-weight: 800;
-          font-size: 1.8rem;
+          font-size: 1.6rem;
           color: var(--text-primary);
-          margin: 8px 0 12px 0;
+          margin: 6px 0 10px 0;
           line-height: 1;
         }
 
         .deliverables-list {
           list-style: none;
           padding: 0;
-          margin: 16px 0 0 0;
+          margin: 12px 0 0 0;
           display: flex;
           flex-direction: column;
           gap: 6px;
         }
 
         .deliverable-item {
-          font-size: 0.84rem;
+          font-size: 0.82rem;
           color: var(--text-secondary);
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 6px;
         }
 
         .deliverable-item svg {
@@ -313,7 +334,7 @@ const Playground: React.FC = () => {
         }
 
         .accordion-header {
-          padding: 20px 24px;
+          padding: 18px 20px;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -323,7 +344,7 @@ const Playground: React.FC = () => {
 
         .accordion-header h3 {
           font-family: var(--font-heading);
-          font-size: 1.05rem;
+          font-size: 1rem;
           font-weight: 700;
           color: var(--text-primary);
           margin: 0;
@@ -333,7 +354,7 @@ const Playground: React.FC = () => {
         }
 
         .accordion-body {
-          padding: 0 24px 24px 24px;
+          padding: 0 20px 20px 20px;
         }
 
         .info-grid {
@@ -343,7 +364,7 @@ const Playground: React.FC = () => {
         }
 
         .info-item {
-          font-size: 0.9rem;
+          font-size: 0.88rem;
           color: var(--text-secondary);
           line-height: 1.5;
           display: flex;
@@ -353,7 +374,7 @@ const Playground: React.FC = () => {
 
         .fit-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
           gap: 16px;
         }
 
@@ -385,63 +406,41 @@ const Playground: React.FC = () => {
         }
 
         .booking-section-card {
-          padding: 28px;
-          border-radius: 20px;
+          padding: 24px;
+          border-radius: 18px;
           border: 1px solid var(--card-border);
           background: var(--card-bg);
           margin-bottom: 24px;
         }
 
-        .scannable-selected-box {
-          padding: 14px 20px;
-          border-radius: 12px;
-          background: var(--accent-light);
-          border: 1.5px solid var(--accent-border);
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
-          width: fit-content;
-        }
-
-        .scannable-title {
-          font-size: 1.05rem;
-          font-weight: 700;
-          color: var(--text-primary);
-        }
-
-        .scannable-meta {
-          font-size: 0.85rem;
-          font-weight: 600;
-          color: var(--text-secondary);
-        }
-
         .booking-form {
           display: flex;
           flex-direction: column;
-          gap: 16px;
-          margin-top: 20px;
+          gap: 14px;
+          margin-top: 16px;
         }
 
         .booking-form .form-group {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 4px;
         }
 
         .booking-form label {
-          font-size: 0.88rem;
+          font-size: 0.85rem;
           font-weight: 600;
           color: var(--text-primary);
         }
 
         .booking-form input,
         .booking-form textarea {
-          padding: 12px 16px;
-          border-radius: 12px;
+          padding: 10px 14px;
+          border-radius: 10px;
           border: 1px solid var(--card-border);
           background: var(--card-bg);
           color: var(--text-primary);
           font-family: var(--font-body);
+          font-size: 0.9rem;
           outline: none;
           transition: border-color 0.2s, box-shadow 0.2s;
         }
@@ -457,17 +456,17 @@ const Playground: React.FC = () => {
           align-items: center;
           justify-content: center;
           gap: 8px;
-          padding: 14px 28px;
+          padding: 12px 24px;
           border-radius: 99px;
           border: 1px solid var(--accent-border);
           background: var(--accent);
           color: var(--bg);
           font-weight: 700;
-          font-size: 1rem;
+          font-size: 0.95rem;
           cursor: pointer;
           transition: all 0.3s ease;
           width: fit-content;
-          margin-top: 8px;
+          margin-top: 6px;
         }
         [data-theme='colorful'] .booking-submit-btn {
           background: #2B2420;
@@ -487,44 +486,41 @@ const Playground: React.FC = () => {
 
         .booking-success-view {
           text-align: center;
-          padding: 48px 24px;
+          padding: 36px 20px;
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 16px;
+          gap: 14px;
         }
 
         .success-check-circle {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 64px;
-          height: 64px;
+          width: 56px;
+          height: 56px;
           border-radius: 50%;
           background: rgba(16, 185, 129, 0.1);
           color: #10B981;
-          margin-bottom: 8px;
+          margin-bottom: 6px;
         }
 
         .form-error {
-          padding: 12px 16px;
+          padding: 10px 14px;
           background: rgba(239, 68, 68, 0.1);
           border: 1px solid rgba(239, 68, 68, 0.2);
-          border-radius: 12px;
+          border-radius: 10px;
           color: #ef4444;
-          font-size: 0.88rem;
+          font-size: 0.85rem;
           text-align: left;
         }
       `}</style>
 
       {/* Header Section */}
       <div className="section-header">
-        <div className="section-title-group">
-          <Gamepad2 className="section-icon" size={24} />
-          <h2>Book a 1-on-1 Session with Sagar</h2>
-        </div>
-        <p className="section-subtitle" style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>
-          AI • Software Development • Career Guidance
+        <h2>Book a 1-on-1 Session with Sagar</h2>
+        <p className="section-subtitle" style={{ fontWeight: 700, color: 'var(--text-primary)', marginTop: '6px', marginBottom: '8px' }}>
+          AI, Software Development, Career Guidance
         </p>
         <p className="section-subtitle">
           Build better software, get unstuck on your projects, improve your portfolio, or receive personalized technical guidance through practical one-on-one sessions.
@@ -535,6 +531,7 @@ const Playground: React.FC = () => {
       <div className="services-grid-v3">
         {services.map((service) => {
           const isSelected = service.id === selectedServiceId;
+          const displayPrice = service.id === 'custom' ? `₹${customAmount || 100}` : `₹${service.price}`;
           return (
             <div
               key={service.id}
@@ -546,8 +543,8 @@ const Playground: React.FC = () => {
                   <h3>{service.title}</h3>
                   <span className="duration-pill">{service.duration}</span>
                 </div>
-                <div className="price-text-large">₹{service.price}</div>
-                <p className="card-desc" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.45 }}>
+                <div className="price-text-large">{displayPrice}</div>
+                <p className="card-desc" style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
                   {service.description}
                 </p>
               </div>
@@ -567,11 +564,11 @@ const Playground: React.FC = () => {
 
       {/* 2. Book Your Session Form */}
       <div id="booking-form-section" className="booking-section-card">
-        <h3 style={{ fontSize: '1.2rem', fontFamily: 'var(--font-heading)', fontWeight: 700, margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
+        <h3 style={{ fontSize: '1.15rem', fontFamily: 'var(--font-heading)', fontWeight: 700, margin: '0 0 4px 0', color: 'var(--text-primary)' }}>
           Book Your Session
         </h3>
-        <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: '0 0 20px 0' }}>
-          Fill in your details below to schedule your live one-on-one session.
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0 0 16px 0' }}>
+          {isCustom ? `Custom Session (₹${customAmount || 100})` : `${selectedService.title} (₹${selectedService.price})`}
         </p>
 
         {!paymentSuccess ? (
@@ -582,20 +579,28 @@ const Playground: React.FC = () => {
               </div>
             )}
 
-            <div className="form-group">
-              <label>Selected Service</label>
-              <div className="scannable-selected-box">
-                <div className="scannable-title">{selectedService.title}</div>
-                <div className="scannable-meta">{selectedService.duration} • ₹{selectedService.price}</div>
+            {isCustom && (
+              <div className="form-group">
+                <label htmlFor="custom-amount">Amount (₹)</label>
+                <input 
+                  id="custom-amount"
+                  type="number" 
+                  min={10}
+                  max={5000}
+                  placeholder="Enter amount e.g. 500"
+                  value={customAmount}
+                  onChange={(e) => setCustomAmount(e.target.value)}
+                  required
+                />
               </div>
-            </div>
+            )}
 
             <div className="form-group">
-              <label htmlFor="booking-name">Your Name</label>
+              <label htmlFor="booking-name">Name</label>
               <input 
                 id="booking-name"
                 type="text" 
-                placeholder="Enter your full name"
+                placeholder="Your Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -603,7 +608,7 @@ const Playground: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="booking-email">Email Address</label>
+              <label htmlFor="booking-email">Email</label>
               <input 
                 id="booking-email"
                 type="email" 
@@ -612,15 +617,14 @@ const Playground: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <small style={{ textAlign: 'left', color: 'var(--text-muted)' }}>Google Meet invite and session confirmation will be sent here.</small>
             </div>
 
             <div className="form-group">
-              <label htmlFor="booking-message">Brief Description of your Request</label>
+              <label htmlFor="booking-message">Details</label>
               <textarea 
                 id="booking-message"
-                rows={4}
-                placeholder="Describe what project, bugs, portfolio, or technical topic you would like to cover..."
+                rows={3}
+                placeholder="Brief description of request..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 required
@@ -634,8 +638,8 @@ const Playground: React.FC = () => {
             >
               {loading ? (
                 <>
-                  <Loader2 className="animate-spin" size={18} />
-                  <span>Initiating Checkout...</span>
+                  <Loader2 className="animate-spin" size={16} />
+                  <span>Processing...</span>
                 </>
               ) : (
                 <span>Book Session →</span>
@@ -646,10 +650,10 @@ const Playground: React.FC = () => {
           /* Success View */
           <div className="booking-success-view">
             <div className="success-check-circle">
-              <Check size={36} />
+              <Check size={32} />
             </div>
             <h3>Session Confirmed!</h3>
-            <p style={{ maxWidth: '440px', margin: '0 auto', lineHeight: 1.5 }}>
+            <p style={{ maxWidth: '440px', margin: '0 auto', lineHeight: 1.5, fontSize: '0.9rem' }}>
               Thank you for booking **{selectedService.title}**. 
               A Google Meet scheduling query has been sent to **{email}**.
             </p>
@@ -663,7 +667,7 @@ const Playground: React.FC = () => {
                 setEmail('');
                 setMessage('');
               }}
-              style={{ marginTop: '16px' }}
+              style={{ marginTop: '12px' }}
             >
               Book Another Session
             </button>
