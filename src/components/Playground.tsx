@@ -63,25 +63,12 @@ const services: ServiceTier[] = [
       'Startup MVP & tech stack advice',
       'Practical recommendations'
     ]
-  },
-  {
-    id: 'custom',
-    title: 'Custom Session',
-    duration: 'Custom',
-    price: 100,
-    description: 'Custom consulting session or agreed custom payment amount for testing or special requests.',
-    deliverables: [
-      'Custom session scope',
-      'Flexible duration',
-      'Custom pricing entry',
-      'Live testing & support'
-    ]
   }
 ];
 
 const Playground: React.FC = () => {
   const [selectedServiceId, setSelectedServiceId] = useState<string>('debugging');
-  const [customAmount, setCustomAmount] = useState<string>('100');
+  const [customAmount, setCustomAmount] = useState<string>('500');
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -95,8 +82,8 @@ const Playground: React.FC = () => {
   const [openFit, setOpenFit] = useState<boolean>(false);
   const [openFaq, setOpenFaq] = useState<boolean>(false);
 
+  const isCustom = selectedServiceId === 'custom';
   const selectedService = services.find(s => s.id === selectedServiceId) || services[0];
-  const isCustom = selectedService.id === 'custom';
 
   const handleCardClick = (id: string) => {
     setSelectedServiceId(id);
@@ -129,6 +116,8 @@ const Playground: React.FC = () => {
         throw new Error('Failed to load Razorpay checkout script. Check connection.');
       }
 
+      const titleText = isCustom ? `Custom Session (₹${finalAmount})` : selectedService.title;
+
       const response = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -137,7 +126,7 @@ const Playground: React.FC = () => {
           name: name || 'Client',
           email,
           message,
-          service_type: isCustom ? `Custom Session (₹${finalAmount})` : selectedService.title,
+          service_type: titleText,
           contact_info: email,
           anonymous: false
         })
@@ -161,7 +150,7 @@ const Playground: React.FC = () => {
         amount: orderData.amount,
         currency: orderData.currency,
         name: 'Sagar Thalavar',
-        description: isCustom ? `Custom Session (₹${finalAmount})` : selectedService.title,
+        description: titleText,
         order_id: orderData.order_id,
         config_id: 'config_TIwloXPRqknnLZ',
         config: {
@@ -238,27 +227,27 @@ const Playground: React.FC = () => {
       <style>{`
         .services-grid-v3 {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 16px;
-          margin: 20px 0 32px 0;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 20px;
+          margin: 20px 0 20px 0;
         }
         .service-card-v3 {
-          padding: 20px;
-          border-radius: 18px;
+          padding: 24px;
+          border-radius: 20px;
           border: 1px solid var(--card-border);
           background: var(--card-bg);
           cursor: pointer;
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
-          gap: 14px;
+          gap: 16px;
           height: 100%;
           position: relative;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           text-align: left;
         }
         .service-card-v3:hover {
-          transform: translateY(-3px);
+          transform: translateY(-4px);
           box-shadow: var(--shadow-md);
         }
         .service-card-v3.selected {
@@ -278,17 +267,17 @@ const Playground: React.FC = () => {
 
         .service-card-v3 h3 {
           font-family: var(--font-heading);
-          font-size: 1.1rem;
+          font-size: 1.15rem;
           font-weight: 700;
           color: var(--text-primary);
           margin: 0;
         }
 
         .duration-pill {
-          font-size: 0.72rem;
+          font-size: 0.75rem;
           font-weight: 600;
           color: var(--text-muted);
-          padding: 2px 7px;
+          padding: 3px 8px;
           border-radius: 6px;
           background: var(--card-border);
           white-space: nowrap;
@@ -296,9 +285,9 @@ const Playground: React.FC = () => {
 
         .price-text-large {
           font-weight: 800;
-          font-size: 1.6rem;
+          font-size: 1.7rem;
           color: var(--text-primary);
-          margin: 6px 0 10px 0;
+          margin: 8px 0 10px 0;
           line-height: 1;
         }
 
@@ -312,16 +301,39 @@ const Playground: React.FC = () => {
         }
 
         .deliverable-item {
-          font-size: 0.82rem;
+          font-size: 0.84rem;
           color: var(--text-secondary);
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
         }
 
         .deliverable-item svg {
           color: #10B981;
           flex-shrink: 0;
+        }
+
+        .custom-session-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 10px 20px;
+          border-radius: 99px;
+          border: 1px dashed var(--card-border);
+          background: var(--card-bg);
+          color: var(--text-secondary);
+          font-size: 0.88rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          margin-bottom: 28px;
+        }
+        .custom-session-btn:hover,
+        .custom-session-btn.selected {
+          border-color: var(--text-primary);
+          border-style: solid;
+          color: var(--text-primary);
+          background: var(--accent-light);
         }
 
         .accordion-section {
@@ -531,7 +543,6 @@ const Playground: React.FC = () => {
       <div className="services-grid-v3">
         {services.map((service) => {
           const isSelected = service.id === selectedServiceId;
-          const displayPrice = service.id === 'custom' ? `₹${customAmount || 100}` : `₹${service.price}`;
           return (
             <div
               key={service.id}
@@ -543,8 +554,8 @@ const Playground: React.FC = () => {
                   <h3>{service.title}</h3>
                   <span className="duration-pill">{service.duration}</span>
                 </div>
-                <div className="price-text-large">{displayPrice}</div>
-                <p className="card-desc" style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                <div className="price-text-large">₹{service.price}</div>
+                <p className="card-desc" style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: 1.45 }}>
                   {service.description}
                 </p>
               </div>
@@ -562,13 +573,24 @@ const Playground: React.FC = () => {
         })}
       </div>
 
+      {/* Custom Session Button */}
+      <div style={{ textAlign: 'center' }}>
+        <button
+          type="button"
+          className={`custom-session-btn ${isCustom ? 'selected' : ''}`}
+          onClick={() => handleCardClick('custom')}
+        >
+          Custom Session →
+        </button>
+      </div>
+
       {/* 2. Book Your Session Form */}
       <div id="booking-form-section" className="booking-section-card">
         <h3 style={{ fontSize: '1.15rem', fontFamily: 'var(--font-heading)', fontWeight: 700, margin: '0 0 4px 0', color: 'var(--text-primary)' }}>
           Book Your Session
         </h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0 0 16px 0' }}>
-          {isCustom ? `Custom Session (₹${customAmount || 100})` : `${selectedService.title} (₹${selectedService.price})`}
+          {isCustom ? `Custom Session (₹${customAmount || 500})` : `${selectedService.title} (₹${selectedService.price})`}
         </p>
 
         {!paymentSuccess ? (
@@ -587,7 +609,7 @@ const Playground: React.FC = () => {
                   type="number" 
                   min={10}
                   max={5000}
-                  placeholder="Enter amount e.g. 500"
+                  placeholder="Enter custom amount"
                   value={customAmount}
                   onChange={(e) => setCustomAmount(e.target.value)}
                   required
@@ -654,7 +676,7 @@ const Playground: React.FC = () => {
             </div>
             <h3>Session Confirmed!</h3>
             <p style={{ maxWidth: '440px', margin: '0 auto', lineHeight: 1.5, fontSize: '0.9rem' }}>
-              Thank you for booking **{selectedService.title}**. 
+              Thank you for booking **{isCustom ? 'Custom Session' : selectedService.title}**. 
               A Google Meet scheduling query has been sent to **{email}**.
             </p>
             <small style={{ color: 'var(--text-muted)' }}>Transaction Reference: {transactionId}</small>
