@@ -97,19 +97,10 @@ const Hero: React.FC = () => {
       
       <h1>Sagar R. Thalavar</h1>
       
-      <p className="hero-subtitle">
-        I work at{' '}
-        <a 
-          href="https://beneathatree.com/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="hero-link"
-        >
-          BeneathAtree
-        </a>{' '}
-        and I am a 3rd-year Data Science Engineering student at New Horizon College, Bengaluru. 
-        I build web pages that are simple, pleasant to use, and easy to understand. I have also started 
-        reading a lot more lately, which has changed how I think about work, design, and attention.
+      <p className="hero-subtitle" style={{ maxWidth: '800px', lineHeight: 1.7 }}>
+        I'm Sagar R. Thalavar, a software developer who enjoys building practical web applications, AI tools, and developer utilities.
+        <br /><br />
+        I also help students and beginner developers debug projects, improve portfolios, and build software through practical one-on-one sessions.
       </p>
 
       <div className="hero-actions">
