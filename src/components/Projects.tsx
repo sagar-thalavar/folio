@@ -18,10 +18,10 @@ const projectsData: Project[] = [
     summary: "A private visitor journal where guests sign in, leave a selfie and a memory, and browse a public wall of moments."
   },
   {
-    title: "Mentorship & Professional Services",
-    badge: "Book 1-on-1 Sessions",
+    title: "Book a 1-on-1 Session with Sagar",
+    badge: "1-on-1 Coaching",
     href: "/playground",
-    summary: "Book 1-on-1 mentorship (Chess teaching & LLM coaching), request a portfolio or resume audit, or request custom software advisory."
+    summary: "AI, software debugging, portfolio review, technical consultation, or build an AI project together live."
   },
   {
     title: "Treasure Hunt: A SaaS Game",
