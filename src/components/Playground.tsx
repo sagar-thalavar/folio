@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, Loader2 } from 'lucide-react';
+import { Gamepad2, Check, Loader2, HelpCircle, UserCheck, ShieldAlert, Sparkles } from 'lucide-react';
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -15,11 +15,73 @@ const loadRazorpayScript = () => {
   });
 };
 
+interface ServiceTier {
+  id: string;
+  title: string;
+  duration: string;
+  price: number;
+  description: string;
+  deliverables: string[];
+  recommended?: boolean;
+}
+
+const services: ServiceTier[] = [
+  {
+    id: 'debugging',
+    title: 'Project Debugging',
+    duration: '45 Minutes',
+    price: 499,
+    description: 'Debug your software or AI project together in a live one-on-one session. Understand the root cause of issues instead of just fixing symptoms.',
+    deliverables: [
+      'Live debugging session',
+      'Root cause analysis',
+      'Best practices guidance',
+      'Unlimited questions during session'
+    ]
+  },
+  {
+    id: 'review',
+    title: 'Portfolio & Career Review',
+    duration: '30 Minutes',
+    price: 299,
+    description: 'Receive practical feedback on your GitHub, portfolio, LinkedIn profile, and resume with actionable improvements.',
+    deliverables: [
+      'Honest feedback on GitHub & Resume',
+      'Actionable improvement roadmap',
+      'Project ideas & suggestions',
+      'Career guidance'
+    ]
+  },
+  {
+    id: 'consultation',
+    title: 'Technical Consultation',
+    duration: '60 Minutes',
+    price: 699,
+    description: 'Discuss software architecture, APIs, backend planning, startup MVPs, databases, or technical decisions.',
+    deliverables: [
+      'Technical architecture guidance',
+      'API & DB planning review',
+      'Practical recommendations'
+    ]
+  },
+  {
+    id: 'ai-project',
+    title: 'Build an AI Project Together',
+    duration: '90 Minutes',
+    price: 999,
+    recommended: true,
+    description: 'Build a complete AI project together instead of just learning theory (Chatbots, OpenAI/Gemini APIs, RAG, AI automation).',
+    deliverables: [
+      'Working project & live demo',
+      'Complete source code access',
+      'Detailed architecture explanation',
+      'Next learning roadmap'
+    ]
+  }
+];
+
 const Playground: React.FC = () => {
-  // Booking states
-  const [selectedTier, setSelectedTier] = useState<'consulting' | 'review' | 'collaboration'>('consulting');
-  const [subService, setSubService] = useState<string>('30-Min Chess Game Mentorship');
-  const [customPrice, setCustomPrice] = useState<string>('');
+  const [selectedServiceId, setSelectedServiceId] = useState<string>('ai-project');
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -28,8 +90,7 @@ const Playground: React.FC = () => {
   const [transactionId, setTransactionId] = useState<string>('');
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
-  // Helper to determine if custom pricing is selected
-  const isCustomService = subService.toLowerCase().includes('custom');
+  const selectedService = services.find(s => s.id === selectedServiceId) || services[3];
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,14 +101,7 @@ const Playground: React.FC = () => {
       return;
     }
 
-    const finalAmount = isCustomService 
-      ? Number(customPrice) 
-      : (selectedTier === 'consulting' ? 499 : selectedTier === 'review' ? 299 : 999);
-
-    if (isNaN(finalAmount) || finalAmount < 10 || finalAmount > 5000) {
-      setPaymentError('Please enter a valid amount between ₹10 and ₹5,000.');
-      return;
-    }
+    const finalAmount = selectedService.price;
 
     try {
       setLoading(true);
@@ -64,7 +118,7 @@ const Playground: React.FC = () => {
           name: name || 'Client',
           email,
           message,
-          service_type: subService,
+          service_type: selectedService.title,
           contact_info: email,
           anonymous: false
         })
@@ -88,7 +142,7 @@ const Playground: React.FC = () => {
         amount: orderData.amount,
         currency: orderData.currency,
         name: 'Sagar Thalavar',
-        description: subService,
+        description: selectedService.title,
         order_id: orderData.order_id,
         config_id: 'config_TIwloXPRqknnLZ',
         config: {
@@ -160,96 +214,175 @@ const Playground: React.FC = () => {
     }
   };
 
-  const getSubServiceOptions = () => {
-    switch (selectedTier) {
-      case 'consulting':
-        return [
-          '30-Min Chess Game Mentorship',
-          '30-Min LLM & AI Coaching',
-          '30-Min Tech Consulting & Q&A',
-          'Custom Mentorship Session'
-        ];
-      case 'review':
-        return [
-          'Resume Review & Feedback',
-          'Portfolio & Website Audit',
-          'Video & Media Editing Audit',
-          'Document & Content Review',
-          'Custom Review Request'
-        ];
-      case 'collaboration':
-        return [
-          'Software Project Advisory',
-          'Active Project Collaboration',
-          'Custom Tech Advisory'
-        ];
-      default:
-        return [];
-    }
-  };
-
   return (
-    <section className="panel playground-panel glass" style={{ maxWidth: '840px', margin: '40px auto', padding: '32px' }}>
+    <section className="panel playground-panel glass" style={{ maxWidth: '920px', margin: '32px auto', padding: '32px' }}>
       <style>{`
-        .services-grid {
+        .services-grid-v2 {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 16px;
-          margin: 12px 0 24px 0;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 20px;
+          margin: 20px 0 32px 0;
         }
-        .service-card {
-          padding: 20px;
-          border-radius: 16px;
+        .service-card-v2 {
+          padding: 24px;
+          border-radius: 20px;
           border: 1px solid var(--card-border);
           background: var(--card-bg);
           cursor: pointer;
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          justify-content: space-between;
+          position: relative;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           text-align: left;
         }
-        .service-card:hover {
+        .service-card-v2:hover {
           transform: translateY(-4px);
           box-shadow: var(--shadow-md);
         }
-        .service-card.active {
+        .service-card-v2.selected {
           border-width: 2px;
+          border-color: var(--accent);
+          background: var(--accent-light);
         }
-        [data-theme='light'] .service-card.active { border-color: #111; box-shadow: 0 0 12px rgba(17, 17, 17, 0.1); }
-        [data-theme='dark'] .service-card.active { border-color: #f9fafb; box-shadow: 0 0 12px rgba(249, 250, 251, 0.2); }
-        [data-theme='colorful'] .service-card.active { border-color: #2B2420; box-shadow: 0 0 12px rgba(43, 36, 32, 0.2); }
-        
-        [data-theme='colorful'] .service-card.tier-consulting { background: #FFE066 !important; color: #2B2420 !important; }
-        [data-theme='colorful'] .service-card.tier-review { background: #A29BF2 !important; color: #2B2420 !important; }
-        [data-theme='colorful'] .service-card.tier-collaboration { background: #8FD8CC !important; color: #2B2420 !important; }
+        [data-theme='light'] .service-card-v2.selected { border-color: #111; box-shadow: 0 0 16px rgba(17, 17, 17, 0.1); }
+        [data-theme='dark'] .service-card-v2.selected { border-color: #f9fafb; box-shadow: 0 0 16px rgba(249, 250, 251, 0.15); }
+        [data-theme='colorful'] .service-card-v2.selected { border-color: #2B2420; box-shadow: 0 0 16px rgba(43, 36, 32, 0.15); }
 
-        .service-card h4 {
+        .recommended-badge {
+          position: absolute;
+          top: -12px;
+          right: 20px;
+          padding: 4px 12px;
+          border-radius: 99px;
+          background: var(--accent);
+          color: var(--bg);
+          font-size: 0.72rem;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .service-card-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 8px;
+        }
+
+        .service-card-v2 h3 {
           font-family: var(--font-heading);
-          font-size: 1rem;
+          font-size: 1.15rem;
           font-weight: 700;
           color: var(--text-primary);
           margin: 0;
         }
-        [data-theme='dark'] .service-card h4 { color: #f9fafb !important; }
-        [data-theme='colorful'] .service-card h4 { color: #2B2420 !important; }
 
-        .price-tag {
-          font-weight: 700;
-          font-size: 1.2rem;
-          color: var(--text-primary);
-          margin-top: 4px;
-        }
-        [data-theme='dark'] .price-tag { color: #f9fafb !important; }
-        [data-theme='colorful'] .price-tag { color: #2B2420 !important; }
-        
-        .card-desc {
-          font-size: 0.85rem;
+        .duration-pill {
+          font-size: 0.75rem;
+          font-weight: 600;
           color: var(--text-muted);
-          line-height: 1.4;
+          padding: 2px 8px;
+          border-radius: 6px;
+          background: var(--card-border);
         }
-        [data-theme='dark'] .card-desc { color: #9ca3af !important; }
-        [data-theme='colorful'] .card-desc { color: #5A4A3A !important; }
+
+        .price-text {
+          font-weight: 800;
+          font-size: 1.4rem;
+          color: var(--text-primary);
+          margin: 6px 0 12px 0;
+        }
+
+        .deliverables-list {
+          list-style: none;
+          padding: 0;
+          margin: 16px 0 0 0;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .deliverable-item {
+          font-size: 0.84rem;
+          color: var(--text-secondary);
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .deliverable-item svg {
+          color: #10B981;
+          flex-shrink: 0;
+        }
+
+        .info-section {
+          padding: 24px;
+          border-radius: 16px;
+          border: 1px solid var(--card-border);
+          background: var(--card-bg);
+          margin-bottom: 24px;
+        }
+
+        .info-section h3 {
+          font-family: var(--font-heading);
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin-bottom: 16px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .info-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 12px;
+        }
+
+        .info-item {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          line-height: 1.5;
+          display: flex;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .fit-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 20px;
+          margin-bottom: 24px;
+        }
+
+        .faq-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+
+        .faq-item {
+          padding: 16px 20px;
+          border-radius: 12px;
+          border: 1px solid var(--card-border);
+          background: var(--card-bg);
+        }
+
+        .faq-question {
+          font-weight: 700;
+          font-size: 0.95rem;
+          color: var(--text-primary);
+          margin-bottom: 4px;
+        }
+
+        .faq-answer {
+          font-size: 0.88rem;
+          color: var(--text-secondary);
+          line-height: 1.5;
+          margin: 0;
+        }
 
         .booking-form {
           display: flex;
@@ -257,18 +390,20 @@ const Playground: React.FC = () => {
           gap: 16px;
           margin-top: 24px;
         }
+
         .booking-form .form-group {
           display: flex;
           flex-direction: column;
           gap: 6px;
         }
+
         .booking-form label {
           font-size: 0.88rem;
           font-weight: 600;
           color: var(--text-primary);
         }
+
         .booking-form input,
-        .booking-form select,
         .booking-form textarea {
           padding: 12px 16px;
           border-radius: 12px;
@@ -279,11 +414,24 @@ const Playground: React.FC = () => {
           outline: none;
           transition: border-color 0.2s, box-shadow 0.2s;
         }
+
         .booking-form input:focus,
-        .booking-form select:focus,
         .booking-form textarea:focus {
           border-color: var(--text-primary);
           box-shadow: 0 0 0 3px var(--card-border);
+        }
+
+        .selected-badge-box {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 16px;
+          border-radius: 12px;
+          background: var(--accent-light);
+          border: 1px solid var(--accent-border);
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--text-primary);
         }
 
         .booking-submit-btn {
@@ -296,20 +444,24 @@ const Playground: React.FC = () => {
           border: 1px solid var(--accent-border);
           background: var(--accent);
           color: var(--bg);
-          font-weight: 600;
+          font-weight: 700;
+          font-size: 1rem;
           cursor: pointer;
           transition: all 0.3s ease;
           width: fit-content;
+          margin-top: 8px;
         }
         [data-theme='colorful'] .booking-submit-btn {
-          background: #FFE066;
-          color: #2B2420;
-          border-color: #FFE066;
+          background: #2B2420;
+          color: #F6C88A;
+          border-color: #2B2420;
         }
+
         .booking-submit-btn:hover:not(:disabled) {
           transform: translateY(-2px);
-          opacity: 0.9;
+          opacity: 0.93;
         }
+
         .booking-submit-btn:disabled {
           opacity: 0.6;
           cursor: not-allowed;
@@ -323,6 +475,7 @@ const Playground: React.FC = () => {
           align-items: center;
           gap: 16px;
         }
+
         .success-check-circle {
           display: flex;
           align-items: center;
@@ -346,50 +499,139 @@ const Playground: React.FC = () => {
         }
       `}</style>
 
+      {/* Header Section */}
       <div className="section-header">
         <div className="section-title-group">
-          <h2>Mentorship & Professional Services</h2>
+          <Gamepad2 className="section-icon" size={24} />
+          <h2>Book a 1-on-1 Session with Sagar</h2>
         </div>
+        <p className="section-subtitle" style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>
+          AI • Software Development • Career Guidance
+        </p>
         <p className="section-subtitle">
-          Book 1-on-1 mentorship (Chess teaching & LLM coaching), request a resume or portfolio audit, or coordinate custom software advisory.
+          Build better software, get unstuck on your projects, improve your portfolio, or receive personalized technical guidance through practical one-on-one sessions.
         </p>
       </div>
 
-      <div className="support-work-container" style={{ marginTop: '8px' }}>
-        {/* Service Cards Selector */}
-        <div className="services-grid">
-          <button 
-            type="button"
-            className={`service-card tier-consulting ${selectedTier === 'consulting' ? 'active' : ''}`}
-            onClick={() => { setSelectedTier('consulting'); setSubService('30-Min Chess Game Mentorship'); }}
-          >
-            <h4>1-on-1 Mentorship</h4>
-            <span className="price-tag">₹499</span>
-            <p className="card-desc">30-minute Chess teaching, LLM/AI coaching, or tech Q&A session.</p>
-          </button>
+      {/* Service Cards Selector */}
+      <div className="services-grid-v2">
+        {services.map((service) => {
+          const isSelected = service.id === selectedServiceId;
+          return (
+            <div
+              key={service.id}
+              className={`service-card-v2 ${isSelected ? 'selected' : ''}`}
+              onClick={() => setSelectedServiceId(service.id)}
+            >
+              {service.recommended && (
+                <div className="recommended-badge">Recommended</div>
+              )}
+              <div>
+                <div className="service-card-header">
+                  <h3>{service.title}</h3>
+                  <span className="duration-pill">{service.duration}</span>
+                </div>
+                <div className="price-text">₹{service.price}</div>
+                <p className="card-desc" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.45 }}>
+                  {service.description}
+                </p>
+              </div>
 
-          <button 
-            type="button"
-            className={`service-card tier-review ${selectedTier === 'review' ? 'active' : ''}`}
-            onClick={() => { setSelectedTier('review'); setSubService('Resume Review & Feedback'); }}
-          >
-            <h4>Resume & Reviews</h4>
-            <span className="price-tag">₹299</span>
-            <p className="card-desc">Audit of your resume, portfolio, video editing, or content writing.</p>
-          </button>
+              <ul className="deliverables-list">
+                {service.deliverables.map((item, idx) => (
+                  <li key={idx} className="deliverable-item">
+                    <Check size={14} />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </div>
 
-          <button 
-            type="button"
-            className={`service-card tier-collaboration ${selectedTier === 'collaboration' ? 'active' : ''}`}
-            onClick={() => { setSelectedTier('collaboration'); setSubService('Software Project Advisory'); }}
-          >
-            <h4>Software Advisory</h4>
-            <span className="price-tag">₹999</span>
-            <p className="card-desc">Join active development projects, software advisory, or tech guidance.</p>
-          </button>
+      {/* Why Work With Me Section */}
+      <div className="info-section">
+        <h3>
+          <Sparkles size={18} />
+          <span>Why Work With Me</span>
+        </h3>
+        <div className="info-grid">
+          <div className="info-item">• Practical hands-on guidance</div>
+          <div className="info-item">• Personalized one-on-one sessions</div>
+          <div className="info-item">• Learn by solving real problems</div>
+          <div className="info-item">• Student-friendly pricing</div>
+          <div className="info-item">• Experience building multiple software and AI projects</div>
+        </div>
+      </div>
+
+      {/* Audience Fit Section */}
+      <div className="fit-grid">
+        <div className="info-section" style={{ marginBottom: 0 }}>
+          <h3>
+            <UserCheck size={18} />
+            <span>Suitable For</span>
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div className="info-item">✓ College students</div>
+            <div className="info-item">✓ Beginner developers</div>
+            <div className="info-item">✓ Developers learning AI</div>
+            <div className="info-item">✓ Hackathon participants</div>
+            <div className="info-item">✓ Developers stuck on projects</div>
+          </div>
         </div>
 
-        {/* Booking / Checkout Form */}
+        <div className="info-section" style={{ marginBottom: 0 }}>
+          <h3>
+            <ShieldAlert size={18} />
+            <span>Not Suitable If</span>
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div className="info-item">✕ You want someone to complete your assignment</div>
+            <div className="info-item">✕ You expect guaranteed job placement</div>
+            <div className="info-item">✕ You want complete projects built for you</div>
+            <div className="info-item">✕ You are looking for free consulting</div>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div className="info-section">
+        <h3>
+          <HelpCircle size={18} />
+          <span>Frequently Asked Questions</span>
+        </h3>
+        <div className="faq-grid">
+          <div className="faq-item">
+            <div className="faq-question">Do I need coding experience?</div>
+            <p className="faq-answer">No. Beginners are welcome.</p>
+          </div>
+          <div className="faq-item">
+            <div className="faq-question">How are sessions conducted?</div>
+            <p className="faq-answer">Sessions are conducted live via Google Meet.</p>
+          </div>
+          <div className="faq-item">
+            <div className="faq-question">Can I record the session?</div>
+            <p className="faq-answer">Yes, you are welcome to record for your personal reference.</p>
+          </div>
+          <div className="faq-item">
+            <div className="faq-question">Will I receive notes?</div>
+            <p className="faq-answer">Yes, session notes and relevant code references will be shared afterwards.</p>
+          </div>
+          <div className="faq-item">
+            <div className="faq-question">What if my issue is not fully solved?</div>
+            <p className="faq-answer">I will provide clear guidance, diagnostic steps, and next steps even if the entire problem requires further steps beyond the session duration.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Booking / Checkout Form */}
+      <div className="info-section" style={{ marginBottom: 0 }}>
+        <h3 style={{ marginBottom: '8px' }}>Confirm Your Session</h3>
+        <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: 0 }}>
+          Fill in your details below to schedule your live one-on-one session.
+        </p>
+
         {!paymentSuccess ? (
           <form onSubmit={handlePayment} className="booking-form">
             {paymentError && (
@@ -399,41 +641,22 @@ const Playground: React.FC = () => {
             )}
 
             <div className="form-group">
-              <label htmlFor="sub-service-select">Select Service Desired</label>
-              <select 
-                id="sub-service-select"
-                value={subService}
-                onChange={(e) => setSubService(e.target.value)}
-              >
-                {getSubServiceOptions().map((opt) => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
-            </div>
-
-            {isCustomService && (
-              <div className="form-group">
-                <label htmlFor="custom-price-input">Custom Amount (₹)</label>
-                <input
-                  id="custom-price-input"
-                  type="number"
-                  min="10"
-                  max="5000"
-                  placeholder="Enter agreed amount (e.g. 500)"
-                  value={customPrice}
-                  onChange={(e) => setCustomPrice(e.target.value)}
-                  required
-                />
-                <small style={{ textAlign: 'left', color: 'var(--text-muted)' }}>Enter amount between ₹10 and ₹5,000.</small>
+              <label>Selected Service</label>
+              <div className="selected-badge-box">
+                <span>{selectedService.title}</span>
+                <span>•</span>
+                <span>{selectedService.duration}</span>
+                <span>•</span>
+                <span>₹{selectedService.price}</span>
               </div>
-            )}
+            </div>
 
             <div className="form-group">
               <label htmlFor="booking-name">Your Name</label>
               <input 
                 id="booking-name"
                 type="text" 
-                placeholder="Your Name"
+                placeholder="Enter your full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -450,21 +673,15 @@ const Playground: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <small style={{ textAlign: 'left', color: 'var(--text-muted)' }}>For transaction confirmation and scheduling details.</small>
+              <small style={{ textAlign: 'left', color: 'var(--text-muted)' }}>Google Meet invite and session confirmation will be sent here.</small>
             </div>
 
             <div className="form-group">
-              <label htmlFor="booking-message">Details of your request</label>
+              <label htmlFor="booking-message">Brief Description of your Request</label>
               <textarea 
                 id="booking-message"
                 rows={4}
-                placeholder={
-                  selectedTier === 'review'
-                    ? "Provide details or links for your resume, portfolio draft, or content review..."
-                    : selectedTier === 'consulting'
-                    ? "Describe what you would like to discuss or learn (Chess game analysis, LLM coaching, AI prompts)..."
-                    : "Share details about your software advisory or technical guidance request..."
-                }
+                placeholder="Describe what project, bugs, portfolio, or technical topic you would like to cover..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 required
@@ -482,20 +699,20 @@ const Playground: React.FC = () => {
                   <span>Initiating Checkout...</span>
                 </>
               ) : (
-                <span>Book Service (₹{isCustomService ? (customPrice || '0') : (selectedTier === 'consulting' ? '499' : selectedTier === 'review' ? '299' : '999')})</span>
+                <span>Book My Session (₹{selectedService.price})</span>
               )}
             </button>
           </form>
         ) : (
-          // Success View
+          /* Success View */
           <div className="booking-success-view">
             <div className="success-check-circle">
               <Check size={36} />
             </div>
-            <h3>Booking Confirmed!</h3>
-            <p style={{ maxWidth: '400px', margin: '0 auto', lineHeight: 1.5 }}>
-              Thank you for booking **{subService}**. 
-              A confirmation and scheduling query has been sent to your email (**{email}**).
+            <h3>Session Confirmed!</h3>
+            <p style={{ maxWidth: '440px', margin: '0 auto', lineHeight: 1.5 }}>
+              Thank you for booking **{selectedService.title}**. 
+              A Google Meet scheduling query has been sent to **{email}**.
             </p>
             <small style={{ color: 'var(--text-muted)' }}>Transaction Reference: {transactionId}</small>
             <button 
@@ -506,11 +723,10 @@ const Playground: React.FC = () => {
                 setName('');
                 setEmail('');
                 setMessage('');
-                setCustomPrice('');
               }}
               style={{ marginTop: '16px' }}
             >
-              Book Another Service
+              Book Another Session
             </button>
           </div>
         )}
