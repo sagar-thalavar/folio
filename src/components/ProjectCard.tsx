@@ -47,11 +47,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, badge, href, summary, 
             padding: '3px 10px',
             borderRadius: '99px',
             background: 'var(--accent)',
-            color: 'var(--bg)',
+            color: '#111827',
             fontSize: '0.7rem',
-            fontWeight: 700,
+            fontWeight: 800,
             textTransform: 'uppercase',
-            letterSpacing: '0.04em'
+            letterSpacing: '0.04em',
+            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)'
           }}
         >
           Most Popular
@@ -67,7 +68,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, badge, href, summary, 
         <h3 className="project-title">{title}</h3>
         <p className="project-desc">{summary}</p>
       </div>
-      <div className="project-link" style={isMentorship ? { background: 'var(--accent)', color: 'var(--bg)', borderColor: 'var(--accent)' } : undefined}>
+      <div className="project-link" style={isMentorship ? { background: 'var(--accent)', color: '#111827', borderColor: 'var(--accent)', fontWeight: 700 } : undefined}>
         <span>{isMentorship ? 'Book Session →' : 'Explore →'}</span>
         <ArrowUpRight size={16} className="project-link-icon" />
       </div>
